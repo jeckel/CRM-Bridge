@@ -1,0 +1,14 @@
+version: '3.2'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    hostname: traefik.localhost
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./.docker/traefik/traefik.toml:/etc/traefik/traefik.toml:ro"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik_https.service: api@internal

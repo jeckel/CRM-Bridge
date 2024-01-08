@@ -4,6 +4,9 @@ parameters:
 	paths:
 		- src/
 		- tests/
+	excludePaths:
+		- castor.php
+		- .castor/
 
 includes:
 	- vendor/phpstan/phpstan/conf/bleedingEdge.neon

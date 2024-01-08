@@ -11,3 +11,4 @@
 /phpunit.xml
 
 /.idea
+.castor.stub.php
