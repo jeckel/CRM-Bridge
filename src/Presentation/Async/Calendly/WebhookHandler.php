@@ -22,7 +22,7 @@ class WebhookHandler implements LoggerAwareInterface
 
     public function __construct(
         private readonly IncomingWebhookRepository $incomingWebhookRepository
-    ) { }
+    ) {}
 
     public function __invoke(Webhook $webhook): void
     {

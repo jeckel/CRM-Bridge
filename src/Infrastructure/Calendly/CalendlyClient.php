@@ -20,7 +20,7 @@ class CalendlyClient
         private readonly string $accessToken,
         private readonly string $webhookUrl,
         private readonly HttpClientInterface $client
-    ) { }
+    ) {}
 
     /**
      * @return iterable<WebhookConfig>

@@ -18,6 +18,5 @@ readonly class Webhook
         public DateTimeImmutable $createdAt,
         public CalendlyEventType $event,
         public array $payload
-    ) {
-    }
+    ) {}
 }

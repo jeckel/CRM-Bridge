@@ -27,8 +27,7 @@ readonly class WebhookConfig
         public string $updated_at,
         public string $uri,
         public ?string $user
-    ) {
-    }
+    ) {}
 
     public function getUid(): string
     {

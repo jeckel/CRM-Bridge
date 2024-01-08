@@ -20,8 +20,7 @@ class CalendlyWebhookController extends AbstractController
     public function __construct(
         private readonly CalendlyClient $calendly,
         private readonly AdminUrlGenerator $adminUrlGenerator
-    ) {
-    }
+    ) {}
 
     #[Route(
         path: '/admin/calendly/webhooks',
