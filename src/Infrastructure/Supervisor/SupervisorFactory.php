@@ -17,12 +17,11 @@ use Supervisor\Supervisor;
 
 class SupervisorFactory
 {
-    static public function getSupervisor(
+    public static function getSupervisor(
         string $url,
         string $user,
         string $password,
-    ): Supervisor
-    {
+    ): Supervisor {
         // Create Guzzle HTTP client
         $guzzleClient = new Client([
             'auth' => [$user, $password],
