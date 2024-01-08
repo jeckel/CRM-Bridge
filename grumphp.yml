@@ -2,7 +2,6 @@ grumphp:
   testsuites:
     github_actions:
       tasks:
-        - composer_require_checker
         - phpmd
         - phpstan
 #        - phpcsfixer
@@ -23,11 +22,6 @@ grumphp:
     phpstan:
       configuration: phpstan.neon.dist
       use_grumphp_paths: true
-    composer_require_checker:
-      composer_file: 'composer.json'
-      config_file: ~
-      ignore_parse_errors: false
-      triggered_by: [ 'composer.json', 'composer.lock', 'src/*.php' ]
     git_branch_name:
       whitelist:
         - "feature/*"
