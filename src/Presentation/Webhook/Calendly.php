@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Webhook;
 
+use App\Presentation\Async\Calendly\CalendlyEventType;
 use App\Presentation\Async\Calendly\Webhook;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +26,12 @@ class Calendly extends AbstractController
     )]
     public function __invoke(Request $request, MessageBusInterface $bus): Response
     {
-        $bus->dispatch(new Webhook($request->getContent()));
+        $content = $request->toArray();
+        $bus->dispatch(new Webhook(
+            createdAt: new DateTimeImmutable($content['created_at']),
+            event: CalendlyEventType::from($content['event']),
+            payload: $content['payload']
+        ));
         return new Response('200 OK');
     }
 }

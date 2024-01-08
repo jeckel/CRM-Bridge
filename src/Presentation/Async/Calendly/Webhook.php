@@ -9,10 +9,15 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Calendly;
 
-class Webhook
+use DateTimeImmutable;
+
+readonly class Webhook
 {
+    /** @phpstan-ignore-next-line */
     public function __construct(
-        public readonly string $content
+        public DateTimeImmutable $createdAt,
+        public CalendlyEventType $event,
+        public array $payload
     ) {
     }
 }
