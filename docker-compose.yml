@@ -40,6 +40,8 @@ services:
       SUPERVISOR_URL: "http://worker:9001/RPC2"
       SUPERVISOR_USER: "user"
       SUPERVISOR_PASSWORD: "password"
+    env_file:
+      - .env.dev.local
     depends_on:
       - mysql
       - rabbitmq
@@ -92,3 +94,14 @@ services:
       retries: 5
     depends_on:
       - traefik
+
+  ngrok:
+    image: ngrok/ngrok:alpine
+    hostname: ngrok.localhost
+    labels:
+      traefik.enable: true
+      traefik.http.services.ngrok.loadbalancer.server.port: 4040
+    env_file:
+      - .env.dev.local
+    command: http web:80
+

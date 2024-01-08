@@ -30,6 +30,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
+        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

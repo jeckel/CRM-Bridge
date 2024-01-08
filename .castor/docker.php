@@ -11,18 +11,21 @@ namespace docker;
 
 use Castor\Attribute\AsTask;
 
+use function Castor\load_dot_env;
 use function Castor\run;
 
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
 {
+//    var_dump(load_dot_env(dirname(__DIR__). '/.env.local'));
     run(
         command: [
             'docker',
             'compose',
             'up'
         ],
-        timeout: 0
+        timeout: 0,
+        environment: load_dot_env(dirname(__DIR__). '/.env.local')
     );
 }
 
