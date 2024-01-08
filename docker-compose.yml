@@ -36,9 +36,28 @@ services:
       - ./:/application
     environment:
       DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
+      MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/crm_bridge/messages"
+      SUPERVISOR_URL: "http://worker:9001/RPC2"
+      SUPERVISOR_USER: "user"
+      SUPERVISOR_PASSWORD: "password"
     depends_on:
       - mysql
-#      - rabbitmq
+      - rabbitmq
+
+  worker:
+    image: crm-bridge/worker:latest
+    hostname: worker.localhost
+    working_dir: /application
+    volumes:
+      - ./:/application
+      - ./.docker/worker/conf.d/:/etc/supervisor/conf.d/:ro
+    environment:
+      DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
+      MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/crm_bridge/messages"
+    depends_on:
+      - mysql
+      - rabbitmq
+      - traefik
 
   mysql:
     image: mysql:8.0
@@ -55,3 +74,21 @@ services:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq.localhost
+    environment:
+      RABBITMQ_DEFAULT_USER: 'user'
+      RABBITMQ_DEFAULT_PASS: 'password'
+      RABBITMQ_DEFAULT_VHOST: 'crm_bridge'
+    labels:
+      traefik.enable: true
+      traefik.http.services.rabbitmq.loadbalancer.server.port: 15672
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - traefik

@@ -1,0 +1,39 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Workers{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <tr>
+            <th>Pid</th>
+            <th>groupe</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>State</th>
+            <th>Start</th>
+            <th>Stop</th>
+            <th>Spawn Error</th>
+            <th>Actions</th>
+        </tr>
+        {% for worker in workers %}
+            <tr>
+                <td>{{ worker.pid }}</td>
+                <td>{{ worker.group }}</td>
+                <td>{{ worker.name }}</td>
+                <td>{{ worker.description }}</td>
+                <td>{{ worker.getState.name }}</td>
+                <td>{{ worker.start != 0 ? worker.start|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</td>
+                <td>{{ worker.stop != 0 ? worker.stop|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</td>
+                <td>{{ worker.spawnerr }}</td>
+                <td>
+                    <a href="{{ ea_url().setRoute('worker_details', {name: worker.name, group: worker.group}) }}" class="btn btn-default"><i class="fa-solid fa-eye"></i>&nbsp;Détails</a>
+                    {% if worker.state != 20 %}
+                        <a href="{{ ea_url().setRoute('worker_start', {name: worker.name, group: worker.group}) }}" class="btn btn-success"><i class="fa-solid fa-play"></i>&nbsp;Start</a>
+                    {% else %}
+                        <a href="{{ ea_url().setRoute('worker_stop', {name: worker.name, group: worker.group}) }}" class="btn btn-danger"><i class="fa-solid fa-stop"></i>&nbsp;Stop</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

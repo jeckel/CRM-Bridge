@@ -39,4 +39,16 @@ function container_build(): void
         ],
         timeout: 0
     );
+
+    run(
+        command: [
+            'docker',
+            'build',
+            '-t', 'crm-bridge/worker:latest',
+            '--build-arg', 'UID=' . posix_getuid(),
+            '--build-arg', 'GID=' . posix_getgid(),
+            '.docker/worker/'
+        ],
+        timeout: 0
+    );
 }
