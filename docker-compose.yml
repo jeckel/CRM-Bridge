@@ -40,6 +40,9 @@ services:
       SUPERVISOR_URL: "http://worker:9001/RPC2"
       SUPERVISOR_USER: "user"
       SUPERVISOR_PASSWORD: "password"
+      CALENDLY_WEBHOOK_URI: "https://cuddly-gratefully-skylark.ngrok-free.app/webhook/calendly"
+    env_file:
+      - .env.dev.local
     depends_on:
       - mysql
       - rabbitmq
@@ -92,3 +95,14 @@ services:
       retries: 5
     depends_on:
       - traefik
+
+  ngrok:
+    image: ngrok/ngrok:alpine
+    hostname: ngrok.localhost
+    labels:
+      traefik.enable: true
+      traefik.http.services.ngrok.loadbalancer.server.port: 4040
+    env_file:
+      - .env.dev.local
+#    command: http web:80
+    command: tunnel --label edge=edghts_2ag6nvGYoQydW1YDRn3Cqb9mJuv http://web:80

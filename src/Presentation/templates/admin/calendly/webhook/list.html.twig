@@ -1,0 +1,37 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Calendly Webhooks{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ ea_url().setRoute('calendly_register_webhook') }}" class="btn btn-default"><i class="fa-solid fa-plus"></i> Ajouter</a>
+{% endblock %}
+
+{% block main %}
+    {% for webhook in webhooks %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title">WebHook #{{ loop.index }}</h5>
+            <p class="card-text">
+                <dl class="row">
+                    <dt class="col-sm-3">UID</dt>
+                    <dd class="col-sm-9">{{ webhook.uid }}</dd>
+
+                    <dt class="col-sm-3">Callback Url</dt>
+                    <dd class="col-sm-9">{{ webhook.callback_url }}</dd>
+
+                    <dt class="col-sm-3">Créé le</dt>
+                    <dd class="col-sm-9">{{ webhook.created_at |date('d/m/Y H:i:s') }}</dd>
+
+                    <dt class="col-sm-3">Status</dt>
+                    <dd class="col-sm-9">{{ webhook.state }}</dd>
+
+                    <dt class="col-sm-3">Evénements</dt>
+                    <dd class="col-sm-9">{{ webhook.events | join(', ') }}</dd>
+                </dl>
+                <a href="{{ ea_url().setRoute('calendly_unregister_webhook', {uid: webhook.uid }) }}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i>&nbsp;Supprimer</a>
+            </p>
+        </div>
+    </div>
+{#        {{ dump(webhook) }}#}
+    {% endfor %}
+{% endblock %}
