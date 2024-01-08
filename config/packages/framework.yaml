@@ -18,6 +18,17 @@ framework:
     php_errors:
         log: true
 
+#    http_client:
+#      scoped_clients:
+#        calendly_api:
+#          base_uri: 'https://api.calendly.com/'
+##          scope: 'https://api\.calendly\.com'
+#          headers:
+##            Accept: 'application/vnd.github.v3+json'
+#              Authorization: 'bearer %env(CALENDLY_ACCESS_TOKEN)%'
+#          # HTTP Bearer authentication (also called token authentication)
+##          auth_bearer: '%env(default::string:CALENDLY_ACCESS_TOKEN)%'
+
 when@test:
     framework:
         test: true

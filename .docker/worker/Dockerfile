@@ -15,12 +15,13 @@ RUN apt-get install -y --no-install-recommends \
 # Install PHP Extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-      pdo_mysql \
-      intl && \
+        amqp \
+        pdo_mysql \
+        intl && \
     rm /usr/local/bin/install-php-extensions
 
-RUN pecl config-set php_ini /etc/php.ini &&  \
-    pecl install amqp
+#RUN pecl config-set php_ini /etc/php.ini &&  \
+#    pecl install amqp
 
 # Configure supervisord
 COPY supervisord.conf /etc/supervisor/supervisord.conf
