@@ -12,9 +12,11 @@ namespace project;
 use Castor\Attribute\AsTask;
 
 use function Castor\io;
+use function docker\container_build;
 
 #[AsTask(name: 'install', description: 'Install the project', aliases: ['install'])]
 function task_install(): void
 {
     io()->writeln('<info>Hello world</info>');
+    container_build();
 }

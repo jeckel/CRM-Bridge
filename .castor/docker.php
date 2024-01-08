@@ -25,3 +25,18 @@ function task_up(): void
         timeout: 0
     );
 }
+
+function container_build(): void
+{
+    run(
+        command: [
+            'docker',
+            'build',
+            '-t', 'crm-bridge/php-fpm:latest',
+            '--build-arg', 'UID=' . posix_getuid(),
+            '--build-arg', 'GID=' . posix_getgid(),
+            '.docker/php-fpm/'
+        ],
+        timeout: 0
+    );
+}

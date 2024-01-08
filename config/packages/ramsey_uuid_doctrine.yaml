@@ -1,0 +1,5 @@
+doctrine:
+    dbal:
+        types:
+            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
+            uuid: 'Ramsey\Uuid\Doctrine\UuidType'

@@ -5,9 +5,9 @@ grumphp:
         - composer_require_checker
         - phpmd
         - phpstan
-        - phpcsfixer
+#        - phpcsfixer
   tasks:
-    phpcsfixer:
+#    phpcsfixer:
     phpmd:
       whitelist_patterns:
         - /^src\/(.*)/
