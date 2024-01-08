@@ -7,10 +7,11 @@ parameters:
     supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
     supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
     supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
-    calendly_client_id: '%env(default::string:CALENDLY_CLIENT_ID)%'
-    calendly_client_secret: '%env(default::string:CALENDLY_CLIENT_SECRET)%'
-    calendly_webhook_signing_key: '%env(default::string:CALENDLY_WEBHOOK_SIGNING_KEY)%'
+#    calendly_client_id: '%env(default::string:CALENDLY_CLIENT_ID)%'
+#    calendly_client_secret: '%env(default::string:CALENDLY_CLIENT_SECRET)%'
+#    calendly_webhook_signing_key: '%env(default::string:CALENDLY_WEBHOOK_SIGNING_KEY)%'
     calendly_access_token: '%env(default::string:CALENDLY_ACCESS_TOKEN)%'
+    calendly_webhook_uri: '%env(default::string:CALENDLY_WEBHOOK_URI)%'
 
     clock:
         mode: real
@@ -42,4 +43,4 @@ services:
       arguments: ['%supervisor_url%', '%supervisor_user%', '%supervisor_password%']
 
     App\Infrastructure\Calendly\CalendlyClient:
-      arguments: ['%calendly_access_token%']
+      arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']

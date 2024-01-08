@@ -40,6 +40,7 @@ services:
       SUPERVISOR_URL: "http://worker:9001/RPC2"
       SUPERVISOR_USER: "user"
       SUPERVISOR_PASSWORD: "password"
+      CALENDLY_WEBHOOK_URI: "https://9da4-88-170-19-46.ngrok-free.app/webhook/calendly"
     env_file:
       - .env.dev.local
     depends_on:

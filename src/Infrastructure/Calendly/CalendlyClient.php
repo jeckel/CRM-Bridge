@@ -18,9 +18,9 @@ class CalendlyClient
 
     public function __construct(
         private readonly string $accessToken,
-        private HttpClientInterface $client
-    ) {
-    }
+        private readonly string $webhookUrl,
+        private readonly HttpClientInterface $client
+    ) { }
 
     /**
      * @return iterable<Webhook>
@@ -65,5 +65,47 @@ class CalendlyClient
             );
         }
         return $this->resourceMe;
+    }
+
+    public function createWebhook(): Webhook
+    {
+        $response = $this->client
+            ->withOptions(
+                (new HttpOptions())
+                    ->setAuthBearer($this->accessToken)
+                    ->toArray()
+            )
+            ->request(
+                method: 'POST',
+                url: 'https://api.calendly.com/webhook_subscriptions',
+                options: [
+                    'json' => [
+                        'url' => $this->webhookUrl,
+                        'events' => [
+                            'invitee.created',
+                            'invitee.canceled',
+                            'invitee_no_show.created'
+                        ],
+                        'organization' => $this->resourceMe()->current_organization,
+                        'user' => $this->resourceMe()->uri,
+                        'scope' => 'organization'
+                    ]
+                ]
+            );
+        return new Webhook(...$response->toArray()['resource']);
+    }
+
+    public function deleteWebhook(string $uid): void
+    {
+        $this->client
+            ->withOptions(
+                (new HttpOptions())
+                    ->setAuthBearer($this->accessToken)
+                    ->toArray()
+            )
+            ->request(
+                method: 'DELETE',
+                url: 'https://api.calendly.com/webhook_subscriptions/' . $uid
+            );
     }
 }
