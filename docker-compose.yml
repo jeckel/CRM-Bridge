@@ -37,6 +37,9 @@ services:
     environment:
       DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
       MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/crm_bridge/messages"
+      SUPERVISOR_URL: "http://worker:9001/RPC2"
+      SUPERVISOR_USER: "user"
+      SUPERVISOR_PASSWORD: "password"
     depends_on:
       - mysql
       - rabbitmq

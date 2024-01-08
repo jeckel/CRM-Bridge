@@ -8,9 +8,9 @@ parameters:
 #    irc_nickname: '%env(default::string:IRC_NICKNAME)%'
 #    irc_channels: '%env(default::string:IRC_CHANNELS)%'
 #    irc_real_name: '%env(default::string:IRC_REAL_NAME)%'
-#    supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
-#    supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
-#    supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
+    supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
+    supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
+    supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
     clock:
         mode: real
         timezone: Europe/Paris
@@ -40,9 +40,9 @@ services:
 #        factory: ['JeckelLab\Clock\Factory\ClockFactory', getClock]
 #        arguments: ['%clock%']
 #
-#    Supervisor\Supervisor:
-#      factory: ['App\Infrastructure\Supervisor\SupervisorFactory', getSupervisor]
-#      arguments: ['%supervisor_url%', '%supervisor_user%', '%supervisor_password%']
+    Supervisor\Supervisor:
+      factory: ['App\Infrastructure\Supervisor\SupervisorFactory', getSupervisor]
+      arguments: ['%supervisor_url%', '%supervisor_user%', '%supervisor_password%']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
