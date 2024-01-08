@@ -1,0 +1,12 @@
+[entryPoints]
+    [entryPoints.web]
+        address = ":80"
+
+[api]
+    insecure = true
+    dashboard = true
+
+[providers]
+    [providers.docker]
+        exposedByDefault = false
+        defaultRule = "Host(`{{ index .Labels \"com.docker.compose.service\"}}.localhost`)"

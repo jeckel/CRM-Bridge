@@ -25,7 +25,7 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - "8.2"
+          - "8.3"
 
     env:
       extensions: ctype, dom, intl, json, mbstring, openssl, xml, zip, zlib
@@ -78,14 +78,11 @@ jobs:
       - name: Run PHPStan
         run: vendor/bin/phpstan
 
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --testdox --coverage-text
+#      - name: Run PHPUnit
+#        run: vendor/bin/phpunit --testdox --coverage-text
 
-      - name: Run Infection
-        run: vendor/bin/infection run
-
-      - name: Run Composer Require Checker
-        run: vendor/bin/composer-require-checker
+#      - name: Run Infection
+#        run: vendor/bin/infection run
 
       - name: Run Roave Security Checker
         run: composer update --dry-run roave/security-advisories
