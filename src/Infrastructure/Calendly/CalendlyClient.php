@@ -23,7 +23,7 @@ class CalendlyClient
     ) { }
 
     /**
-     * @return iterable<Webhook>
+     * @return iterable<WebhookConfig>
      */
     public function listWebhooks(): iterable
     {
@@ -45,7 +45,7 @@ class CalendlyClient
             );
 
         foreach ($response->toArray()['collection'] as $webhook) {
-            yield new Webhook(...$webhook);
+            yield new WebhookConfig(...$webhook);
         }
     }
 
@@ -67,7 +67,7 @@ class CalendlyClient
         return $this->resourceMe;
     }
 
-    public function createWebhook(): Webhook
+    public function createWebhook(): WebhookConfig
     {
         $response = $this->client
             ->withOptions(
@@ -92,7 +92,7 @@ class CalendlyClient
                     ]
                 ]
             );
-        return new Webhook(...$response->toArray()['resource']);
+        return new WebhookConfig(...$response->toArray()['resource']);
     }
 
     public function deleteWebhook(string $uid): void

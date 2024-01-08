@@ -17,7 +17,6 @@ use function Castor\run;
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
 {
-//    var_dump(load_dot_env(dirname(__DIR__). '/.env.local'));
     run(
         command: [
             'docker',
@@ -27,6 +26,12 @@ function task_up(): void
         timeout: 0,
         environment: load_dot_env(dirname(__DIR__). '/.env.dev.local')
     );
+}
+
+#[AsTask(name: 'stop', description: 'Stop docker container', aliases: ['stop'])]
+function task_stop(): void
+{
+    run(command: ['docker', 'compose','stop']);
 }
 
 function container_build(): void

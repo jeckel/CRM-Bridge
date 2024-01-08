@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Calendly;
 
-readonly class Webhook
+readonly class WebhookConfig
 {
     /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
