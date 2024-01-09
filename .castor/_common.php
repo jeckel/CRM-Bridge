@@ -16,14 +16,10 @@ use function Castor\load_dot_env;
 #[AsContext()]
 function default_context(): Context
 {
-    $envFile = dirname(__DIR__) . '/.env.local';
-    if (! fs()->exists($envFile)) {
-        generate_env_file($envFile);
-    }
-
+    $envFile = dirname(__DIR__). '/.env.local';
     return new Context(
         data: [],
-        environment: load_dot_env($envFile)
+        environment: fs()->exists($envFile) ? load_dot_env($envFile) : []
     );
 }
 
