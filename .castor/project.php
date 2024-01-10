@@ -29,3 +29,9 @@ function task_build_database(): void
         command: ['docker', 'compose', 'run', '--rm', 'worker', 'php', 'bin/console', 'doctrine:schema:create'],
     );
 }
+
+#[AsTask(name: 'env:build', description: 'Build environment variables file')]
+function task_env_build(): void
+{
+    generate_env_file(dirname(__DIR__). '/.env.local');
+}

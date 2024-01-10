@@ -24,7 +24,7 @@ function task_up(): void
             'up'
         ],
         timeout: 0,
-        environment: load_dot_env(dirname(__DIR__). '/.env.dev.local')
+        environment: load_dot_env(dirname(__DIR__). '/.env.local')
     );
 }
 
