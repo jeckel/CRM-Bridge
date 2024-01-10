@@ -11,6 +11,8 @@ namespace docker;
 
 use Castor\Attribute\AsTask;
 
+use function Castor\capture;
+use function Castor\io;
 use function Castor\load_dot_env;
 use function Castor\run;
 
@@ -33,6 +35,25 @@ function task_stop(): void
 {
     run(command: ['docker', 'compose','stop']);
 }
+
+#[AsTask(name: 'bash', description: 'Down docker container', aliases: ['bash'])]
+function task_bash(): void
+{
+    io()->title("Enter container " . $project->containerName);
+    pcntl_exec(
+        capture('which docker'),
+        [
+            'compose',
+            'run',
+            '--rm',
+            '--user',
+            'hostUser',
+            'php-fpm',
+            'bash'
+        ]
+    );
+}
+
 
 function container_build(): void
 {
