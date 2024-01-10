@@ -40,7 +40,6 @@ services:
       SUPERVISOR_URL: "http://worker:9001/RPC2"
       SUPERVISOR_USER: "user"
       SUPERVISOR_PASSWORD: "password"
-#      CALENDLY_WEBHOOK_URI: "https://cuddly-gratefully-skylark.ngrok-free.app/webhook/calendly"
     env_file:
       - .env.local
     depends_on:
@@ -104,6 +103,4 @@ services:
       traefik.http.services.ngrok.loadbalancer.server.port: 4040
     env_file:
       - .env.local
-#    command: http web:80
-#    command: tunnel --label edge=edghts_2ag6nvGYoQydW1YDRn3Cqb9mJuv http://web:80
     command: tunnel --label edge=\${NGROK_EDGE} http://web:80
