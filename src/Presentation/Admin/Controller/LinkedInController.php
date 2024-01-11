@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Admin\Controller;
 
+use App\Entity\User;
 use App\Infrastructure\LinkedIn\LinkedInClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -18,9 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class LinkedInController extends AbstractController
 {
-    public function __construct(private readonly LinkedInClient $linkedInClient)
-    {
-    }
+    public function __construct(private readonly LinkedInClient $linkedInClient) {}
 
     #[Route(
         path: '/admin/linkedin',
@@ -41,12 +40,13 @@ class LinkedInController extends AbstractController
     )]
     public function callback(Request $request): Response
     {
-        if (((int) $request->get('state')) === $_SESSION['csrf_token'] && $request->get('code') !== null) {
-            $this->linkedInClient->exchangeCodeToAccessToken($request->get('code'));
+        if ($request->get('state') === $_SESSION['csrf_token'] && $request->get('code') !== null) {
+            /** @var string $code */
+            $code = $request->get('code');
+            $this->linkedInClient->exchangeCodeToAccessToken($code);
             return $this->redirectToRoute('linkedin_contact');
-        } else {
-            dd($request->get('error'), $request->get('error_description'), $request->get('state'), $request->get('code'), $_SESSION['csrf_token']);
         }
+        dd($request->get('error'), $request->get('error_description'), $request->get('state'), $request->get('code'), $_SESSION['csrf_token']);
     }
 
     #[Route(
@@ -56,6 +56,7 @@ class LinkedInController extends AbstractController
     )]
     public function refresh(Security $security): Response
     {
+        /** @var User $user */
         $user = $security->getUser();
         $api_url = "https://api.linkedin.com/v2/userinfo"; // Ajustez 'count' si nécessaire
         $headers = [
@@ -71,6 +72,6 @@ class LinkedInController extends AbstractController
         $contacts = curl_exec($curl);
         curl_close($curl);
 
-        dd(json_decode($contacts));
+        dd(json_decode((string) $contacts));
     }
 }
