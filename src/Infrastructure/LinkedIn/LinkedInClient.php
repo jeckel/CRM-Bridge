@@ -10,6 +10,7 @@ namespace App\Infrastructure\LinkedIn;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class LinkedInClient
@@ -60,7 +61,7 @@ class LinkedInClient
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curl);
         if (! is_string($response)) {
-            throw new \RuntimeException('Failed to get access token');
+            throw new RuntimeException('Failed to get access token');
         }
         /** @var object{error: string, access_token: string} $decodedResponse */
         $decodedResponse = json_decode($response);
@@ -74,7 +75,7 @@ class LinkedInClient
         /** @var User|null $user */
         $user = $this->security->getUser();
         if (null === $user) {
-            throw new \RuntimeException('User not found');
+            throw new RuntimeException('User not found');
         }
         $user->setLinkedInAccessToken($access_token);
         $this->userRepository->save($user);
