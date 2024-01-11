@@ -1,4 +1,4 @@
-FROM php:8.3-rc-fpm
+FROM php:8.3-fpm
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG UID

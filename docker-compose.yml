@@ -66,7 +66,6 @@ services:
     hostname: mysql.localhost
     volumes:
       - mysql_db:/var/lib/mysql
-      - ./.docker/sql:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "crm-bridge"
@@ -103,4 +102,7 @@ services:
       traefik.http.services.ngrok.loadbalancer.server.port: 4040
     env_file:
       - .env.local
-    command: tunnel --label edge=\${NGROK_EDGE} http://web:80
+    entrypoint: ""
+    command: sh -c "ngrok tunnel --label edge=$$NGROK_EDGE http://web:80"
+    depends_on:
+      - traefik

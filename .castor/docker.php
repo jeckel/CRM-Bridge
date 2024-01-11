@@ -11,73 +11,42 @@ namespace docker;
 
 use Castor\Attribute\AsTask;
 
-use function Castor\capture;
-use function Castor\io;
-use function Castor\load_dot_env;
 use function Castor\run;
+
+#[AsTask(name: 'build', description: 'Build docker images')]
+function task_install(): void
+{
+    build_docker_images();
+}
 
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
 {
-    run(
-        command: [
-            'docker',
-            'compose',
-            'up'
-        ],
-        timeout: 0,
-        environment: load_dot_env(dirname(__DIR__). '/.env.local')
-    );
+    compose_up();
 }
 
 #[AsTask(name: 'stop', description: 'Stop docker container', aliases: ['stop'])]
 function task_stop(): void
 {
-    run(command: ['docker', 'compose','stop']);
+    docker_compose(['stop']);
 }
 
 #[AsTask(name: 'bash', description: 'Down docker container', aliases: ['bash'])]
 function task_bash(): void
 {
-    io()->title("Enter container " . $project->containerName);
-    pcntl_exec(
-        capture('which docker'),
-        [
-            'compose',
-            'run',
-            '--rm',
-            '--user',
-            'hostUser',
-            'php-fpm',
-            'bash'
-        ]
-    );
+    compose_bash('php-fpm', ['--user', 'hostUser']);
 }
 
-
-function container_build(): void
+function build_docker_images(): void
 {
-    run(
-        command: [
-            'docker',
-            'build',
-            '-t', 'crm-bridge/php-fpm:latest',
-            '--build-arg', 'UID=' . posix_getuid(),
-            '--build-arg', 'GID=' . posix_getgid(),
-            '.docker/php-fpm/'
-        ],
-        timeout: 0
+    build_image(
+        path: '.docker/php-fpm/',
+        tag: 'crm-bridge/php-fpm:latest',
+        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
-
-    run(
-        command: [
-            'docker',
-            'build',
-            '-t', 'crm-bridge/worker:latest',
-            '--build-arg', 'UID=' . posix_getuid(),
-            '--build-arg', 'GID=' . posix_getgid(),
-            '.docker/worker/'
-        ],
-        timeout: 0
+    build_image(
+        path: '.docker/worker/',
+        tag: 'crm-bridge/worker:latest',
+        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
 }

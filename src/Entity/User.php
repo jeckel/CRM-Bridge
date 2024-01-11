@@ -30,6 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'text', length: 1024, nullable: true)]
+    private ?string $linkedInAccessToken = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +96,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->password = $password;
 
+        return $this;
+    }
+
+    public function getLinkedInAccessToken(): ?string
+    {
+        return $this->linkedInAccessToken;
+    }
+
+    public function setLinkedInAccessToken(?string $linkedInAccessToken): User
+    {
+        $this->linkedInAccessToken = $linkedInAccessToken;
         return $this;
     }
 
