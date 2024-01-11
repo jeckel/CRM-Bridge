@@ -22,6 +22,8 @@ grumphp:
     phpstan:
       configuration: phpstan.neon.dist
       use_grumphp_paths: true
+      triggered_by:
+        - php
     git_branch_name:
       whitelist:
         - "feature/*"
