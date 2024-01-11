@@ -13,6 +13,10 @@ parameters:
     calendly_access_token: '%env(default::string:CALENDLY_ACCESS_TOKEN)%'
     calendly_webhook_uri: '%env(default::string:CALENDLY_WEBHOOK_URI)%'
 
+    linkedin_client_id: '%env(default::string:LINKEDIN_CLIENT_ID)%'
+    linkedin_client_secret: '%env(default::string:LINKEDIN_CLIENT_SECRET)%'
+    linkedin_redirect_uri: '%env(default::string:LINKEDIN_REDIRECT_URI)%'
+
     clock:
         mode: real
         timezone: Europe/Paris
@@ -44,3 +48,6 @@ services:
 
     App\Infrastructure\Calendly\CalendlyClient:
       arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']
+
+    App\Infrastructure\LinkedIn\LinkedInClient:
+      arguments: ['%linkedin_client_id%', '%linkedin_client_secret%', '%linkedin_redirect_uri%']

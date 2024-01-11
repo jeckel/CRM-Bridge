@@ -35,12 +35,14 @@ function generate_env_file(string $envFile): void
     $ngrokEdge = io()->ask('Ngrok Edge', $env['NGROK_EDGE'] ?? null);
     $ngrokEntryPoint = io()->ask('Ngrok entry point', $env['NGROK_ENTRYPOINT'] ?? null);
     $calendlyAccessToken = io()->ask('Calendly Access Token', $env['CALENDLY_ACCESS_TOKEN'] ?? null);
+    $linkedInClientId = io()->ask('LinkedIn Client Id', $env['LINKEDIN_CLIENT_ID'] ?? null);
+    $linkedInClientSecret = io()->ask('LinkedIn Client Secret', $env['LINKEDIN_CLIENT_SECRET'] ?? null);
 
     file_put_contents(
         $envFile,
         str_replace(
-            ['%NGROK_AUTHTOKEN%', '%NGROK_EDGE%', '%NGROK_ENTRYPOINT%', '%CALENDLY_ACCESS_TOKEN%'],
-            [$ngrokToken, $ngrokEdge, $ngrokEntryPoint, $calendlyAccessToken],
+            ['%NGROK_AUTHTOKEN%', '%NGROK_EDGE%', '%NGROK_ENTRYPOINT%', '%CALENDLY_ACCESS_TOKEN%', '%LINKEDIN_CLIENT_ID%', '%LINKEDIN_CLIENT_SECRET%'],
+            [$ngrokToken, $ngrokEdge, $ngrokEntryPoint, $calendlyAccessToken, $linkedInClientId, $linkedInClientSecret],
             file_get_contents(dirname(__DIR__) . '/.env.local.sample')
         )
     );

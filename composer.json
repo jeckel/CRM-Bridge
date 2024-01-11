@@ -51,7 +51,8 @@
         "symfony/yaml": "7.0.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
-        "ext-pcntl": "*"
+        "ext-pcntl": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",

@@ -30,7 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    #[ORM\Column(type: 'text', length: 1024, nullable: true)]
     private ?string $linkedInAccessToken = null;
 
     public function getId(): ?int
