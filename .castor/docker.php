@@ -19,14 +19,12 @@ use function Castor\run;
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
 {
-    run(
-        command: [
-            'docker',
+    pcntl_exec(
+        capture('which docker'),
+        [
             'compose',
-            'up'
-        ],
-        timeout: 0,
-        environment: load_dot_env(dirname(__DIR__). '/.env.local')
+            'up',
+        ]
     );
 }
 

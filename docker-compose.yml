@@ -103,4 +103,6 @@ services:
       traefik.http.services.ngrok.loadbalancer.server.port: 4040
     env_file:
       - .env.local
-    command: tunnel --label edge=\${NGROK_EDGE} http://web:80
+    command: tunnel --label edge=\$\NGROK_EDGE http://web:80
+    depends_on:
+      - traefik
