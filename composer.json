@@ -11,6 +11,8 @@
     ],
     "require": {
         "php": "~8.3",
+        "ext-curl": "*",
+        "ext-pcntl": "*",
         "ext-posix": "*",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.8",
@@ -19,6 +21,7 @@
         "easycorp/easyadmin-bundle": "^4.8",
         "guzzlehttp/guzzle": "^7.0",
         "jeckel-lab/clock": "^1.2",
+        "jeckel-lab/identity-contract": "~2.0",
         "ramsey/uuid-doctrine": "^2.0",
         "supervisorphp/supervisor": "^5.1",
         "symfony/amqp-messenger": "7.0.*",
@@ -50,9 +53,7 @@
         "symfony/web-link": "7.0.*",
         "symfony/yaml": "7.0.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "ext-pcntl": "*",
-        "ext-curl": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",

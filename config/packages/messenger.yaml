@@ -17,7 +17,8 @@ framework:
             Symfony\Component\Mailer\Messenger\SendEmailMessage: async
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
-            App\Presentation\Async\Calendly\Webhook: async
+#            App\Presentation\Async\WebHook\WebHook: async
+#            App\Presentation\Async\WebHook\CalDotComWebhook: async
 #            App\Async\Message\AsyncIrcMessage: async
 #            App\Async\Message\AsyncIrcCommand: irc_command
 

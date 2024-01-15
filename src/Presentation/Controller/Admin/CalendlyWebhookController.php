@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Admin\Controller;
+namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\Calendly\CalendlyClient;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;

@@ -37,6 +37,13 @@ function task_env_build(): void
     generate_env_file(dirname(__DIR__). '/.env.local');
 }
 
+#[AsTask(name: 'update', description: 'Update the project', aliases: ['update'])]
+function task_update(): void
+{
+    run(['git', 'pull']);
+    run(['composer', 'update']);
+}
+
 function run_symfony_console(array $command): void
 {
     compose_run_or_exec('php-fpm', ['php', 'bin/console', ...$command], ['--user', 'hostUser']);
