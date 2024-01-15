@@ -38,6 +38,9 @@ class Contact
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phoneNumber;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $espoContactId = null;
+
     public function getId(): UuidInterface|string
     {
         return $this->id;
@@ -101,6 +104,17 @@ class Contact
     public function setPhoneNumber(?string $phoneNumber): Contact
     {
         $this->phoneNumber = $phoneNumber;
+        return $this;
+    }
+
+    public function getEspoContactId(): ?string
+    {
+        return $this->espoContactId;
+    }
+
+    public function setEspoContactId(?string $espoContactId): Contact
+    {
+        $this->espoContactId = $espoContactId;
         return $this;
     }
 }

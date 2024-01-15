@@ -1,12 +1,16 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
+imports:
+  # Load all files from 'parameters' directory
+  - { resource: parameters/ }
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
-    supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
-    supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
+#    supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
+#    supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
+#    supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
 #    calendly_client_id: '%env(default::string:CALENDLY_CLIENT_ID)%'
 #    calendly_client_secret: '%env(default::string:CALENDLY_CLIENT_SECRET)%'
 #    calendly_webhook_signing_key: '%env(default::string:CALENDLY_WEBHOOK_SIGNING_KEY)%'
@@ -38,9 +42,9 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-#    JeckelLab\Contract\Infrastructure\System\Clock:
-#        factory: ['JeckelLab\Clock\Factory\ClockFactory', getClock]
-#        arguments: ['%clock%']
+    JeckelLab\Contract\Infrastructure\System\Clock:
+        factory: ['JeckelLab\Clock\Factory\ClockFactory', getClock]
+        arguments: ['%clock%']
 #
     Supervisor\Supervisor:
       factory: ['App\Infrastructure\Supervisor\SupervisorFactory', getSupervisor]

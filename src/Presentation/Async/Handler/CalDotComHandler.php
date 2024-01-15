@@ -12,6 +12,7 @@ namespace App\Presentation\Async\Handler;
 use App\Entity\Contact;
 use App\Event\ContactCreated;
 use App\Identity\ContactId;
+use App\Infrastructure\EspoCRM\EspoAdapter;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
 use App\Repository\ContactRepository;
 use DateTimeImmutable;
@@ -23,7 +24,8 @@ readonly class CalDotComHandler
 {
     public function __construct(
         private ContactRepository $contactRepository,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
+        private EspoAdapter $espoAdapter
     ) {}
 
     public function __invoke(CalDotComWebhook $webhook): void
@@ -31,9 +33,15 @@ readonly class CalDotComHandler
         foreach ($webhook->payload['attendees'] as $attendee) {
             $contact = $this->contactRepository->findOneBy(['email' => $attendee['email']]);
             if ($contact === null) {
+                $espoContact = $this->espoAdapter->getContactByEmail($attendee['email']);
+
                 $contact = new Contact();
                 $contact->setEmail($attendee['email'])
                     ->setDisplayName($attendee['name']);
+
+                if (null !== $espoContact) {
+                    $contact->setEspoContactId($espoContact->id);
+                }
                 $this->contactRepository->persist($contact);
             }
             $this->eventDispatcher->dispatch(

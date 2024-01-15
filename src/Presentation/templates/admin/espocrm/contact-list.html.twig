@@ -1,0 +1,22 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}EspoCRM - Contacts{% endblock %}
+
+{% block main %}
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Titre</th>
+        <th>email</th>
+        <th>Téléphone</th>
+    </tr>
+{% for contact in contacts %}
+    <tr>
+        <td>{{ contact.name }}</td>
+        <td>{{ contact.title }}</td>
+        <td>{{ contact.emailAddress }}</td>
+        <td>{{ contact.phoneNumber }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

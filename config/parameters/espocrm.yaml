@@ -1,0 +1,8 @@
+parameters:
+  espocrm_url: '%env(default::string:ESPOCRM_URL)%'
+  espocrm_api_key: '%env(default::string:ESPOCRM_API_KEY)%'
+
+services:
+  Espo\ApiClient\Client:
+    factory: [ 'App\Infrastructure\EspoCRM\EspoCRMFactory', getEspoCRM ]
+    arguments: [ '%espocrm_url%', '%espocrm_api_key%' ]

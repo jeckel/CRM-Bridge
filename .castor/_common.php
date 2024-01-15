@@ -37,12 +37,32 @@ function generate_env_file(string $envFile): void
     $calendlyAccessToken = io()->ask('Calendly Access Token', $env['CALENDLY_ACCESS_TOKEN'] ?? null);
     $linkedInClientId = io()->ask('LinkedIn Client Id', $env['LINKEDIN_CLIENT_ID'] ?? null);
     $linkedInClientSecret = io()->ask('LinkedIn Client Secret', $env['LINKEDIN_CLIENT_SECRET'] ?? null);
+    $espocrmUrl = io()->ask('EspoCRM URL', $env['ESPOCRM_URL'] ?? null);
+    $espocrmApiKey = io()->ask('EspoCRM API Key', $env['ESPOCRM_API_KEY'] ?? null);
 
     file_put_contents(
         $envFile,
         str_replace(
-            ['%NGROK_AUTHTOKEN%', '%NGROK_EDGE%', '%NGROK_ENTRYPOINT%', '%CALENDLY_ACCESS_TOKEN%', '%LINKEDIN_CLIENT_ID%', '%LINKEDIN_CLIENT_SECRET%'],
-            [$ngrokToken, $ngrokEdge, $ngrokEntryPoint, $calendlyAccessToken, $linkedInClientId, $linkedInClientSecret],
+            [
+                '%NGROK_AUTHTOKEN%',
+                '%NGROK_EDGE%',
+                '%NGROK_ENTRYPOINT%',
+                '%CALENDLY_ACCESS_TOKEN%',
+                '%LINKEDIN_CLIENT_ID%',
+                '%LINKEDIN_CLIENT_SECRET%',
+                '%ESPOCRM_URL%',
+                '%ESPOCRM_API_KEY%'
+            ],
+            [
+                $ngrokToken,
+                $ngrokEdge,
+                $ngrokEntryPoint,
+                $calendlyAccessToken,
+                $linkedInClientId,
+                $linkedInClientSecret,
+                $espocrmUrl,
+                $espocrmApiKey
+            ],
             file_get_contents(dirname(__DIR__) . '/.env.local.sample')
         )
     );
