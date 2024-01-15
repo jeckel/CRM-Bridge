@@ -17,14 +17,14 @@ class IncomingWebhook
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface|string $id; /** @phpstan-ignore-line */
 
-    #[ORM\Column(length: 255)]
-    private ?string $application = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $event = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $source = '';
+
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $event = '';
 
     #[ORM\Column(type: Types::JSON)]
     private ?array $payload = null; /** @phpstan-ignore-line */
@@ -34,15 +34,14 @@ class IncomingWebhook
         return $this->id;
     }
 
-    public function getApplication(): ?string
+    public function getSource(): string
     {
-        return $this->application;
+        return $this->source;
     }
 
-    public function setApplication(string $application): static
+    public function setSource(string $source): IncomingWebhook
     {
-        $this->application = $application;
-
+        $this->source = $source;
         return $this;
     }
 

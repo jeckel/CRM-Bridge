@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Admin\Controller;
+namespace App\Presentation\Controller\Admin;
 
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

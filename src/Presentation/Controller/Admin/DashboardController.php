@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Admin\Controller;
+namespace App\Presentation\Controller\Admin;
 
 use App\Entity\IncomingWebhook;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;

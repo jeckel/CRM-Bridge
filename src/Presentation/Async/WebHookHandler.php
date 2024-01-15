@@ -2,35 +2,31 @@
 
 /**
  * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
- * Created at: 08/01/2024
+ * Created at: 15/01/2024
  */
 
 declare(strict_types=1);
 
-namespace App\Presentation\Async\Calendly;
+namespace App\Presentation\Async;
 
 use App\Entity\IncomingWebhook;
 use App\Repository\IncomingWebhookRepository;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class WebhookHandler implements LoggerAwareInterface
+class WebHookHandler
 {
-    use LoggerAwareTrait;
-
     public function __construct(
         private readonly IncomingWebhookRepository $incomingWebhookRepository
     ) {}
 
-    public function __invoke(Webhook $webhook): void
+    public function __invoke(WebHook $webhook): void
     {
         $this->incomingWebhookRepository->persist(
             (new IncomingWebhook())
-                ->setApplication('Calendly')
+                ->setSource('Calendly')
                 ->setCreatedAt($webhook->createdAt)
-                ->setEvent($webhook->event->value)
+                ->setEvent((string) $webhook->event)
                 ->setPayload($webhook->payload)
         );
     }
