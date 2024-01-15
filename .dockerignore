@@ -1,0 +1,10 @@
+.build
+.castor
+.github
+tests
+var
+vendor
+.env.local
+.env.local.sample
+CHANGELOG.md
+docker-compose.yml
