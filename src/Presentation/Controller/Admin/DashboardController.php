@@ -3,6 +3,7 @@
 namespace App\Presentation\Controller\Admin;
 
 use App\Entity\IncomingWebhook;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -27,6 +28,14 @@ class DashboardController extends AbstractDashboardController
         ;
     }
 
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->setDateTimeFormat('dd/MM/yyyy HH:mm:ss')
+            ->setPaginatorPageSize(100)
+            ->showEntityActionsInlined();
+    }
+
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
@@ -34,6 +43,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
         yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
         yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

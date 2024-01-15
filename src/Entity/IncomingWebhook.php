@@ -12,7 +12,7 @@ use Ramsey\Uuid\UuidInterface;
 class IncomingWebhook
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'incoming_webhook__id', type: "uuid", unique: true)]
+    #[ORM\Column(name: 'incoming_webhook_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface|string $id; /** @phpstan-ignore-line */

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Presentation\Async\WebHook;
+use App\Presentation\Async\WebHook\WebHook;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

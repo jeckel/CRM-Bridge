@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Presentation\Async\WebHook;
+use App\Presentation\Async\WebHook\CalDotComWebHook;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,10 +27,10 @@ class CalDotComController extends AbstractController
     public function __invoke(Request $request, MessageBusInterface $bus): Response
     {
         $content = $request->toArray();
-        $bus->dispatch(new WebHook(
-            createdAt: new DateTimeImmutable($content['createdAt']),
+        $bus->dispatch(new CalDotComWebHook(
+            createdAt: new DateTimeImmutable($content['createdAt'] ?? "now"),
             source: WebHookSource::CAL_DOT_COM,
-            event: $content['triggerEvent'],
+            event: $content['triggerEvent'] ?? 'Unknown event',
             payload: $content
         ));
         return new Response('200 OK');

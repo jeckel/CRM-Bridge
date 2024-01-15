@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Async;
+namespace App\Presentation\Async\WebHook;
 
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
