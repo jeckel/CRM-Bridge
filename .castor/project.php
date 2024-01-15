@@ -44,6 +44,14 @@ function task_update(): void
     run(['composer', 'update']);
 }
 
+#[AsTask(name: 'cache:clear', description: 'Clear cache', aliases: ['cc'])]
+function task_cache_clear(): void
+{
+    run_symfony_console(['cache:clear']);
+}
+
+#[AsTask(name: 'cache:warmup', description: 'Warmup cache', aliases: ['cw'])]
+
 function run_symfony_console(array $command): void
 {
     compose_run_or_exec('php-fpm', ['php', 'bin/console', ...$command], ['--user', 'hostUser']);

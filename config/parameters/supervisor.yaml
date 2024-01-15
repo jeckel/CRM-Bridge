@@ -1,0 +1,4 @@
+parameters:
+  supervisor_url: '%env(default::string:SUPERVISOR_URL)%'
+  supervisor_user: '%env(default::string:SUPERVISOR_USER)%'
+  supervisor_password: '%env(default::string:SUPERVISOR_PASSWORD)%'
