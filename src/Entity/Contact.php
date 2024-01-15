@@ -24,15 +24,18 @@ class Contact
     private UuidInterface|string $id;
 
     #[ORM\Column(length: 180, nullable: false)]
-    private string $name = '';
+    private string $displayName = '';
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $lastname = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $firstname = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30, nullable: true)]
     private ?string $phoneNumber;
 
     public function getId(): UuidInterface|string
@@ -46,14 +49,25 @@ class Contact
         return $this;
     }
 
-    public function getName(): string
+    public function getDisplayName(): string
     {
-        return $this->name;
+        return $this->displayName;
     }
 
-    public function setName(string $name): Contact
+    public function setDisplayName(string $displayName): Contact
     {
-        $this->name = $name;
+        $this->displayName = $displayName;
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): Contact
+    {
+        $this->firstname = $firstname;
         return $this;
     }
 

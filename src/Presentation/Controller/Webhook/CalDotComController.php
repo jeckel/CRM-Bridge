@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Presentation\Async\WebHook\CalDotComWebHook;
+use App\Entity\IncomingWebhook;
+use App\Presentation\Async\WebHook\CalDotComWebhook;
+use App\Repository\IncomingWebhookRepository;
+use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,8 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class CalDotComController extends AbstractController
+class CalDotComController extends AbstractWebhookController
 {
+
+
     #[Route(
         path: '/webhook/cal-dot-com',
         methods: ['GET', 'POST']
@@ -27,12 +32,27 @@ class CalDotComController extends AbstractController
     public function __invoke(Request $request, MessageBusInterface $bus): Response
     {
         $content = $request->toArray();
-        $bus->dispatch(new CalDotComWebHook(
-            createdAt: new DateTimeImmutable($content['createdAt'] ?? "now"),
-            source: WebHookSource::CAL_DOT_COM,
-            event: $content['triggerEvent'] ?? 'Unknown event',
-            payload: $content
-        ));
+        $source = WebHookSource::CAL_DOT_COM;
+        $createdAt = new DateTimeImmutable($content['createdAt'] ?? 'now');
+        $event = TriggerEvent::tryFrom($content['triggerEvent']);
+
+        $this->persistWebhook(
+            source: $source,
+            createdAt: $createdAt,
+            event: $event->value ?? $content['triggerEvent'],
+            content: $content
+        );
+
+        if ($event !== null) {
+            $bus->dispatch(
+                new CalDotComWebhook(
+                    createdAt: $createdAt,
+                    source: $source,
+                    event: $event,
+                    payload: $content['payload']
+                )
+            );
+        }
         return new Response('200 OK');
     }
 }
