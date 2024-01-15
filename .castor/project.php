@@ -44,8 +44,6 @@ function task_update(): void
     run(['composer', 'update']);
 }
 
-#[AsTask(name: 'deploy', description: 'Deploy the project', aliases: ['deploy'])]
-
 function run_symfony_console(array $command): void
 {
     compose_run_or_exec('php-fpm', ['php', 'bin/console', ...$command], ['--user', 'hostUser']);

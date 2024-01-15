@@ -9,13 +9,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Entity\IncomingWebhook;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
-use App\Repository\IncomingWebhookRepository;
 use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -23,17 +21,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CalDotComController extends AbstractWebhookController
 {
-
-
     #[Route(
         path: '/webhook/cal-dot-com',
         methods: ['GET', 'POST']
     )]
-    public function __invoke(Request $request, MessageBusInterface $bus): Response
+    public function __invoke(Request $request, MessageBusInterface $bus, Clock $clock): Response
     {
         $content = $request->toArray();
         $source = WebHookSource::CAL_DOT_COM;
-        $createdAt = new DateTimeImmutable($content['createdAt'] ?? 'now');
+        $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
         $event = TriggerEvent::tryFrom($content['triggerEvent']);
 
         $this->persistWebhook(

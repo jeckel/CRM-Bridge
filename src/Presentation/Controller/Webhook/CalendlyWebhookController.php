@@ -9,30 +9,32 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Presentation\Async\WebHook\WebHook;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class Calendly extends AbstractController
+class CalendlyWebhookController extends AbstractWebhookController
 {
     #[Route(
         path: '/webhook/calendly',
         methods: ['GET', 'POST']
     )]
-    public function __invoke(Request $request, MessageBusInterface $bus): Response
+    public function __invoke(Request $request, Clock $clock): Response
     {
         $content = $request->toArray();
-        $bus->dispatch(new WebHook(
-            createdAt: new DateTimeImmutable($content['created_at']),
-            source: WebHookSource::CALENDLY,
+
+        $source = WebHookSource::CAL_DOT_COM;
+        $createdAt = isset($content['created_at']) ? new DateTimeImmutable($content['created_at']) : $clock->now();
+
+        $this->persistWebhook(
+            source: $source,
+            createdAt: $createdAt,
             event: $content['event'],
-            payload: $content['payload']
-        ));
+            content: $content
+        );
         return new Response('200 OK');
     }
 }
