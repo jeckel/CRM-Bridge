@@ -10552,12 +10552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jeckel-Lab/castor-helper.git",
-                "reference": "e2d3fffb87806e70a01251a8ea0165b6aacc575f"
+                "reference": "ea2771ecca1df7628ed7849c0595199e5273e159"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jeckel-Lab/castor-helper/zipball/e2d3fffb87806e70a01251a8ea0165b6aacc575f",
-                "reference": "e2d3fffb87806e70a01251a8ea0165b6aacc575f",
+                "url": "https://api.github.com/repos/Jeckel-Lab/castor-helper/zipball/ea2771ecca1df7628ed7849c0595199e5273e159",
+                "reference": "ea2771ecca1df7628ed7849c0595199e5273e159",
                 "shasum": ""
             },
             "require": {
@@ -10585,7 +10585,7 @@
                 "issues": "https://github.com/Jeckel-Lab/castor-helper/issues",
                 "source": "https://github.com/Jeckel-Lab/castor-helper/tree/main"
             },
-            "time": "2024-01-20T19:19:47+00:00"
+            "time": "2024-01-20T20:47:27+00:00"
         },
         {
             "name": "justinrainbow/json-schema",

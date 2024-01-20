@@ -11,6 +11,8 @@ namespace docker;
 
 use Castor\Attribute\AsTask;
 
+use function Castor\get_cache;
+use function Castor\io;
 use function Castor\run;
 
 #[AsTask(name: 'build', description: 'Build docker images')]
@@ -35,6 +37,35 @@ function task_stop(): void
 function task_bash(): void
 {
     compose_bash(container: 'php-fpm', options: ['--user', 'hostUser']);
+}
+
+#[AsTask(name: 'prod', description: 'Build prod images')]
+function build_prod_image(): void
+{
+    $cache = get_cache();
+
+    $item = $cache->getItem('docker-registry');
+    $registry = $item->isHit() ? $item->get() : null;
+    $registry = io()->ask('Docker registry url', $registry);
+
+    $item->set($registry);
+    $cache->save($item);
+
+    $tag = $registry . '/crm-bridge/web:latest';
+    docker_build(
+        path: '',
+        tag: $tag,
+        options: ['-f', '.docker/prod-web/Dockerfile']
+    );
+
+    run(
+        command: [
+            'docker',
+            'push',
+            $tag
+        ],
+        timeout: 0
+    );
 }
 
 function build_docker_images(): void
