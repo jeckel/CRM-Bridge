@@ -17,23 +17,12 @@ services:
       traefik.http.routers.traefik_https.service: api@internal
 
   web:
-    image: nginx:alpine
-    working_dir: /application
+    image: crm-bridge/apache:latest
+    working_dir: /var/www
     volumes:
-      - ./:/application
-      - ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www
     labels:
       traefik.enable: "true"
-    depends_on:
-      - php-fpm
-      - traefik
-
-  php-fpm:
-    image: crm-bridge/php-fpm:latest
-    hostname: php-fpm.localhost
-    working_dir: /application
-    volumes:
-      - ./:/application
     environment:
       DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
       MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/crm_bridge/messages"
@@ -44,7 +33,7 @@ services:
       - .env.local
     depends_on:
       - mysql
-      - rabbitmq
+      - traefik
 
   worker:
     image: crm-bridge/worker:latest
