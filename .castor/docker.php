@@ -40,18 +40,13 @@ function task_bash(): void
 function build_docker_images(): void
 {
     docker_build(
-        path: '.docker/php-fpm/',
-        tag: 'crm-bridge/php-fpm:latest',
-        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
-    );
-    docker_build(
         path: '.docker/worker/',
         tag: 'crm-bridge/worker:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
     docker_build(
-        path: '.docker/apache/',
-        tag: 'crm-bridge/apache:latest',
+        path: '.docker/web/',
+        tag: 'crm-bridge/web:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
 }
