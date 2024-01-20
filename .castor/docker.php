@@ -22,7 +22,7 @@ function task_install(): void
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
 {
-    compose_up();
+    docker_compose_up();
 }
 
 #[AsTask(name: 'stop', description: 'Stop docker container', aliases: ['stop'])]
@@ -34,19 +34,24 @@ function task_stop(): void
 #[AsTask(name: 'bash', description: 'Down docker container', aliases: ['bash'])]
 function task_bash(): void
 {
-    compose_bash('php-fpm', ['--user', 'hostUser']);
+    compose_bash(container: 'php-fpm', options: ['--user', 'hostUser']);
 }
 
 function build_docker_images(): void
 {
-    build_image(
+    docker_build(
         path: '.docker/php-fpm/',
         tag: 'crm-bridge/php-fpm:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
-    build_image(
+    docker_build(
         path: '.docker/worker/',
         tag: 'crm-bridge/worker:latest',
+        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
+    );
+    docker_build(
+        path: '.docker/apache/',
+        tag: 'crm-bridge/apache:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
 }

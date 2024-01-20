@@ -54,5 +54,5 @@ function task_cache_clear(): void
 
 function run_symfony_console(array $command): void
 {
-    compose_run_or_exec('php-fpm', ['php', 'bin/console', ...$command], ['--user', 'hostUser']);
+    compose_run_or_exec('web', ['php', 'bin/console', ...$command], ['--user', 'hostUser']);
 }
