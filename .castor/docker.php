@@ -36,7 +36,7 @@ function task_stop(): void
 #[AsTask(name: 'bash', description: 'Down docker container', aliases: ['bash'])]
 function task_bash(): void
 {
-    compose_bash(container: 'php-fpm', options: ['--user', 'hostUser']);
+    compose_bash(container: 'web', options: ['--user', 'hostUser']);
 }
 
 #[AsTask(name: 'prod', description: 'Build prod images')]

@@ -1,13 +1,16 @@
-FROM php:8.1-cli as build
+FROM php:8.3-cli as build
+
+RUN apt update && apt install -y zip
 
 COPY . /application
 WORKDIR /application
 
-RUN apt update && apt install -y zip
-
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-RUN composer install --no-dev --ignore-platform-reqs --no-plugins --no-scripts
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV APP_ENV=prod
+RUN composer install --no-dev --ignore-platform-reqs
+RUN #composer install --no-dev --ignore-platform-reqs --no-plugins --no-scripts
 
 FROM php:8.3-apache
 
@@ -31,5 +34,6 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/docker-php.conf
 
 COPY --from=build /application /var/www
+ENV APP_ENV=prod
 
 WORKDIR /var/www
