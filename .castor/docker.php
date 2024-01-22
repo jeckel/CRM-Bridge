@@ -57,7 +57,21 @@ function build_prod_image(): void
         tag: $tag,
         options: ['-f', '.docker/prod-web/Dockerfile']
     );
+    run(
+        command: [
+            'docker',
+            'push',
+            $tag
+        ],
+        timeout: 0
+    );
 
+    $tag = $registry . '/crm-bridge/worker:latest';
+    docker_build(
+        path: '',
+        tag: $tag,
+        options: ['-f', '.docker/prod-worker/Dockerfile']
+    );
     run(
         command: [
             'docker',
