@@ -28,6 +28,12 @@ class IncomingWebhookCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $replayAction = Action::new('webhook_replay', 'Replay')
+//            ->displayAsButton()
+            ->linkToRoute(
+                routeName: 'webhook_replay',
+                routeParameters: static fn(IncomingWebhook $webhook) => ['webhookId' => (string) $webhook->getId()]
+            );
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->remove(Crud::PAGE_INDEX, Action::EDIT)
@@ -36,7 +42,8 @@ class IncomingWebhookCrudController extends AbstractCrudController
                 return $action->setIcon('fa fa-eye')
                     ->setLabel(false)
                     ->setCssClass('btn btn-secondary');
-            });
+            })
+            ->add(Crud::PAGE_DETAIL, $replayAction);
     }
 
     /**

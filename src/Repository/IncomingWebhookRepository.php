@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\IncomingWebhook;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,6 +26,11 @@ class IncomingWebhookRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($incomingWebhook);
         $this->getEntityManager()->flush();
+    }
+
+    public function getById(string $id): IncomingWebhook
+    {
+        return $this->find($id) ?? throw new EntityNotFoundException();
     }
 
     //    /**

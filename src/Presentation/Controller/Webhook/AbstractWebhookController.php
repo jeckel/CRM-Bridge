@@ -29,13 +29,15 @@ abstract class AbstractWebhookController extends AbstractController
         DateTimeImmutable $createdAt,
         string|\Stringable $event,
         array $content
-    ): void {
+    ): IncomingWebhook {
+        $webhook = (new IncomingWebhook())
+            ->setSource($source->value)
+            ->setCreatedAt($createdAt)
+            ->setEvent((string) $event)
+            ->setPayload($content);
         $this->incomingWebhookRepository->persist(
-            (new IncomingWebhook())
-                ->setSource($source->value)
-                ->setCreatedAt($createdAt)
-                ->setEvent((string) $event)
-                ->setPayload($content)
+            $webhook
         );
+        return $webhook;
     }
 }

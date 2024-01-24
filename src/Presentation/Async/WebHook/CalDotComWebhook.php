@@ -13,7 +13,7 @@ use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
 
-readonly class CalDotComWebhook
+readonly class CalDotComWebhook implements WebhookInterface
 {
     /** @phpstan-ignore-next-line */
     public function __construct(
