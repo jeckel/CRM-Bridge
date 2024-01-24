@@ -32,7 +32,7 @@ class CalDotComController extends AbstractWebhookController
         $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
         $event = TriggerEvent::tryFrom($content['triggerEvent']);
 
-        $this->persistWebhook(
+        $webhook = $this->persistWebhook(
             source: $source,
             createdAt: $createdAt,
             event: $event->value ?? $content['triggerEvent'],
@@ -40,14 +40,7 @@ class CalDotComController extends AbstractWebhookController
         );
 
         if ($event !== null) {
-            $webhookDispatcher->dispatch(
-                new CalDotComWebhook(
-                    createdAt: $createdAt,
-                    source: $source,
-                    event: $event,
-                    payload: $content['payload']
-                )
-            );
+            $webhookDispatcher->dispatch($webhook);
         }
         return new Response('200 OK');
     }

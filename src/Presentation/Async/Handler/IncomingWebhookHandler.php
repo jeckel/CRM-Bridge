@@ -12,25 +12,26 @@ use App\Entity\IncomingWebhook;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
 use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;
+use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 readonly class IncomingWebhookHandler
 {
-    public function __construct(private CalDotComHandler $calDotcomHandler) {}
+    public function __construct(private CalDotComHandler $calDotcomHandler, private Clock $clock) {}
 
     public function __invoke(IncomingWebhook $webhook): void
     {
         $source = WebHookSource::tryFrom($webhook->getSource());
-        $event = TriggerEvent::tryFrom($webhook->getEvent());
+        $event = TriggerEvent::tryFrom((string) $webhook->getEvent());
         if ($source === WebHookSource::CAL_DOT_COM && $event !== null) {
             call_user_func(
                 $this->calDotcomHandler,
                 new CalDotComWebhook(
-                    createdAt: $webhook->getCreatedAt(),
+                    createdAt: $webhook->getCreatedAt() ?? $this->clock->now(),
                     source: $source,
                     event: $event,
-                    payload: $webhook->getPayload()
+                    payload: $webhook->getPayload() ?? []
                 )
             );
         }
