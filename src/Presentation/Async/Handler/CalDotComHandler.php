@@ -30,7 +30,7 @@ readonly class CalDotComHandler
 
     public function __invoke(CalDotComWebhook $webhook): void
     {
-        foreach ($webhook->payload['attendees'] as $attendee) {
+        foreach ($webhook->payload['payload']['attendees'] as $attendee) {
             $contact = $this->contactRepository->findOneBy(['email' => $attendee['email']]);
             if ($contact === null) {
                 $espoContact = $this->espoAdapter->getContactByEmail($attendee['email']);
