@@ -6,7 +6,4 @@
 
 namespace App\Presentation\Async\WebHook;
 
-interface WebhookInterface
-{
-
-}
+interface WebhookInterface {}

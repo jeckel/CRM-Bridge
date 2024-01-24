@@ -32,7 +32,7 @@ class IncomingWebhookCrudController extends AbstractCrudController
 //            ->displayAsButton()
             ->linkToRoute(
                 routeName: 'webhook_replay',
-                routeParameters: static fn (IncomingWebhook $webhook) => ['webhookId' => (string) $webhook->getId()]
+                routeParameters: static fn(IncomingWebhook $webhook) => ['webhookId' => (string) $webhook->getId()]
             );
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)

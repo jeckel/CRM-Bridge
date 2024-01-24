@@ -15,7 +15,7 @@ readonly class WebhookDispatcher
 {
     public function __construct(
         private MessageBusInterface $bus
-    ) { }
+    ) {}
 
     public function dispatch(IncomingWebhook $webhook): void
     {

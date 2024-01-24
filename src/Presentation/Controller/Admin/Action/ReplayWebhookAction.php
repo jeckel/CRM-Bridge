@@ -29,8 +29,7 @@ class ReplayWebhookAction extends AbstractController
         WebhookDispatcher $dispatcher,
         IncomingWebhookRepository $repository,
         AdminUrlGenerator $urlGenerator
-    ): Response
-    {
+    ): Response {
         $dispatcher->dispatch($repository->getById($webhookId));
         $this->addFlash('success', 'Webhook re-added to the queue.');
         return $this->redirect(

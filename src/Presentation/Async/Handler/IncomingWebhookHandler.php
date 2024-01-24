@@ -17,9 +17,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 readonly class IncomingWebhookHandler
 {
-    public function __construct(private CalDotComHandler $calDotcomHandler)
-    {
-    }
+    public function __construct(private CalDotComHandler $calDotcomHandler) {}
 
     public function __invoke(IncomingWebhook $webhook): void
     {
