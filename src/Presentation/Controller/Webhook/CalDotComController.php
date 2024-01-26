@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\Presentation\Async\WebHook\CalDotComWebhook;
 use App\Presentation\Service\WebhookDispatcher;
 use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;
