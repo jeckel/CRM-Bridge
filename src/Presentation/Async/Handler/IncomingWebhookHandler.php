@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Handler;
 
-use App\Entity\IncomingWebhook;
+use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
 use App\ValueObject\CalDotCom\TriggerEvent;
 use App\ValueObject\WebHookSource;

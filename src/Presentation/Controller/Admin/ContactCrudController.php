@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Entity\Contact;
+use App\Infrastructure\Doctrine\Entity\Contact;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
