@@ -85,12 +85,12 @@ function build_prod_image(): void
 function build_docker_images(): void
 {
     docker_build(
-        path: '.docker/worker/',
+        path: '/.docker/worker/',
         tag: 'crm-bridge/worker:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
     docker_build(
-        path: '.docker/web/',
+        path: '/.docker/web/',
         tag: 'crm-bridge/web:latest',
         buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );

@@ -9,46 +9,30 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Handler;
 
-use App\Entity\Contact;
-use App\Event\ContactCreated;
-use App\Identity\ContactId;
-use App\Infrastructure\EspoCRM\EspoAdapter;
+use App\Application\RegisterAppointmentRequest;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
-use App\Repository\ContactRepository;
 use DateTimeImmutable;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 readonly class CalDotComHandler
 {
     public function __construct(
-        private ContactRepository $contactRepository,
-        private EventDispatcherInterface $eventDispatcher,
-        private EspoAdapter $espoAdapter
+        private RegisterAppointmentRequest $registerAppointmentRequest
     ) {}
 
     public function __invoke(CalDotComWebhook $webhook): void
     {
         foreach ($webhook->payload['payload']['attendees'] as $attendee) {
-            $contact = $this->contactRepository->findOneBy(['email' => $attendee['email']]);
-            if ($contact === null) {
-                $espoContact = $this->espoAdapter->getContactByEmail($attendee['email']);
-
-                $contact = new Contact();
-                $contact->setEmail($attendee['email'])
-                    ->setDisplayName($attendee['name']);
-
-                if (null !== $espoContact) {
-                    $contact->setEspoContactId($espoContact->id);
-                }
-                $this->contactRepository->persist($contact);
-            }
-            $this->eventDispatcher->dispatch(
-                new ContactCreated(
-                    ContactId::from((string) $contact->getId()),
-                    new DateTimeImmutable()
-                )
+            $this->registerAppointmentRequest->registerAppointment(
+                firstName: '',
+                lastName: '',
+                displayName: $attendee['name'],
+                email: $attendee['email'],
+                phoneNumber: '',
+                appointmentDate: new DateTimeImmutable(),
+                requestDate: new DateTimeImmutable(),
+                appointmentSubject: 'Appointment',
             );
         }
     }

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Entity\IncomingWebhook;
+use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -29,7 +29,6 @@ class IncomingWebhookCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $replayAction = Action::new('webhook_replay', 'Replay')
-//            ->displayAsButton()
             ->linkToRoute(
                 routeName: 'webhook_replay',
                 routeParameters: static fn(IncomingWebhook $webhook) => ['webhookId' => (string) $webhook->getId()]
@@ -43,7 +42,8 @@ class IncomingWebhookCrudController extends AbstractCrudController
                     ->setLabel(false)
                     ->setCssClass('btn btn-secondary');
             })
-            ->add(Crud::PAGE_DETAIL, $replayAction);
+            ->add(Crud::PAGE_DETAIL, $replayAction)
+            ->add(Crud::PAGE_INDEX, $replayAction);
     }
 
     /**

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Entity\User;
+use App\Infrastructure\Doctrine\Entity\User;
 use App\Infrastructure\LinkedIn\LinkedInClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;

@@ -6,16 +6,13 @@
  */
 declare(strict_types=1);
 
-namespace App\Domain\ContactManagment\Repository;
+namespace App\Domain\Component\ContactManagment\Port;
 
-use App\Domain\ContactManagment\Entity\Contact;
-use App\Identity\ContactId;
+use App\Domain\Component\ContactManagment\Entity\Contact;
 
 interface ContactRepository
 {
     public function save(Contact $contact): void;
-
-    public function getById(ContactId $contactId): Contact;
 
     public function findByEmail(string $email): ?Contact;
 }

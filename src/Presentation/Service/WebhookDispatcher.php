@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Service;
 
-use App\Entity\IncomingWebhook;
+use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class WebhookDispatcher

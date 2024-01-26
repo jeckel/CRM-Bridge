@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Infrastructure\Doctrine\Entity;
 
-use App\Repository\IncomingWebhookRepository;
+use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;

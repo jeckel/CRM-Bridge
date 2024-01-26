@@ -2,8 +2,9 @@
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Entity\Contact;
-use App\Entity\IncomingWebhook;
+use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Infrastructure\Doctrine\Entity\ContactActivity;
+use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -42,6 +43,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Incoming Webhooks', 'fas fa-list', IncomingWebhook::class);
         yield MenuItem::linkToCrud('Contacts', 'fas fa-list', Contact::class);
+        yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
