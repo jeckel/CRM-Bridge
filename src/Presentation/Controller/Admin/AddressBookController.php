@@ -11,6 +11,7 @@ namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\CardDav\AddressBookDiscovery;
 use App\Infrastructure\ConfigurationService;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,6 +21,7 @@ class AddressBookController extends AbstractController
     public function __construct(
         private readonly AddressBookDiscovery $addressBookDiscovery,
         private readonly ConfigurationService $configuration,
+        private readonly AdminUrlGenerator $adminUrlGenerator
     ) {}
 
     /**
@@ -34,6 +36,11 @@ class AddressBookController extends AbstractController
     {
         if (! $this->configuration->has('carddav.default_address_book')) {
             $this->addFlash('success', 'Aucun address book n\'a été défini pour');
+            return $this->redirect(
+                $this->adminUrlGenerator->setRoute(
+                    'carddav_select_address_book'
+                )->generateUrl()
+            );
         }
 
         return $this->render(
