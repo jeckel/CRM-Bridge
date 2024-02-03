@@ -2,6 +2,7 @@
 
 namespace App\Presentation\Controller\Admin;
 
+use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
@@ -46,8 +47,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
-        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
-        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
+//        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
+//        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
         yield MenuItem::linkToRoute('Address Book', 'fa fa-helmet-safety', 'address_books_list');
+        yield MenuItem::linkToCrud('Configuration', 'fas fa-wrench', Configuration::class);
+
     }
 }

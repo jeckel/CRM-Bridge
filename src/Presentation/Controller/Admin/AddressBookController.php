@@ -10,13 +10,17 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\CardDav\AddressBookDiscovery;
+use App\Infrastructure\ConfigurationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AddressBookController extends AbstractController
 {
-    public function __construct(private readonly AddressBookDiscovery $addressBookDiscovery) {}
+    public function __construct(
+        private readonly AddressBookDiscovery $addressBookDiscovery,
+        private readonly ConfigurationService $configuration,
+    ) {}
 
     /**
      * @throws \Exception
@@ -28,6 +32,10 @@ class AddressBookController extends AbstractController
     )]
     public function index(): Response
     {
+        if (! $this->configuration->has('carddav.default_address_book')) {
+            $this->addFlash('success', 'Aucun address book n\'a été défini pour');
+        }
+
         return $this->render(
             'admin/carddav/list_address_books.html.twig',
             ['address_books' => $this->addressBookDiscovery->discoverAddressBooks()]
