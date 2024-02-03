@@ -1,0 +1,11 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Address Books{% endblock %}
+
+{% block main %}
+    <ul>
+        {% for address_book in address_books %}
+            <li>{{ address_book.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -48,5 +48,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
         yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
+        yield MenuItem::linkToRoute('Address Book', 'fa fa-helmet-safety', 'address_books_list');
     }
 }
