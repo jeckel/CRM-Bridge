@@ -1,4 +1,0 @@
-parameters:
-  carddav_uri: '%env(default::string:CARDDAV_URI)%'
-  carddav_username: '%env(default::string:CARDDAV_USERNAME)%'
-  carddav_password: '%env(default::string:CARDDAV_PASSWORD)%'

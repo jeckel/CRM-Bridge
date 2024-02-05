@@ -39,9 +39,6 @@ function generate_env_file(string $envFile): void
     $linkedInClientSecret = io()->ask('LinkedIn Client Secret', $env['LINKEDIN_CLIENT_SECRET'] ?? null);
     $espocrmUrl = io()->ask('EspoCRM URL', $env['ESPOCRM_URL'] ?? null);
     $espocrmApiKey = io()->ask('EspoCRM API Key', $env['ESPOCRM_API_KEY'] ?? null);
-    $cardDavUri = io()->ask('CardDav URI', $env['CARDDAV_URI'] ?? null);
-    $cardDavUserName = io()->ask('CardDav Username', $env['CARDDAV_USERNAME'] ?? null);
-    $cardDavPassword = io()->ask('CardDav Password', $env['CARDDAV_PASSWORD'] ?? null);
 
     file_put_contents(
         $envFile,
@@ -55,9 +52,6 @@ function generate_env_file(string $envFile): void
                 '%LINKEDIN_CLIENT_SECRET%',
                 '%ESPOCRM_URL%',
                 '%ESPOCRM_API_KEY%',
-                '%CARDDAV_URI%',
-                '%CARDDAV_USERNAME%',
-                '%CARDDAV_PASSWORD%',
             ],
             [
                 $ngrokToken,
@@ -68,9 +62,6 @@ function generate_env_file(string $envFile): void
                 $linkedInClientSecret,
                 $espocrmUrl,
                 $espocrmApiKey,
-                $cardDavUri,
-                $cardDavUserName,
-                $cardDavPassword,
             ],
             file_get_contents(dirname(__DIR__) . '/.env.local.sample')
         )
