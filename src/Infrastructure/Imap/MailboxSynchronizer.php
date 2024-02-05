@@ -9,11 +9,15 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Imap;
 
+use App\Event\NewIncomingEmail;
+use App\Identity\MailId;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
+use App\ValueObject\Email;
 use DateTimeImmutable;
 use Exception;
 use PhpImap\Mailbox;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 
 readonly class MailboxSynchronizer
@@ -21,7 +25,8 @@ readonly class MailboxSynchronizer
     public function __construct(
         private Mailbox $mailbox,
         private MailRepository $mailRepository,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private EventDispatcherInterface $eventDispatcher
     ) {}
 
     /**
@@ -32,11 +37,13 @@ readonly class MailboxSynchronizer
         $mailsIds = $this->mailbox->searchMailbox('ALL');
         foreach($mailsIds as $mailId) {
             $mail = $this->mailbox->getMail($mailId);
-            if (null !== $this->mailRepository->find($mail->messageId)) {
+            if (null !== $this->mailRepository->find($mailId)) {
                 continue;
             }
             $doctrineMail = new Mail();
-            $doctrineMail->setMessageId($mail->messageId)
+            $doctrineMail
+                ->setId($mailId)
+                ->setMessageId($mail->messageId)
                 ->setDate(new DateTimeImmutable($mail->date))
                 ->setSubject($mail->subject)
                 ->setFromName($mail->fromName)
@@ -47,6 +54,12 @@ readonly class MailboxSynchronizer
             ;
             $this->mailRepository->persist($doctrineMail);
             $this->logger->debug("Persisted mail: " . $mail->messageId);
+            $this->eventDispatcher->dispatch(
+                new NewIncomingEmail(
+                    MailId::from((string) $doctrineMail->getMessageId()),
+                    new Email($mail->fromAddress),
+                )
+            );
         }
     }
 }

@@ -61,9 +61,20 @@ class Contact
     )]
     private Collection $activities;
 
+    /**
+     * @var Collection<int, Mail> $mails
+     */
+    #[ORM\OneToMany(
+        mappedBy: 'contact',
+        targetEntity: Mail::class,
+        orphanRemoval: false
+    )]
+    private Collection $mails;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->mails = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -200,6 +211,36 @@ class Contact
             // set the owning side to null (unless already changed)
             if ($activity->getContact() === $this) {
                 $activity->setContact(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mail>
+     */
+    public function getMails(): Collection
+    {
+        return $this->mails;
+    }
+
+    public function addMail(Mail $mail): static
+    {
+        if (!$this->mails->contains($mail)) {
+            $this->mails->add($mail);
+            $mail->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMail(Mail $mail): static
+    {
+        if ($this->mails->removeElement($mail)) {
+            // set the owning side to null (unless already changed)
+            if ($mail->getContact() === $this) {
+                $mail->setContact(null);
             }
         }
 

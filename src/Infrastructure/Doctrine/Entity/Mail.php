@@ -10,8 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Mail
 {
     #[ORM\Id]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: 'mail_id', unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $messageId = null;
 
     #[ORM\Column]
@@ -34,6 +37,21 @@ class Mail
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $textHtml = null;
+
+    #[ORM\ManyToOne(inversedBy: 'mails')]
+    #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'contact_id', nullable: true)]
+    private ?Contact $contact;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): Mail
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getMessageId(): ?string
     {
@@ -128,6 +146,17 @@ class Mail
     {
         $this->textHtml = $textHtml;
 
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contact $contact): Mail
+    {
+        $this->contact = $contact;
         return $this;
     }
 }
