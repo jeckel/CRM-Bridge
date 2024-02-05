@@ -15,4 +15,6 @@ interface ContactRepository
     public function save(Contact $contact): void;
 
     public function findByEmail(string $email): ?Contact;
+
+    public function findByVCard(string $vCardUri): ?Contact;
 }

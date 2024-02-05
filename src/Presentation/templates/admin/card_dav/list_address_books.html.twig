@@ -8,6 +8,8 @@
         {{ 'card_dav.action.configuration' | trans }}</a>
     <a href="{{ ea_url().setRoute('carddav_select_address_book') }}" class="btn btn-default"><i class="fa-solid fa-wrench"></i>
         {{ 'card_dav.action.default_address_book' | trans }}</a>
+    <a href="{{ ea_url().setRoute('carddav_sync') }}" class="btn btn-default"><i class="fa-solid fa-wrench"></i>
+        {{ 'card_dav.action.sync' | trans }}</a>
 {% endblock %}
 
 {% block main %}

@@ -13,4 +13,5 @@ enum ConfigurationKey: string
     case CARDDAV_URI = 'carddav:uri';
     case CARDDAV_USERNAME = 'carddav:username';
     case CARDDAV_PASSWORD = 'carddav:password';
+    case CARDDAV_LAST_SYNC_TOKEN = 'carddav:last_sync_token';
 }
