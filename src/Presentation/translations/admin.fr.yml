@@ -2,13 +2,6 @@ action:
   save: Enregistrer
   select: "Sélectionner"
 
-#address_book:
-#  title:
-#    select_default_address_book: "Sélectionnez le carnet d'adresses par défaut"
-#  field:
-#    default_address_book: "Carnet d'adresses par défaut"
-#    default_address_book_submit: "Sélectionner"
-
 card_dav:
   action:
     configuration: "Configuration"
@@ -37,7 +30,21 @@ config:
       default_address_book: Carnet d'adresses par défaut
       last_sync_token: Token synchronization CardDav
 
+imap:
+  action:
+    sync: Synchroniser
+  alert:
+    synchronization_request_success: Synchronisation des mails en cours
+  field:
+    host: Serveur
+    login: Login
+    password: Mot de passe
+  title:
+    setup: IMAP Configuration
+
 menu:
   card_dav: Card Dav
   config: Configuration
+  imap: IMAP
+  mail: Mails
   setup_options: Options
