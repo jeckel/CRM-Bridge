@@ -3,6 +3,7 @@
 namespace App\Presentation\Form;
 
 use App\Infrastructure\CardDav\AddressBookDiscovery;
+use App\Infrastructure\Configuration\ConfigurationKey;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,10 +17,27 @@ class DefaultAddressBookFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('property', HiddenType::class, ['data' => 'carddav.default_address_book'])
-            ->add('value', ChoiceType::class, ['choices' => $options['addressBooks']])
-            ->add('label', HiddenType::class, ['data' => 'Default Address Book'])
-            ->add('save', SubmitType::class)
+            ->add('property', HiddenType::class, ['data' => ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK->value])
+            ->add(
+                child: 'value',
+                type: ChoiceType::class,
+                options: [
+                    'choices' => $options['addressBooks'],
+                    'label' => 'address_book.field.default_address_book',
+                ]
+            )
+            ->add(
+                child: 'label',
+                type: HiddenType::class,
+                options: [
+                    'data' => 'Default Address Book',
+                ]
+            )
+            ->add(
+                child:'save',
+                type: SubmitType::class,
+                options: ['label' => 'address_book.field.default_address_book_submit']
+            )
         ;
     }
 
@@ -27,7 +45,8 @@ class DefaultAddressBookFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Configuration::class,
-            'addressBooks' => []
+            'addressBooks' => [],
+            'translation_domain' => 'admin'
         ]);
     }
 }

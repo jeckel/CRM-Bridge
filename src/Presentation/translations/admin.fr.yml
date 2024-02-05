@@ -1,0 +1,8 @@
+address_book:
+  alert:
+    default_address_book_not_set: "Carnet d'adresses par défaut non défini"
+  title:
+    select_default_address_book: "Sélectionnez le carnet d'adresses par défaut"
+  field:
+    default_address_book: "Carnet d'adresses par défaut"
+    default_address_book_submit: "Sélectionner"

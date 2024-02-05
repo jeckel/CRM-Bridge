@@ -1,7 +1,11 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
 
-{% block content_title %}Address Books{% endblock %}
+{% block content_title %}{{ 'address_book.title.select_default_address_book' | trans }}{% endblock %}
 
-{% block main %}
+{% block page_content %}
+    {% form_theme form with [
+        '@EasyAdmin/crud/form_theme.html.twig'
+    ] %}
     {{ form(form) }}
 {% endblock %}

@@ -10,7 +10,8 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\CardDav\AddressBookDiscovery;
-use App\Infrastructure\ConfigurationService;
+use App\Infrastructure\Configuration\ConfigurationKey;
+use App\Infrastructure\Configuration\ConfigurationService;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,8 +35,11 @@ class AddressBookController extends AbstractController
     )]
     public function index(): Response
     {
-        if (! $this->configuration->has('carddav.default_address_book')) {
-            $this->addFlash('success', 'Aucun address book n\'a été défini pour');
+        if (! $this->configuration->has(ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK)) {
+            $this->addFlash(
+                type: 'warning',
+                message: 'address_book.alert.default_address_book_not_set'
+            );
             return $this->redirect(
                 $this->adminUrlGenerator->setRoute(
                     'carddav_select_address_book'

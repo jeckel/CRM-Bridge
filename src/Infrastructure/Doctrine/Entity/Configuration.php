@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ConfigurationRepository::class)]
 class Configuration
 {
-//    #[ORM\GeneratedValue]
-//    #[ORM\Column]
-//    private ?int $id = null;
+    //    #[ORM\GeneratedValue]
+    //    #[ORM\Column]
+    //    private ?int $id = null;
 
     #[ORM\Id]
     #[ORM\Column(length: 255)]
@@ -22,10 +22,10 @@ class Configuration
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-//    public function getId(): ?int
-//    {
-//        return $this->id;
-//    }
+    //    public function getId(): ?int
+    //    {
+    //        return $this->id;
+    //    }
 
     public function getProperty(): ?string
     {

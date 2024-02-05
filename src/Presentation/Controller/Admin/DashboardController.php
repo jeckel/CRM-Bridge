@@ -34,7 +34,9 @@ class DashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateTimeFormat('dd/MM/yyyy HH:mm:ss')
+            ->setDateFormat('dd/MM/yyyy')
+            ->setDateTimeFormat('dd/MM/yyyy HH:mm')
+            ->setTimeFormat('HH:mm')
             ->setPaginatorPageSize(100)
             ->showEntityActionsInlined();
     }
@@ -47,8 +49,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
-//        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
-//        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
+        //        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
+        //        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
         yield MenuItem::linkToRoute('Address Book', 'fa fa-helmet-safety', 'address_books_list');
         yield MenuItem::linkToCrud('Configuration', 'fas fa-wrench', Configuration::class);
 
