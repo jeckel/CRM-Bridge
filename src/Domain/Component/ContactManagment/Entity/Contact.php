@@ -12,6 +12,7 @@ use App\Domain\Component\ContactManagment\Error\VCardUriChangedError;
 use App\Domain\Component\ContactManagment\Port\VCard;
 use App\Domain\Error\LogicError;
 use App\Identity\ContactId;
+use App\Identity\MailId;
 use DateTimeImmutable;
 
 /**
@@ -91,6 +92,22 @@ class Contact
         return $this;
     }
 
+    public function addMail(MailId $mailId, DateTimeImmutable $sendAt): self
+    {
+        $this->activities->add(
+            ContactActivity::new(
+                date: $sendAt,
+                subject: 'New email',
+                description: sprintf(
+                    "New mail %s (send: %s)",
+                    $mailId->id(),
+                    $sendAt->format("d/m/Y H:i:s")
+                )
+            )
+        );
+        return $this;
+    }
+
     public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
@@ -99,4 +116,5 @@ class Contact
         }
         throw new LogicError("Undefined property: {$name}");
     }
+
 }

@@ -11,11 +11,13 @@ namespace App\Event;
 
 use App\Identity\MailId;
 use App\ValueObject\Email;
+use DateTimeImmutable;
 
 final readonly class NewIncomingEmail implements Event
 {
     public function __construct(
         public MailId $mailId,
         public Email $email,
+        public DateTimeImmutable $sendAt,
     ) {}
 }

@@ -9,18 +9,6 @@ declare(strict_types=1);
 
 namespace App\Identity;
 
-use JeckelLab\Contract\Domain\Identity\Exception\IdentityException;
-use JeckelLab\IdentityContract\AbstractStringIdentity;
+use JeckelLab\IdentityContract\AbstractIntIdentity;
 
-final readonly class MailId extends AbstractStringIdentity
-{
-    protected static function generateNewIdentity(): int|string
-    {
-        throw new class () extends \LogicException implements IdentityException {
-            public function __construct()
-            {
-                parent::__construct('New mail id generation is not allowed');
-            }
-        };
-    }
-}
+final readonly class MailId extends AbstractIntIdentity {}

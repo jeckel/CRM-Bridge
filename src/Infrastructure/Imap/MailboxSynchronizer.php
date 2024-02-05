@@ -36,10 +36,11 @@ readonly class MailboxSynchronizer
     {
         $mailsIds = $this->mailbox->searchMailbox('ALL');
         foreach($mailsIds as $mailId) {
-            $mail = $this->mailbox->getMail($mailId);
             if (null !== $this->mailRepository->find($mailId)) {
                 continue;
             }
+            $mail = $this->mailbox->getMail($mailId);
+            $date = new DateTimeImmutable($mail->date);
             $doctrineMail = new Mail();
             $doctrineMail
                 ->setId($mailId)
@@ -56,8 +57,9 @@ readonly class MailboxSynchronizer
             $this->logger->debug("Persisted mail: " . $mail->messageId);
             $this->eventDispatcher->dispatch(
                 new NewIncomingEmail(
-                    MailId::from((string) $doctrineMail->getMessageId()),
+                    MailId::from($mailId),
                     new Email($mail->fromAddress),
+                    $date
                 )
             );
         }
