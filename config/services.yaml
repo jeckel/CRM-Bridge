@@ -50,6 +50,10 @@ services:
       factory: ['App\Infrastructure\Supervisor\SupervisorFactory', getSupervisor]
       arguments: ['%supervisor_url%', '%supervisor_user%', '%supervisor_password%']
 
+    MStilkerich\CardDavClient\Account:
+      factory: ['App\Infrastructure\CardDav\CardDavClientFactory', getAccount]
+      lazy: true
+
     App\Infrastructure\Calendly\CalendlyClient:
       arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']
 

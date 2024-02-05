@@ -18,12 +18,8 @@ services:
 
   web:
     image: registry.corrin.j3ck3l.me:443/jeckel-lab/php-apache-dev:8.3
-#    image: crm-bridge/web:latest
-#    working_dir: /var/www
     volumes:
       - ./:/var/www
-#    labels:
-#      traefik.enable: "true"
     environment:
       DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
       MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/crm_bridge/messages"
@@ -38,9 +34,7 @@ services:
 
   worker:
     image: registry.corrin.j3ck3l.me:443/jeckel-lab/php-supervisor-dev:8.3
-#    image: crm-bridge/worker:latest
     hostname: worker.localhost
-#    working_dir: /application
     volumes:
       - ./:/var/www
       - ./.docker/worker/conf.d/:/etc/supervisor/conf.d/:ro

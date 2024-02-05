@@ -51,7 +51,7 @@ function generate_env_file(string $envFile): void
                 '%LINKEDIN_CLIENT_ID%',
                 '%LINKEDIN_CLIENT_SECRET%',
                 '%ESPOCRM_URL%',
-                '%ESPOCRM_API_KEY%'
+                '%ESPOCRM_API_KEY%',
             ],
             [
                 $ngrokToken,
@@ -61,7 +61,7 @@ function generate_env_file(string $envFile): void
                 $linkedInClientId,
                 $linkedInClientSecret,
                 $espocrmUrl,
-                $espocrmApiKey
+                $espocrmApiKey,
             ],
             file_get_contents(dirname(__DIR__) . '/.env.local.sample')
         )
