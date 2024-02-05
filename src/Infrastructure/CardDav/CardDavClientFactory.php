@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CardDav;
 
+use App\Infrastructure\Configuration\ConfigurationKey;
+use App\Infrastructure\Configuration\ConfigurationService;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Config;
 use Psr\Log\LoggerInterface;
@@ -16,15 +18,16 @@ use Psr\Log\LoggerInterface;
 class CardDavClientFactory
 {
     public static function getAccount(
-        string $discoveryUri,
-        string $username,
-        string $password,
+        ConfigurationService $configurationService,
         LoggerInterface $logger
     ): Account {
         Config::init($logger, $logger);
         return new Account(
-            discoveryUri: $discoveryUri,
-            httpOptions: ["username" => $username, "password" => $password]
+            discoveryUri: $configurationService->get(ConfigurationKey::CARDDAV_URI) ?? '',
+            httpOptions: [
+                "username" => $configurationService->get(ConfigurationKey::CARDDAV_USERNAME) ?? '',
+                "password" => $configurationService->get(ConfigurationKey::CARDDAV_PASSWORD) ?? ''
+            ]
         );
     }
 }

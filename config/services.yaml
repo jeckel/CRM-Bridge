@@ -52,7 +52,7 @@ services:
 
     MStilkerich\CardDavClient\Account:
       factory: ['App\Infrastructure\CardDav\CardDavClientFactory', getAccount]
-      arguments: ['%carddav_uri%', '%carddav_username%', '%carddav_password%']
+      lazy: true
 
     App\Infrastructure\Calendly\CalendlyClient:
       arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']

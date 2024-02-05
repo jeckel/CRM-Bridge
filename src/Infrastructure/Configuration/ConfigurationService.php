@@ -16,12 +16,17 @@ readonly class ConfigurationService
 {
     public function __construct(private EntityManagerInterface $entityManager) {}
 
-    public function has(ConfigurationKey $key): bool
+    public function has(ConfigurationKey ...$keys): bool
     {
-        return $this->entityManager->getRepository(Configuration::class)->find($key->value) !== null;
+        foreach ($keys as $key) {
+            if ($this->entityManager->getRepository(Configuration::class)->find($key->value) === null) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public function get(ConfigurationKey $key): mixed
+    public function get(ConfigurationKey $key): ?string
     {
         $config = $this->entityManager->getRepository(Configuration::class)->find($key->value);
         return ($config !== null) ? $config->getValue() : null;
@@ -33,7 +38,7 @@ readonly class ConfigurationService
             ->setProperty($key->value)
             ->setValue($value)
         ;
-        if (null === $config->getValue()) {
+        if (null === $config->getLabel()) {
             $config->setLabel($key->value);
         }
         $this->entityManager->persist($config);

@@ -9,5 +9,8 @@ namespace App\Infrastructure\Configuration;
 
 enum ConfigurationKey: string
 {
-    case CARDDAV_DEFAULT_ADDRESS_BOOK = 'carddav.default_address_book';
+    case CARDDAV_DEFAULT_ADDRESS_BOOK = 'carddav:default_address_book';
+    case CARDDAV_URI = 'carddav:uri';
+    case CARDDAV_USERNAME = 'carddav:username';
+    case CARDDAV_PASSWORD = 'carddav:password';
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Presentation\Form;
+namespace App\Presentation\Form\CardDav;
 
-use App\Infrastructure\CardDav\AddressBookDiscovery;
 use App\Infrastructure\Configuration\ConfigurationKey;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +22,7 @@ class DefaultAddressBookFormType extends AbstractType
                 type: ChoiceType::class,
                 options: [
                     'choices' => $options['addressBooks'],
-                    'label' => 'address_book.field.default_address_book',
+                    'label' => 'card_dav.field.default_address_book',
                 ]
             )
             ->add(
@@ -36,7 +35,7 @@ class DefaultAddressBookFormType extends AbstractType
             ->add(
                 child:'save',
                 type: SubmitType::class,
-                options: ['label' => 'address_book.field.default_address_book_submit']
+                options: ['label' => 'action.select']
             )
         ;
     }

@@ -51,8 +51,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         //        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
         //        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
-        yield MenuItem::linkToRoute('Address Book', 'fa fa-helmet-safety', 'address_books_list');
-        yield MenuItem::linkToCrud('Configuration', 'fas fa-wrench', Configuration::class);
+        yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
+            ->setSubItems([
+                MenuItem::linkToRoute('menu.card_dav', 'fa fa-sync', 'card_dav_list'),
+                MenuItem::linkToCrud('menu.setup_options', 'fas fa-wrench', Configuration::class)
+            ]);
 
     }
 }

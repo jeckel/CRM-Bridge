@@ -22,9 +22,8 @@ class ConfigurationCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
-        yield TextField::new('property', 'Clé')
-            ->hideOnIndex();
-        yield TextField::new('label', 'Propriété');
+        yield TextField::new('property', 'Propriété')
+            ->setTemplatePath('admin/field/config_property.html.twig');
         yield TextField::new('value', 'Valeur');
     }
 }
