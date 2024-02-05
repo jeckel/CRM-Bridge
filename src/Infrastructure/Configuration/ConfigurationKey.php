@@ -14,4 +14,7 @@ enum ConfigurationKey: string
     case CARDDAV_USERNAME = 'carddav:username';
     case CARDDAV_PASSWORD = 'carddav:password';
     case CARDDAV_LAST_SYNC_TOKEN = 'carddav:last_sync_token';
+    case IMAP_HOST = 'imap:host';
+    case IMAP_LOGIN = 'imap:login';
+    case IMAP_PASSWORD = 'imap:password';
 }

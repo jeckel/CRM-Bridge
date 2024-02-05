@@ -49,11 +49,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
         yield MenuItem::linkToRoute('Workers', 'fa fa-helmet-safety', 'worker_list');
         yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
+        yield MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_check');
         //        yield MenuItem::linkToRoute('Calendly Webhooks', 'fa fa-helmet-safety', 'calendly_webhook_list');
         //        yield MenuItem::linkToRoute('Linked-In', 'fa fa-helmet-safety', 'linkedin');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
                 MenuItem::linkToRoute('menu.card_dav', 'fa fa-sync', 'card_dav_list'),
+                MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
                 MenuItem::linkToCrud('menu.setup_options', 'fas fa-wrench', Configuration::class)
             ]);
 

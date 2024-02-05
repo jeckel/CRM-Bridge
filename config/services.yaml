@@ -54,6 +54,10 @@ services:
       factory: ['App\Infrastructure\CardDav\CardDavClientFactory', getAccount]
       lazy: true
 
+    PhpImap\Mailbox:
+      factory: ['App\Infrastructure\Imap\MailboxFactory', getMailbox]
+      lazy: true
+
     App\Infrastructure\Calendly\CalendlyClient:
       arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']
 
