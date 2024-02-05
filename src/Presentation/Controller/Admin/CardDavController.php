@@ -12,10 +12,8 @@ namespace App\Presentation\Controller\Admin;
 use App\Infrastructure\CardDav\AddressBookDiscovery;
 use App\Infrastructure\Configuration\ConfigurationKey;
 use App\Infrastructure\Configuration\ConfigurationService;
-use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Presentation\Form\CardDav\DefaultAddressBookFormType;
 use App\Presentation\Form\CardDav\SetupConnectionFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +28,6 @@ class CardDavController extends AbstractController
     public function __construct(
         private readonly AddressBookDiscovery $addressBookDiscovery,
         private readonly ConfigurationService $configuration,
-        private readonly EntityManagerInterface $entityManager,
         private readonly AdminUrlGenerator $urlGenerator
     ) {}
 
@@ -61,7 +58,13 @@ class CardDavController extends AbstractController
     )]
     public function setupConfiguration(Request $request): Response
     {
-        $form = $this->createForm(type: SetupConnectionFormType::class);
+        $form = $this->createForm(
+            type: SetupConnectionFormType::class,
+            data: [
+                ConfigurationKey::CARDDAV_URI->value => $this->configuration->get(ConfigurationKey::CARDDAV_URI),
+                ConfigurationKey::CARDDAV_USERNAME->value => $this->configuration->get(ConfigurationKey::CARDDAV_USERNAME)
+            ]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var array<string, string> $formData */
@@ -98,15 +101,22 @@ class CardDavController extends AbstractController
     ): Response {
         $form = $this->createForm(
             type: DefaultAddressBookFormType::class,
-            options: ['addressBooks' => $this->getList()]
+            options: [
+                'addressBooks' => $this->getList(),
+                'data' => [
+                    ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK->value =>
+                        $this->configuration->get(ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK)
+                ]
+            ]
         );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Configuration $entity */
-            $entity = $form->getData();
-            $this->entityManager->persist($entity);
-            $this->entityManager->flush();
+            /** @var array<string, string> $formData */
+            $formData = $form->getData();
+            foreach ($formData as $key => $value) {
+                $this->configuration->set(ConfigurationKey::from($key), $value);
+            }
             return $this->redirect(
                 $this->urlGenerator->setRoute(
                     'card_dav_list'

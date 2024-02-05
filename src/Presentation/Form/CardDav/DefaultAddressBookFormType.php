@@ -16,20 +16,12 @@ class DefaultAddressBookFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('property', HiddenType::class, ['data' => ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK->value])
             ->add(
-                child: 'value',
+                child: ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK->value,
                 type: ChoiceType::class,
                 options: [
                     'choices' => $options['addressBooks'],
                     'label' => 'card_dav.field.default_address_book',
-                ]
-            )
-            ->add(
-                child: 'label',
-                type: HiddenType::class,
-                options: [
-                    'data' => 'Default Address Book',
                 ]
             )
             ->add(
@@ -43,7 +35,6 @@ class DefaultAddressBookFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Configuration::class,
             'addressBooks' => [],
             'translation_domain' => 'admin'
         ]);

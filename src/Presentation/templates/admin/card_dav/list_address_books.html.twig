@@ -1,11 +1,30 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
 
-{% block content_title %}Address Books{% endblock %}
+{% block content_title %}{{ 'card_dav.title.index' | trans }}{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ ea_url().setRoute('card_dav_setup') }}" class="btn btn-default"><i class="fa-solid fa-wrench"></i>
+        {{ 'card_dav.action.configuration' | trans }}</a>
+    <a href="{{ ea_url().setRoute('carddav_select_address_book') }}" class="btn btn-default"><i class="fa-solid fa-wrench"></i>
+        {{ 'card_dav.action.default_address_book' | trans }}</a>
+{% endblock %}
 
 {% block main %}
-    <ul>
-        {% for address_book in address_books %}
-            <li>{{ address_book.name }}</li>
-        {% endfor %}
-    </ul>
+    {% set default_address_book_uri = config(constant('\\App\\Infrastructure\\Configuration\\ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK')) %}
+    {% set default_address_book = 'Undefiend' %}
+    {% for address_book in address_books %}
+        {% if (address_book.uri == default_address_book_uri) %}
+            {% set default_address_book = address_book.name %}
+        {% endif %}
+    {% endfor %}
+
+    <dl class="row">
+        <dt class="col-2">{{ 'card_dav.field.connection_uri' | trans }}</dt>
+        <dd class="col-10">{{ config(constant('\\App\\Infrastructure\\Configuration\\ConfigurationKey::CARDDAV_URI')) }}</dd>
+        <dt class="col-2">{{ 'card_dav.field.connection_username' | trans }}</dt>
+        <dd class="col-10">{{ config(constant('\\App\\Infrastructure\\Configuration\\ConfigurationKey::CARDDAV_USERNAME')) }}</dd>
+        <dt class="col-2">{{ 'card_dav.field.default_address_book' | trans }}</dt>
+        <dd class="col-10">{{ default_address_book }}</dd>
+    </dl>
 {% endblock %}
