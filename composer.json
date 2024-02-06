@@ -12,12 +12,14 @@
     "require": {
         "php": "~8.3",
         "ext-curl": "*",
+        "ext-imap": "*",
         "ext-pcntl": "*",
         "ext-posix": "*",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
+        "dragonmantank/cron-expression": "^3.3",
         "easycorp/easyadmin-bundle": "^4.8",
         "espocrm/php-espo-api-client": "^0.1.0",
         "guzzlehttp/guzzle": "^7.0",
@@ -47,6 +49,7 @@
         "symfony/property-access": "7.0.*",
         "symfony/property-info": "7.0.*",
         "symfony/runtime": "7.0.*",
+        "symfony/scheduler": "7.0.*",
         "symfony/security-bundle": "7.0.*",
         "symfony/serializer": "7.0.*",
         "symfony/string": "7.0.*",
@@ -56,8 +59,7 @@
         "symfony/web-link": "7.0.*",
         "symfony/yaml": "7.0.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-      "ext-imap": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",

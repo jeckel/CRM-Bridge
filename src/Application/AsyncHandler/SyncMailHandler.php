@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Application\Async;
+namespace App\Application\AsyncHandler;
 
 use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
 use App\Domain\Component\DirectCommunicationHub\Service\IncomingMailRegisterer;

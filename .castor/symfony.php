@@ -17,3 +17,10 @@ function task_database_migrate(): void
 {
     run_symfony_console(['cache:clear']);
 }
+
+//php bin/console debug:scheduler
+#[AsTask(name: 'debug:scheduler', description: 'Debug Scheduler')]
+function task_debug_scheduler(): void
+{
+    run_symfony_console(['debug:scheduler']);
+}
