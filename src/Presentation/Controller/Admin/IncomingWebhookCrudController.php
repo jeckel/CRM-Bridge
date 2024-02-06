@@ -57,7 +57,7 @@ class IncomingWebhookCrudController extends AbstractCrudController
         yield TextField::new('source');
         yield TextField::new('event');
         yield ArrayField::new('payload')
-            ->setTemplatePath('admin/fields/json.html.twig')
+            ->setTemplatePath('admin/field/json.html.twig')
             ->onlyOnDetail();
     }
 }

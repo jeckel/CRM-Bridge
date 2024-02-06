@@ -1,0 +1,11 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block content_title %}{{ page_title | trans }}{% endblock %}
+
+{% block page_content %}
+    {% form_theme form with [
+        '@EasyAdmin/crud/form_theme.html.twig'
+    ] %}
+    {{ form(form) }}
+{% endblock %}

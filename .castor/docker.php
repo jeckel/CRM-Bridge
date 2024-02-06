@@ -15,11 +15,6 @@ use function Castor\get_cache;
 use function Castor\io;
 use function Castor\run;
 
-#[AsTask(name: 'build', description: 'Build docker images')]
-function task_install(): void
-{
-    build_docker_images();
-}
 
 #[AsTask(name: 'up', description: 'Start docker container', aliases: ['up'])]
 function task_up(): void
@@ -79,19 +74,5 @@ function build_prod_image(): void
             $tag
         ],
         timeout: 0
-    );
-}
-
-function build_docker_images(): void
-{
-    docker_build(
-        path: '/.docker/worker/',
-        tag: 'crm-bridge/worker:latest',
-        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
-    );
-    docker_build(
-        path: '/.docker/web/',
-        tag: 'crm-bridge/web:latest',
-        buildArgs: ['UID' => posix_getuid(), 'GID' => posix_getgid()]
     );
 }
