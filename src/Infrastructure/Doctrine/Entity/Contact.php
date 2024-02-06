@@ -23,7 +23,7 @@ class Contact
     #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface|string $id;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
     private string $displayName = '';
 
     #[ORM\Column(length: 180, nullable: true)]
@@ -32,14 +32,23 @@ class Contact
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 180, unique: true)]
-    private string $email = '';
+    #[ORM\Column(length: 180, unique: true, nullable: true)]
+    private ?string $email;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phoneNumber;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $espoContactId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $vCardUri = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $vCardEtag = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $vCardLastSyncAt = null;
 
     /**
      * @var Collection<int, ContactActivity> $activities
@@ -52,9 +61,20 @@ class Contact
     )]
     private Collection $activities;
 
+    /**
+     * @var Collection<int, Mail> $mails
+     */
+    #[ORM\OneToMany(
+        mappedBy: 'contact',
+        targetEntity: Mail::class,
+        orphanRemoval: false
+    )]
+    private Collection $mails;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->mails = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -101,12 +121,12 @@ class Contact
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): Contact
+    public function setEmail(?string $email): Contact
     {
         $this->email = $email;
         return $this;
@@ -134,6 +154,39 @@ class Contact
         return $this;
     }
 
+    public function getVCardUri(): ?string
+    {
+        return $this->vCardUri;
+    }
+
+    public function setVCardUri(?string $vCardUri): Contact
+    {
+        $this->vCardUri = $vCardUri;
+        return $this;
+    }
+
+    public function getVCardEtag(): ?string
+    {
+        return $this->vCardEtag;
+    }
+
+    public function setVCardEtag(?string $vCardEtag): Contact
+    {
+        $this->vCardEtag = $vCardEtag;
+        return $this;
+    }
+
+    public function getVCardLastSyncAt(): ?\DateTimeImmutable
+    {
+        return $this->vCardLastSyncAt;
+    }
+
+    public function setVCardLastSyncAt(?\DateTimeImmutable $vCardLastSyncAt): Contact
+    {
+        $this->vCardLastSyncAt = $vCardLastSyncAt;
+        return $this;
+    }
+
     /**
      * @return Collection<int, ContactActivity>
      */
@@ -158,6 +211,36 @@ class Contact
             // set the owning side to null (unless already changed)
             if ($activity->getContact() === $this) {
                 $activity->setContact(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mail>
+     */
+    public function getMails(): Collection
+    {
+        return $this->mails;
+    }
+
+    public function addMail(Mail $mail): static
+    {
+        if (!$this->mails->contains($mail)) {
+            $this->mails->add($mail);
+            $mail->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMail(Mail $mail): static
+    {
+        if ($this->mails->removeElement($mail)) {
+            // set the owning side to null (unless already changed)
+            if ($mail->getContact() === $this) {
+                $mail->setContact(null);
             }
         }
 
