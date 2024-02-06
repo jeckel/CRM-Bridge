@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SyncMailboxController extends AbstractController
 {
     public function __construct(
-//        private readonly MailboxSynchronizer $mailboxSynchronizer,
+        //        private readonly MailboxSynchronizer $mailboxSynchronizer,
         private readonly AdminUrlGenerator $urlGenerator,
         private readonly MessageBusInterface $messageBus
     ) {}
@@ -35,7 +35,7 @@ class SyncMailboxController extends AbstractController
     public function __invoke(): Response
     {
         $this->messageBus->dispatch(new SyncMailbox());
-//        $this->mailboxSynchronizer->sync();
+        //        $this->mailboxSynchronizer->sync();
         $this->addFlash(
             type: 'success',
             message: 'imap.alert.synchronization_request_success',

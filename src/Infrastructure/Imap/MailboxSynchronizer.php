@@ -35,13 +35,13 @@ readonly class MailboxSynchronizer
                 continue;
             }
             $this->messageBus->dispatch(new SyncMail(MailId::from($mailId)));
-//            $this->eventDispatcher->dispatch(
-//                new NewIncomingEmail(
-//                    MailId::from($mailId),
-//                    new Email($mail->fromAddress),
-//                    $date
-//                )
-//            );
+            //            $this->eventDispatcher->dispatch(
+            //                new NewIncomingEmail(
+            //                    MailId::from($mailId),
+            //                    new Email($mail->fromAddress),
+            //                    $date
+            //                )
+            //            );
         }
     }
 }
