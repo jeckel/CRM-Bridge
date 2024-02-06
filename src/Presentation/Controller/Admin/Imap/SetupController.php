@@ -49,7 +49,7 @@ class SetupController extends AbstractController
             }
             return $this->redirect(
                 $this->urlGenerator->setRoute(
-                    'card_dav_list'
+                    'admin'
                 )->generateUrl()
             );
         }

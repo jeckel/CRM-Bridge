@@ -56,7 +56,7 @@ services:
 
     PhpImap\Mailbox:
       factory: ['App\Infrastructure\Imap\MailboxFactory', getMailbox]
-#      lazy: true
+      lazy: true
 
     App\Infrastructure\Calendly\CalendlyClient:
       arguments: ['%calendly_access_token%', '%calendly_webhook_uri%']

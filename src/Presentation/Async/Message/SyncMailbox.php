@@ -9,6 +9,4 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Message;
 
-class SyncMailbox
-{
-}
+final readonly class SyncMailbox {}
