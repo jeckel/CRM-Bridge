@@ -21,7 +21,7 @@ class CardDavDashboardController extends AbstractController
     use ConfigurationCheckTrait;
 
     public function __construct(
-        private readonly AddressBookDiscovery $addressBookDiscovery,
+        //        private readonly AddressBookDiscovery $addressBookDiscovery,
         private readonly ConfigurationService $configuration,
         private readonly AdminUrlGenerator $urlGenerator
     ) {}
@@ -42,7 +42,8 @@ class CardDavDashboardController extends AbstractController
 
         return $this->render(
             'admin/card_dav/list_address_books.html.twig',
-            ['address_books' => $this->addressBookDiscovery->discoverAddressBooks()]
+            ['address_books' => []]
+            //            ['address_books' => $this->addressBookDiscovery->discoverAddressBooks()]
         );
     }
 }
