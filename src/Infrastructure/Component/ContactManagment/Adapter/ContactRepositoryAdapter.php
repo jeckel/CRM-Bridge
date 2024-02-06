@@ -10,47 +10,23 @@ declare(strict_types=1);
 namespace App\Infrastructure\Component\ContactManagment\Adapter;
 
 use App\Domain\Component\ContactManagment\Entity\Contact;
-use App\Domain\Component\ContactManagment\Entity\ContactActivity;
-use App\Domain\Component\ContactManagment\Entity\ContactActivityCollection;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
-use App\Identity\ContactActivityId;
-use App\Identity\ContactId;
+use App\Infrastructure\Component\ContactManagment\Mapper\ContactMapper;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
-use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
-use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
 
-class ContactRepositoryAdapter implements ContactRepository
+readonly class ContactRepositoryAdapter implements ContactRepository
 {
     public function __construct(
-        private readonly DoctrineContactRepository $repository,
-        private readonly ContactActivityRepository $activityRepository
+        private DoctrineContactRepository $repository,
+        private ContactMapper $contactMapper
     ) {}
 
     #[\Override]
     public function save(Contact $contact): void
     {
         $entity = $this->repository->find((string) $contact->id) ?? new DoctrineContact();
-        $entity
-            ->setId((string) $contact->id)
-            ->setFirstname($contact->firstName)
-            ->setLastname($contact->lastName)
-            ->setDisplayName($contact->displayName)
-            ->setEmail($contact->email)
-            ->setPhoneNumber($contact->phoneNumber)
-            ->setEspoContactId($contact->espoContactId);
-
-        if ($contact->activities->hasChanged()) {
-            foreach ($contact->activities as $activity) {
-                $entity->addActivity(
-                    ($this->activityRepository->find((string) $activity->id) ?? new DoctrineContactActivity())
-                        ->setId((string) $activity->id)
-                        ->setDate($activity->date)
-                        ->setSubject($activity->subject)
-                        ->setDescription($activity->description)
-                );
-            }
-        }
+        $entity = $this->contactMapper->mapToDoctrine($entity, $contact);
         $this->repository->persist($entity);
     }
 
@@ -61,25 +37,16 @@ class ContactRepositoryAdapter implements ContactRepository
         if (null === $contact) {
             return null;
         }
-        return new Contact(
-            id: ContactId::from((string) $contact->getId()),
-            firstName: $contact->getFirstname(),
-            lastName: $contact->getLastname(),
-            displayName: $contact->getDisplayName(),
-            email: $contact->getEmail(),
-            phoneNumber: $contact->getPhoneNumber(),
-            espoContactId: $contact->getEspoContactId(),
-            activities: new ContactActivityCollection(
-                array_map(
-                    static fn($activity) => new ContactActivity(
-                        id: ContactActivityId::from((string) $activity->getId()),
-                        date: $activity->getDate(),
-                        subject: $activity->getSubject(),
-                        description: $activity->getDescription()
-                    ),
-                    $contact->getActivities()->toArray(),
-                )
-            )
-        );
+        return $this->contactMapper->mapToDomain($contact);
+    }
+
+    #[\Override]
+    public function findByVCard(string $vCardUri): ?Contact
+    {
+        $contact = $this->repository->findOneBy(['vCardUri' => $vCardUri]);
+        if (null === $contact) {
+            return null;
+        }
+        return $this->contactMapper->mapToDomain($contact);
     }
 }

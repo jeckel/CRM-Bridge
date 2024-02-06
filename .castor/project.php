@@ -31,6 +31,12 @@ function task_build_database(): void
     run_symfony_console(['doctrine:fixtures:load', '-n']);
 }
 
+#[AsTask(name: 'database:migrate', description: 'Build database')]
+function task_database_migrate(): void
+{
+    run_symfony_console(['doctrine:migration:migrate']);
+}
+
 #[AsTask(name: 'env:build', description: 'Build environment variables file')]
 function task_env_build(): void
 {
