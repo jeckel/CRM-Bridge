@@ -5,9 +5,10 @@ namespace App\Infrastructure\Doctrine\Entity;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Entity(repositoryClass: MailRepository::class)]
-class Mail
+class Mail implements Stringable
 {
     #[ORM\Id]
     #[ORM\Column(name: 'mail_id', unique: true)]
@@ -158,5 +159,10 @@ class Mail
     {
         $this->contact = $contact;
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getSubject() ?? '';
     }
 }

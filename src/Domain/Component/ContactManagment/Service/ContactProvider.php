@@ -12,6 +12,7 @@ namespace App\Domain\Component\ContactManagment\Service;
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
 use App\Identity\ContactId;
+use App\ValueObject\Email;
 
 readonly class ContactProvider
 {
@@ -20,26 +21,32 @@ readonly class ContactProvider
     ) {}
 
     public function findOrCreate(
-        string $firstName,
-        string $lastName,
+        ?string $firstName,
+        ?string $lastName,
         string $displayName,
-        string $email,
-        string $phoneNumber
+        string|Email|null $email,
+        ?string $phoneNumber
     ): Contact {
-        $contact = $this->contactRepository->findByEmail($email);
-        if ($contact !== null) {
-            return $contact;
+        if (is_string($email)) {
+            $email = new Email($email);
         }
+        if (null !== $email) {
+            $contact = $this->contactRepository->findByEmail($email);
+            if ($contact !== null) {
+                return $contact;
+            }
+        }
+        // @todo Search also by display name
 
         // @todo search for contact in EspoCRM
 
         $contact = new Contact(
-            ContactId::new(),
-            $firstName,
-            $lastName,
-            $displayName,
-            $email,
-            $phoneNumber
+            id: ContactId::new(),
+            displayName: $displayName,
+            firstName: $firstName,
+            lastName: $lastName,
+            email: $email,
+            phoneNumber: $phoneNumber
         );
         $this->contactRepository->save($contact);
         return $contact;

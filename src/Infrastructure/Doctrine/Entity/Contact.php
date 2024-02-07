@@ -14,9 +14,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Stringable;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
-class Contact
+class Contact implements Stringable
 {
     #[ORM\Id]
     #[ORM\Column(name: 'contact_id', type: "uuid", unique: true)]
@@ -245,5 +246,10 @@ class Contact
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
     }
 }

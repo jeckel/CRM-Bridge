@@ -14,6 +14,7 @@ use App\Domain\Component\ContactManagment\Port\ContactRepository;
 use App\Infrastructure\Component\ContactManagment\Mapper\ContactMapper;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
+use App\ValueObject\Email;
 
 readonly class ContactRepositoryAdapter implements ContactRepository
 {
@@ -31,9 +32,9 @@ readonly class ContactRepositoryAdapter implements ContactRepository
     }
 
     #[\Override]
-    public function findByEmail(string $email): ?Contact
+    public function findByEmail(Email $email): ?Contact
     {
-        $contact = $this->repository->findOneBy(['email' => $email]);
+        $contact = $this->repository->findOneBy(['email' => $email->getEmail()]);
         if (null === $contact) {
             return null;
         }
