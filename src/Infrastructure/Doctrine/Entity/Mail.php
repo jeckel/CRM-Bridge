@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\MailRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -13,25 +14,25 @@ class Mail implements Stringable
     #[ORM\Id]
     #[ORM\Column(name: 'mail_id', unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $messageId = null;
+    private string $messageId;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $date = null;
+    private DateTimeImmutable $date;
 
     #[ORM\Column(length: 255)]
-    private ?string $subject = null;
+    private string $subject;
 
     #[ORM\Column(length: 255)]
-    private ?string $fromName = null;
+    private string $fromName;
 
     #[ORM\Column(length: 255)]
-    private ?string $fromAddress = null;
+    private string $fromAddress;
 
     #[ORM\Column(length: 255)]
-    private ?string $toString = null;
+    private string $toString;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $textPlain = null;
@@ -43,18 +44,18 @@ class Mail implements Stringable
     #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'contact_id', nullable: true)]
     private ?Contact $contact;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(?int $id): Mail
+    public function setId(int $id): Mail
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getMessageId(): ?string
+    public function getMessageId(): string
     {
         return $this->messageId;
     }
@@ -66,19 +67,19 @@ class Mail implements Stringable
         return $this;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function getDate(): DateTimeImmutable
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeImmutable $date): static
+    public function setDate(DateTimeImmutable $date): static
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getSubject(): ?string
+    public function getSubject(): string
     {
         return $this->subject;
     }
@@ -90,7 +91,7 @@ class Mail implements Stringable
         return $this;
     }
 
-    public function getFromName(): ?string
+    public function getFromName(): string
     {
         return $this->fromName;
     }
@@ -102,7 +103,7 @@ class Mail implements Stringable
         return $this;
     }
 
-    public function getFromAddress(): ?string
+    public function getFromAddress(): string
     {
         return $this->fromAddress;
     }
@@ -114,7 +115,7 @@ class Mail implements Stringable
         return $this;
     }
 
-    public function getToString(): ?string
+    public function getToString(): string
     {
         return $this->toString;
     }
@@ -163,6 +164,6 @@ class Mail implements Stringable
 
     public function __toString()
     {
-        return $this->getSubject() ?? '';
+        return $this->getSubject();
     }
 }

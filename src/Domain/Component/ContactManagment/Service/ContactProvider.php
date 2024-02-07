@@ -11,13 +11,19 @@ namespace App\Domain\Component\ContactManagment\Service;
 
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
+use App\Event\ContactCreated;
+use App\Event\Event;
 use App\Identity\ContactId;
 use App\ValueObject\Email;
+use JeckelLab\Contract\Infrastructure\System\Clock;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 readonly class ContactProvider
 {
     public function __construct(
-        private ContactRepository $contactRepository
+        private ContactRepository $contactRepository,
+        private EventDispatcherInterface $eventDispatcher,
+        private Clock $clock
     ) {}
 
     public function findOrCreate(
@@ -49,6 +55,14 @@ readonly class ContactProvider
             phoneNumber: $phoneNumber
         );
         $this->contactRepository->save($contact);
+
+        $this->eventDispatcher->dispatch(
+            new ContactCreated(
+                $contact->id,
+                $contact->email,
+                $this->clock->now()
+            )
+        );
         return $contact;
     }
 }

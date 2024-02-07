@@ -10,9 +10,11 @@ namespace App\Infrastructure\Component\DirectCommunicationHub\Adapter;
 
 use App\Domain\Component\DirectCommunicationHub\Model\IncomingMail;
 use App\Domain\Component\DirectCommunicationHub\Port\IncomingMailRepository;
+use App\Identity\MailId;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
+use App\ValueObject\Email;
 use Override;
 
 readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
@@ -39,5 +41,24 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
         }
 
         $this->repository->persist($mail);
+    }
+
+    #[\Override]
+    public function findByAuthorEmail(Email $authorEmail): iterable
+    {
+        $mails = $this->repository->findBy(['fromAddress' => (string) $authorEmail]);
+        foreach ($mails as $mail) {
+            yield new IncomingMail(
+                MailId::from($mail->getId()),
+                $mail->getMessageId(),
+                $mail->getDate(),
+                $mail->getSubject(),
+                $mail->getFromName(),
+                new Email($mail->getFromAddress()),
+                $mail->getToString(),
+                $mail->getTextPlain(),
+                $mail->getTextHtml()
+            );
+        }
     }
 }

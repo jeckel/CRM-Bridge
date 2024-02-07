@@ -22,7 +22,7 @@ readonly class AttachMailToContact
 
     public function __invoke(Email $email, MailId $mailId, DateTimeImmutable $sendAt): void
     {
-        $contact = $this->contactRepository->findByEmail($email->getEmail());
+        $contact = $this->contactRepository->findByEmail($email);
         if (null === $contact) {
             return;
         }
