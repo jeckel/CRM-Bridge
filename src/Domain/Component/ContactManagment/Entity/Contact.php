@@ -64,7 +64,7 @@ class Contact
         $this->displayName = $vCard->displayName();
         $this->firstName = $vCard->firstName();
         $this->lastName = $vCard->lastName();
-        $this->email = $vCard->email() !== null ? new Email($vCard->email()) : null;
+        $this->email = $vCard->email() !== null ? $vCard->email() : null;
         $this->phoneNumber = $vCard->phoneNumber();
         if (null !== $this->vCardUri && $this->vCardUri !== $vCard->vCardUri()) {
             throw new VCardUriChangedError('Can not change vCardUri');

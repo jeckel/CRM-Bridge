@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Application\Dto;
 
 use App\Domain\Component\ContactManagment\Port\VCard as DomainVCard;
+use App\ValueObject\Email;
 use Override;
 use Sabre\VObject\Component\VCard;
 
@@ -43,10 +44,14 @@ readonly class VCardDto implements DomainVCard
     }
 
     #[Override]
-    public function email(): ?string
+    public function email(): ?Email
     {
         /** @phpstan-ignore-next-line  */
-        return (string) $this->card->EMAIL;
+        $email = $this->card->EMAIL;
+        if (null === $email) {
+            return null;
+        }
+        return new Email((string) $email);
     }
 
     #[Override]
