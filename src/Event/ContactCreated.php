@@ -10,12 +10,14 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Identity\ContactId;
+use App\ValueObject\Email;
 use DateTimeImmutable;
 
 readonly class ContactCreated implements Event
 {
     public function __construct(
         public ContactId $contactId,
+        public ?Email $email,
         public DateTimeImmutable $occurredAt,
     ) {}
 }

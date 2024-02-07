@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Port;
 
+use App\ValueObject\Email;
+
 interface VCard
 {
     public function firstName(): ?string;
@@ -17,7 +19,7 @@ interface VCard
 
     public function displayName(): string;
 
-    public function email(): ?string;
+    public function email(): ?Email;
 
     public function phoneNumber(): ?string;
 

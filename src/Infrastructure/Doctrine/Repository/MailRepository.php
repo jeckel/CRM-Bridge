@@ -4,6 +4,7 @@ namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Infrastructure\Doctrine\Entity\Mail;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,4 +52,12 @@ class MailRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getById(string $mailId): Mail
+    {
+        $mail = $this->find($mailId);
+        if (null === $mail) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(Mail::class, [$mailId]);
+        }
+        return $mail;
+    }
 }

@@ -13,13 +13,14 @@ use App\Domain\Component\ContactManagment\Port\VCard;
 use App\Domain\Error\LogicError;
 use App\Identity\ContactId;
 use App\Identity\MailId;
+use App\ValueObject\Email;
 use DateTimeImmutable;
 
 /**
  * @property-read string $displayName
  * @property-read ?string $firstName
  * @property-read ?string $lastName
- * @property-read ?string $email
+ * @property-read ?Email $email
  * @property-read ?string $phoneNumber
  * @property-read ?string $espoContactId
  * @property-read ContactActivityCollection $activities
@@ -39,7 +40,7 @@ class Contact
         protected string $displayName,
         protected ?string $firstName = null,
         protected ?string $lastName = null,
-        protected ?string $email = null,
+        protected ?Email $email = null,
         protected ?string $phoneNumber = null,
         protected ?string $espoContactId = null,
         ?ContactActivityCollection $activities = null,
@@ -63,7 +64,7 @@ class Contact
         $this->displayName = $vCard->displayName();
         $this->firstName = $vCard->firstName();
         $this->lastName = $vCard->lastName();
-        $this->email = $vCard->email();
+        $this->email = $vCard->email() !== null ? $vCard->email() : null;
         $this->phoneNumber = $vCard->phoneNumber();
         if (null !== $this->vCardUri && $this->vCardUri !== $vCard->vCardUri()) {
             throw new VCardUriChangedError('Can not change vCardUri');

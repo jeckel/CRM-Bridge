@@ -29,6 +29,18 @@ config:
       password: CardDav Password
       default_address_book: Carnet d'adresses par défaut
       last_sync_token: Token synchronization CardDav
+    imap:
+      host: Serveur IMAP
+      login: Login IMAP
+      password: Mot de passe IMAP
+
+contact:
+  field:
+    display_name: Nom d'affichage
+    email: Email
+    first_name: Prénom
+    last_name: Nom
+    phone: Téléphone
 
 imap:
   action:
@@ -42,9 +54,31 @@ imap:
   title:
     setup: IMAP Configuration
 
+mail:
+  action:
+    add_to_address_book: Ajouter au carnet d'adresses
+  alert:
+    contact_adding_to_address_book: Ajout de l'auteur au carnet d'adresses en cours
+  field:
+    date: Reçu le
+    from: De
+    message: Message
+    subject: Objet
+    toString: A
+  label:
+    singular: Mail
+    plural: Mails
+  title:
+    list: Mails entrant
+    add_to_address_book: Ajouter au carnet d'adresses
+
 menu:
   card_dav: Card Dav
   config: Configuration
+  contacts: Contacts
+  dashboard: Dashboard
   imap: IMAP
+  incoming_webhooks: Webhook Logs
   mail: Mails
   setup_options: Options
+  workers: Workers

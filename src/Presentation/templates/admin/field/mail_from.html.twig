@@ -1,0 +1,12 @@
+{% if entity.instance.contact %}
+    {% set contact = entity.instance.contact %}
+    <a href="{{ ea_url()
+        .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
+        .setAction('detail')
+        .setEntityId(contact.id)
+    }}" title="{{ entity.instance.fromName }} &lt;{{ entity.instance.fromAddress }}&gt;">
+        <span class="fas fa-id-card"></span> {{ entity.instance.contact.displayName }}
+    </a>
+{% else %}
+    <span>{{ entity.instance.fromName }} &lt;{{ entity.instance.fromAddress }}&gt;</span>
+{% endif %}

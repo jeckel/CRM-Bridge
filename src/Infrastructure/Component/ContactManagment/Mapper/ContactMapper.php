@@ -17,6 +17,7 @@ use App\Identity\ContactId;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
+use App\ValueObject\Email;
 
 readonly class ContactMapper
 {
@@ -31,7 +32,7 @@ readonly class ContactMapper
             displayName: $contact->getDisplayName(),
             firstName: $contact->getFirstname(),
             lastName: $contact->getLastname(),
-            email: $contact->getEmail(),
+            email: $contact->getEmail() !== null ? new Email($contact->getEmail()) : null,
             phoneNumber: $contact->getPhoneNumber(),
             espoContactId: $contact->getEspoContactId(),
             activities: new ContactActivityCollection(
@@ -58,7 +59,7 @@ readonly class ContactMapper
             ->setFirstname($contact->firstName)
             ->setLastname($contact->lastName)
             ->setDisplayName($contact->displayName)
-            ->setEmail($contact->email)
+            ->setEmail($contact->email !== null ? (string) $contact->email : null)
             ->setPhoneNumber($contact->phoneNumber)
             ->setEspoContactId($contact->espoContactId)
             ->setVCardUri($contact->vCardUri)
