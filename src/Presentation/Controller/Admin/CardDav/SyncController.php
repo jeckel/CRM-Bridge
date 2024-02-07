@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\CardDav;
 
-use App\Infrastructure\CardDav\SyncManager;
-use App\Infrastructure\Configuration\ConfigurationKey;
 use App\Infrastructure\Configuration\ConfigurationService;
 use App\Presentation\Async\Message\SyncAddressBook;
 use App\Presentation\Controller\Admin\ContactCrudController;
