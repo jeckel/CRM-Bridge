@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Async\Handler;
+namespace App\Application\AsyncHandler;
 
 use App\Infrastructure\Imap\MailboxSynchronizer;
 use App\Presentation\Async\Message\SyncMailbox;
