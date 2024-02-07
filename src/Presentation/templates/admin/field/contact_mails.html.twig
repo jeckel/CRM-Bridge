@@ -1,0 +1,14 @@
+<table>
+    {% for mail in field.value %}
+    <tr>
+        <td>
+            <a href="{{ ea_url()
+                .setController('App\\Presentation\\Controller\\Admin\\MailCrudController')
+                .setAction('detail')
+                .setEntityId(mail.id)
+            }}">{{ mail.subject }}</a>
+        </td>
+        <td><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
+    </tr>
+    {% endfor %}
+</table>
