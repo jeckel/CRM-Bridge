@@ -9,21 +9,22 @@ declare(strict_types=1);
 
 namespace App\Application\AsyncHandler;
 
-use App\Application\CardDavObjectChanged;
+use App\Application\Dto\VCardDto;
+use App\Domain\Component\ContactManagment\Service\ContactVCardUpdater;
 use MStilkerich\CardDavClient\Services\SyncHandler;
 use Sabre\VObject\Component\VCard;
 
-readonly class AddressBookSyncHandler implements SyncHandler
+readonly class CardDavSyncHandler implements SyncHandler
 {
     public function __construct(
-        private CardDavObjectChanged $cardDavObjectChanged
+        private ContactVCardUpdater $VCardUpdater
     ) {}
 
     #[\Override]
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
         if (null !== $card) {
-            $this->cardDavObjectChanged->updateContactVCard($uri, $etag, $card);
+            $this->VCardUpdater->sync(new VCardDto($uri, $etag, $card));
         }
     }
 

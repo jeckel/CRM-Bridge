@@ -22,14 +22,14 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
 #[AsMessageHandler]
 #[AsCronTask(
-    expression: '0 * * * *',
+    expression: '*/5 * * * *',
     method: 'onSchedule'
 )]
 readonly class SyncAddressBookHandler
 {
     public function __construct(
         private ConfigurationService $configuration,
-        private AddressBookSyncHandler $syncHandler,
+        private CardDavSyncHandler $syncHandler,
         private Account $account
     ) {}
 
