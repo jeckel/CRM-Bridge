@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav;
+namespace App\Application\AsyncHandler;
 
 use App\Application\CardDavObjectChanged;
 use MStilkerich\CardDavClient\Services\SyncHandler;
 use Sabre\VObject\Component\VCard;
 
-class AddressBookSyncHandler implements SyncHandler
+readonly class AddressBookSyncHandler implements SyncHandler
 {
     public function __construct(
-        private readonly CardDavObjectChanged $cardDavObjectChanged
+        private CardDavObjectChanged $cardDavObjectChanged
     ) {}
 
     #[\Override]

@@ -12,11 +12,13 @@ namespace App\Presentation\Controller\Admin\CardDav;
 use App\Infrastructure\CardDav\SyncManager;
 use App\Infrastructure\Configuration\ConfigurationKey;
 use App\Infrastructure\Configuration\ConfigurationService;
+use App\Presentation\Async\Message\SyncAddressBook;
 use App\Presentation\Controller\Admin\ContactCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SyncController extends AbstractController
@@ -25,7 +27,8 @@ class SyncController extends AbstractController
 
     public function __construct(
         private readonly ConfigurationService $configuration,
-        private readonly AdminUrlGenerator $urlGenerator
+        private readonly AdminUrlGenerator $urlGenerator,
+        private readonly MessageBusInterface $messageBus
     ) {}
 
     /**
@@ -36,18 +39,13 @@ class SyncController extends AbstractController
         name: "carddav_sync",
         methods: ['GET']
     )]
-    public function syncAddressBook(
-        SyncManager $syncManager
-    ): Response {
+    public function syncAddressBook(): Response
+    {
         if (($response = $this->checkRequiredConfiguration($this->configuration, $this->urlGenerator)) instanceof Response) {
             return $response;
         }
 
-        $lastSyncToken = $syncManager->synchronize(
-            (string) $this->configuration->get(ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK)
-        );
-
-        $this->configuration->set(ConfigurationKey::CARDDAV_LAST_SYNC_TOKEN, $lastSyncToken);
+        $this->messageBus->dispatch(new SyncAddressBook());
         $this->addFlash(
             type: 'success',
             message: 'card_dav.alert.synchronization_success',
