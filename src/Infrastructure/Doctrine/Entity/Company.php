@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
-use App\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
     #[ORM\Id]
@@ -111,5 +111,10 @@ class Company
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function hasId(): bool
+    {
+        return isset($this->id);
     }
 }
