@@ -14,15 +14,24 @@ use App\Domain\Component\ContactManagment\Entity\ContactActivity;
 use App\Domain\Component\ContactManagment\Entity\ContactActivityCollection;
 use App\Identity\ContactActivityId;
 use App\Identity\ContactId;
+use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
+use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use App\ValueObject\Email;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 readonly class ContactMapper
 {
     public function __construct(
         private ContactActivityRepository $activityRepository,
+        private CompanyRepository $companyRepository,
+        private SluggerInterface $slugger
     ) {}
 
     public function mapToDomain(DoctrineContact $contact): DomainContact
@@ -34,6 +43,7 @@ readonly class ContactMapper
             lastName: $contact->getLastname(),
             email: $contact->getEmail() !== null ? new Email($contact->getEmail()) : null,
             phoneNumber: $contact->getPhoneNumber(),
+            company: $contact->getCompany()?->getName(),
             espoContactId: $contact->getEspoContactId(),
             activities: new ContactActivityCollection(
                 array_map(
@@ -54,6 +64,18 @@ readonly class ContactMapper
 
     public function mapToDoctrine(DoctrineContact $entity, DomainContact $contact): DoctrineContact
     {
+        $company = null;
+        if ($contact->company !== null) {
+            $slug = (string) $this->slugger->slug($contact->company);
+            $company = $this->companyRepository->findOneBy(['slug' => $slug]);
+            if (null === $company) {
+                $company = (new Company())
+                    ->setName($contact->company)
+                    ->setSlug($slug)
+                    ->setId(Uuid::uuid4()->toString());
+            }
+        }
+
         $entity
             ->setId((string) $contact->id)
             ->setFirstname($contact->firstName)
@@ -62,6 +84,7 @@ readonly class ContactMapper
             ->setEmail($contact->email !== null ? (string) $contact->email : null)
             ->setPhoneNumber($contact->phoneNumber)
             ->setEspoContactId($contact->espoContactId)
+            ->setCompany($company)
             ->setVCardUri($contact->vCardUri)
             ->setVCardEtag($contact->vCardEtag)
             ->setVCardLastSyncAt($contact->vCardLastSyncAt);

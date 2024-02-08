@@ -55,6 +55,14 @@ class ContactFormType extends AbstractType
                 ]
             )
             ->add(
+                child: 'company',
+                type: TextType::class,
+                options: [
+                    'label' => 'contact.field.company',
+                    'required' => false
+                ]
+            )
+            ->add(
                 child:'save',
                 type: SubmitType::class,
                 options: ['label' => 'action.save']

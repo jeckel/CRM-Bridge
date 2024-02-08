@@ -72,6 +72,18 @@ class Contact implements Stringable
     )]
     private Collection $mails;
 
+    #[ORM\ManyToOne(
+        cascade: ['persist'],
+        inversedBy: 'contacts'
+    )]
+    #[ORM\JoinColumn(
+        name: 'company_id',
+        referencedColumnName: 'company_id',
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
@@ -245,6 +257,17 @@ class Contact implements Stringable
             }
         }
 
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): Contact
+    {
+        $this->company = $company;
         return $this;
     }
 

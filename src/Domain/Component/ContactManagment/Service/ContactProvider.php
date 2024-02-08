@@ -31,7 +31,8 @@ readonly class ContactProvider
         ?string $lastName,
         string $displayName,
         string|Email|null $email,
-        ?string $phoneNumber
+        ?string $phoneNumber,
+        ?string $company = null
     ): Contact {
         if (is_string($email)) {
             $email = new Email($email);
@@ -52,7 +53,8 @@ readonly class ContactProvider
             firstName: $firstName,
             lastName: $lastName,
             email: $email,
-            phoneNumber: $phoneNumber
+            phoneNumber: $phoneNumber,
+            company: $company
         );
         $this->contactRepository->save($contact);
 

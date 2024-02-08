@@ -41,7 +41,12 @@ class Mail implements Stringable
     private ?string $textHtml = null;
 
     #[ORM\ManyToOne(inversedBy: 'mails')]
-    #[ORM\JoinColumn(name: 'contact_id', referencedColumnName: 'contact_id', nullable: true)]
+    #[ORM\JoinColumn(
+        name: 'contact_id',
+        referencedColumnName: 'contact_id',
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
     private ?Contact $contact;
 
     public function getId(): int

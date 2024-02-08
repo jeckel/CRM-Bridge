@@ -27,7 +27,8 @@ readonly class CreateContactHandler
             lastName: $message->lastName,
             displayName: $message->displayName,
             email: $message->email,
-            phoneNumber: $message->phoneNumber
+            phoneNumber: $message->phoneNumber,
+            company: $message->company
         );
     }
 }
