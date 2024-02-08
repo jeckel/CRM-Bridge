@@ -5,7 +5,9 @@ namespace App\Presentation\Controller\Admin;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Ramsey\Uuid\Uuid;
@@ -25,9 +27,12 @@ class CompanyCrudController extends AbstractCrudController
             ];
         }
         return [
-            IdField::new('id'),
             TextField::new('name'),
+            TextField::new('slug')
+                ->hideOnIndex()
+                ->hideWhenCreating(),
             TextField::new('espoCompanyId'),
+            AssociationField::new('contacts')
         ];
     }
 

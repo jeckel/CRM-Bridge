@@ -36,6 +36,7 @@ config:
 
 contact:
   field:
+    company: Société
     display_name: Nom d'affichage
     email: Email
     first_name: Prénom

@@ -23,6 +23,8 @@ interface VCard
 
     public function phoneNumber(): ?string;
 
+    public function company(): ?string;
+
     public function vCardUri(): string;
 
     public function vCardEtag(): string;

@@ -57,6 +57,7 @@ class CreateContactFromMailAuthor extends AbstractController
                     firstName: $formData['firstName'],
                     lastName: $formData['lastName'],
                     email: new Email($formData['email']),
+                    company: $formData['company'],
                 )
             );
             $this->addFlash('success', 'mail.alert.contact_adding_to_address_book');

@@ -22,6 +22,7 @@ use DateTimeImmutable;
  * @property-read ?string $lastName
  * @property-read ?Email $email
  * @property-read ?string $phoneNumber
+ * @property-read ?string $company
  * @property-read ?string $espoContactId
  * @property-read ContactActivityCollection $activities
  * @property-read ?string $vCardUri
@@ -42,6 +43,7 @@ class Contact
         protected ?string $lastName = null,
         protected ?Email $email = null,
         protected ?string $phoneNumber = null,
+        protected ?string $company = null,
         protected ?string $espoContactId = null,
         ?ContactActivityCollection $activities = null,
         protected ?string $vCardUri = null,
@@ -66,6 +68,7 @@ class Contact
         $this->lastName = $vCard->lastName();
         $this->email = $vCard->email() !== null ? $vCard->email() : null;
         $this->phoneNumber = $vCard->phoneNumber();
+        $this->company = $vCard->company();
         if (null !== $this->vCardUri && $this->vCardUri !== $vCard->vCardUri()) {
             throw new VCardUriChangedError('Can not change vCardUri');
         }

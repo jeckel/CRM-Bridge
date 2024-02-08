@@ -61,6 +61,14 @@ readonly class VCardDto implements DomainVCard
         return (string) $this->card->TEL;
     }
 
+    #[\Override]
+    public function company(): ?string
+    {
+        /** @phpstan-ignore-next-line  */
+        return explode(';', (string) $this->card->ORG)[0];
+    }
+
+
     #[Override]
     public function vCardUri(): string
     {

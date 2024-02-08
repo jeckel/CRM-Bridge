@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -23,8 +24,11 @@ class Company
     #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface|string $id;
 
-    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    #[ORM\Column(length: 180, nullable: false)]
     private string $name = '';
+
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    private string $slug = '';
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $espoCompanyId = null;
@@ -35,8 +39,7 @@ class Company
     #[ORM\OneToMany(
         mappedBy: 'company',
         targetEntity: Contact::class,
-        cascade: ['persist'],
-        orphanRemoval: true
+        cascade: ['persist']
     )]
     private Collection $contacts;
 
@@ -64,6 +67,20 @@ class Company
     public function setName(string $name): Company
     {
         $this->name = $name;
+        if (!isset($this->slug)) {
+            $this->setSlug((string) (new AsciiSlugger())->slug($name));
+        }
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): Company
+    {
+        $this->slug = $slug;
         return $this;
     }
 

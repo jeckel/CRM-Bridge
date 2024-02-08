@@ -18,6 +18,7 @@ readonly class CreateContact
         public ?string $firstName = null,
         public ?string $lastName = null,
         public ?Email $email = null,
-        public ?string $phoneNumber = null
+        public ?string $phoneNumber = null,
+        public ?string $company = null
     ) {}
 }

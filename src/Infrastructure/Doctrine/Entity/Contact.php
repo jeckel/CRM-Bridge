@@ -73,10 +73,15 @@ class Contact implements Stringable
     private Collection $mails;
 
     #[ORM\ManyToOne(
-        inversedBy: 'contacts',
-        cascade: ['persist']
+        cascade: ['persist'],
+        inversedBy: 'contacts'
     )]
-    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'company_id', nullable: true)]
+    #[ORM\JoinColumn(
+        name: 'company_id',
+        referencedColumnName: 'company_id',
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
     private ?Company $company = null;
 
     public function __construct()
