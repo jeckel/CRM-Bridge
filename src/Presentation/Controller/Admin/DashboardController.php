@@ -49,8 +49,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('menu.contacts', 'fas fa-id-card', Contact::class);
         yield MenuItem::linkToCrud('menu.companies', 'fa fa-building', Company::class);
         yield MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class);
-//        yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
-//        yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
+        //        yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
+        //        yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
                 MenuItem::linkToRoute('menu.card_dav', 'fa fa-sync', 'card_dav_list'),
