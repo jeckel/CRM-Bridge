@@ -14,7 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
+
+use function App\slug;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -68,7 +69,7 @@ class Company
     {
         $this->name = $name;
         if (!isset($this->slug)) {
-            $this->setSlug((string) (new AsciiSlugger())->slug($name));
+            $this->setSlug(slug($name));
         }
         return $this;
     }

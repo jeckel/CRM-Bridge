@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,6 +33,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'text', length: 1024, nullable: true)]
     private ?string $linkedInAccessToken = null;
+
+    #[ORM\ManyToOne(
+        cascade: ['persist'],
+        inversedBy: 'users'
+    )]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
 
     public function getId(): ?int
     {
@@ -107,6 +119,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLinkedInAccessToken(?string $linkedInAccessToken): User
     {
         $this->linkedInAccessToken = $linkedInAccessToken;
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): User
+    {
+        $this->account = $account;
         return $this;
     }
 
