@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use RuntimeException;
 use Stringable;
 
 #[ORM\Entity(repositoryClass: CardDavConfigRepository::class)]
@@ -119,6 +120,14 @@ class CardDavConfig implements Stringable
 
     public function getAccount(): ?Account
     {
+        return $this->account;
+    }
+
+    public function getAccountOrFail(): Account
+    {
+        if (null === $this->account) {
+            throw new RuntimeException('Account not set');
+        }
         return $this->account;
     }
 

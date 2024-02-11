@@ -5,6 +5,7 @@ namespace App\Presentation\Controller\Admin;
 use App\Infrastructure\Doctrine\Entity\CardDavConfig;
 use App\Infrastructure\Doctrine\Entity\User;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use App\Presentation\Async\Message\SyncAddressBook;
 use Doctrine\ORM\EntityNotFoundException;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -20,6 +21,7 @@ use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,6 +40,14 @@ class CardDavConfigCrudController extends AbstractCrudController
             ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
                 return $action->setIcon('fa fa-eye')
                     ->setCssClass('btn btn-secondary');
+            })
+            ->update(Crud::PAGE_INDEX, Action::EDIT, static function (Action $action) {
+                return $action->setIcon('fa fa-pencil')
+                    ->setCssClass('btn btn-secondary');
+            })
+            ->update(Crud::PAGE_INDEX, Action::DELETE, static function (Action $action) {
+                return $action->setIcon('fa fa-trash')
+                    ->setCssClass('btn btn-danger');
             });
     }
 
@@ -103,6 +113,20 @@ class CardDavConfigCrudController extends AbstractCrudController
             $addressBookRepository->getById($addressBookId)
                 ->disableSync()
         );
+        return $this->redirect(
+            $urlGenerator->setAction(Action::DETAIL)
+                ->generateUrl()
+        );
+    }
+
+    public function syncNow(AdminContext $context, AdminUrlGenerator $urlGenerator, MessageBusInterface $messageBus): Response
+    {
+        $addressBookId = $context->getRequest()->get('addressBookId');
+        if (! is_string($addressBookId)) {
+            throw new InvalidArgumentException('Address book id must be a string');
+        }
+
+        $messageBus->dispatch(new SyncAddressBook($addressBookId));
         return $this->redirect(
             $urlGenerator->setAction(Action::DETAIL)
                 ->generateUrl()

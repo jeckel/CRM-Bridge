@@ -11,6 +11,7 @@ namespace App\Infrastructure\Doctrine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Stringable;
 
 /**
  * @template T of object
@@ -19,11 +20,11 @@ use Doctrine\ORM\EntityNotFoundException;
 abstract class AbstractEntityRepository extends ServiceEntityRepository
 {
     /**
-     * @param string|int $id
+     * @param string|int|Stringable $id
      * @return T
      * @throws EntityNotFoundException
      */
-    public function getById(string|int $id)
+    public function getById(string|int|Stringable $id)
     {
         return $this->find($id) ?? throw new EntityNotFoundException();
     }

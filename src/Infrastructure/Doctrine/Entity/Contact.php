@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use RuntimeException;
 use Stringable;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
@@ -83,6 +84,22 @@ class Contact implements Stringable
         onDelete: 'SET NULL'
     )]
     private ?Company $company = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'card_dav_address_book_id',
+        referencedColumnName: 'card_dav_address_book_id',
+        nullable: true
+    )]
+    private ?CardDavAddressBook $addressBook = null;
 
     public function __construct()
     {
@@ -268,6 +285,36 @@ class Contact implements Stringable
     public function setCompany(?Company $company): Contact
     {
         $this->company = $company;
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function getAccountOrFail(): Account
+    {
+        if (null === $this->account) {
+            throw new RuntimeException('Account not set');
+        }
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): Contact
+    {
+        $this->account = $account;
+        return $this;
+    }
+
+    public function getAddressBook(): ?CardDavAddressBook
+    {
+        return $this->addressBook;
+    }
+
+    public function setAddressBook(?CardDavAddressBook $addressBook): Contact
+    {
+        $this->addressBook = $addressBook;
         return $this;
     }
 

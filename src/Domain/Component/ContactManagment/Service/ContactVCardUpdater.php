@@ -13,6 +13,8 @@ use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
 use App\Domain\Component\ContactManagment\Port\VCard;
 use App\Event\ContactCreated;
+use App\Identity\AccountId;
+use App\Identity\AddressBookId;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -24,7 +26,7 @@ readonly class ContactVCardUpdater
         private Clock $clock
     ) {}
 
-    public function sync(VCard $vCard): void
+    public function sync(VCard $vCard, AccountId $accountId, AddressBookId $addressBookId): void
     {
         $newContact = false;
         $contact = $this->repository->findByVCard($vCard->vCardUri());
@@ -32,10 +34,10 @@ readonly class ContactVCardUpdater
             $contact = $this->repository->findByEmail($email);
         }
         if (null === $contact) {
-            $contact = Contact::new($vCard->displayName());
+            $contact = Contact::new($accountId, $vCard->displayName());
             $newContact = true;
         }
-        $contact->updateFromVCard($vCard, $this->clock->now());
+        $contact->updateFromVCard($vCard, $this->clock->now(), $addressBookId);
         $this->repository->save($contact);
         if ($newContact) {
             $this->eventDispatcher->dispatch(

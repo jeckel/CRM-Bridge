@@ -30,6 +30,14 @@
                 }}" class="btn btn-secondary   ">
                     {{ 'config.card_dav.action.disable_sync' | trans }}
                 </a>
+                <a href="{{ ea_url()
+                    .setController('App\\Presentation\\Controller\\Admin\\CardDavConfigCrudController')
+                    .setAction('syncNow')
+                    .setEntityId(entity.instance.id)
+                    .set('addressBookId', address_book.id)
+                }}" class="btn btn-secondary   ">
+                    {{ 'config.card_dav.action.sync_now' | trans }}
+                </a>
             {% else %}
                 <a href="{{ ea_url()
                     .setController('App\\Presentation\\Controller\\Admin\\CardDavConfigCrudController')

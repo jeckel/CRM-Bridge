@@ -9,6 +9,7 @@ config:
     action:
       disable_sync: Désactiver la synchro
       enable_sync: Activer la synchro
+      sync_now: Synchroniser maintenant
     field:
       address_book: Carnet d'adresse
       address_books: Carnet d'adresses

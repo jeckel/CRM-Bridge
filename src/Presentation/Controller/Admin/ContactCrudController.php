@@ -69,6 +69,7 @@ class ContactCrudController extends AbstractCrudController
             yield EmailField::new('email');
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
+            yield TextField::new('addressBook');
             yield AssociationField::new('mails');
         }
         if ($pageName === Crud::PAGE_DETAIL) {
@@ -79,6 +80,7 @@ class ContactCrudController extends AbstractCrudController
             yield TextField::new('lastName');
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
+            yield TextField::new('addressBook');
 
             yield FormField::addTab('Mails');
             yield AssociationField::new('mails')

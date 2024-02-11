@@ -12,14 +12,20 @@ namespace App\Infrastructure\Component\ContactManagment\Mapper;
 use App\Domain\Component\ContactManagment\Entity\Contact as DomainContact;
 use App\Domain\Component\ContactManagment\Entity\ContactActivity;
 use App\Domain\Component\ContactManagment\Entity\ContactActivityCollection;
+use App\Identity\AccountId;
 use App\Identity\ContactActivityId;
 use App\Identity\ContactId;
+use App\Infrastructure\Doctrine\Entity\Account;
+use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
+use App\Infrastructure\Doctrine\Repository\AccountRepository;
+use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use App\ValueObject\Email;
+use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -31,6 +37,7 @@ readonly class ContactMapper
     public function __construct(
         private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
+        private EntityManagerInterface $entityManager,
         private SluggerInterface $slugger
     ) {}
 
@@ -38,6 +45,7 @@ readonly class ContactMapper
     {
         return new DomainContact(
             id: ContactId::from((string) $contact->getId()),
+            accountId: AccountId::from((string) $contact->getAccountOrFail()->getId()),
             displayName: $contact->getDisplayName(),
             firstName: $contact->getFirstname(),
             lastName: $contact->getLastname(),
@@ -75,9 +83,12 @@ readonly class ContactMapper
                     ->setId(Uuid::uuid4()->toString());
             }
         }
+        $account = $this->entityManager->getReference(Account::class, $contact->accountId);
+        $addressBook = $this->entityManager->getReference(CardDavAddressBook::class, $contact->addressBookId);
 
         $entity
             ->setId((string) $contact->id)
+            ->setAccount($account)
             ->setFirstname($contact->firstName)
             ->setLastname($contact->lastName)
             ->setDisplayName($contact->displayName)
@@ -87,7 +98,8 @@ readonly class ContactMapper
             ->setCompany($company)
             ->setVCardUri($contact->vCardUri)
             ->setVCardEtag($contact->vCardEtag)
-            ->setVCardLastSyncAt($contact->vCardLastSyncAt);
+            ->setVCardLastSyncAt($contact->vCardLastSyncAt)
+            ->setAddressBook($addressBook);
 
         if ($contact->activities->hasChanged()) {
             foreach ($contact->activities as $activity) {

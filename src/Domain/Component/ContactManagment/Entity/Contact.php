@@ -11,6 +11,8 @@ namespace App\Domain\Component\ContactManagment\Entity;
 use App\Domain\Component\ContactManagment\Error\VCardUriChangedError;
 use App\Domain\Component\ContactManagment\Port\VCard;
 use App\Domain\Error\LogicError;
+use App\Identity\AccountId;
+use App\Identity\AddressBookId;
 use App\Identity\ContactId;
 use App\Identity\MailId;
 use App\ValueObject\Email;
@@ -28,6 +30,7 @@ use DateTimeImmutable;
  * @property-read ?string $vCardUri
  * @property-read ?string $vCardEtag
  * @property-read ?DateTimeImmutable $vCardLastSyncAt
+ * @property-read ?AddressBookId $addressBookId
  */
 class Contact
 {
@@ -38,6 +41,7 @@ class Contact
      */
     public function __construct(
         public readonly ContactId $id,
+        public readonly AccountId $accountId,
         protected string $displayName,
         protected ?string $firstName = null,
         protected ?string $lastName = null,
@@ -48,20 +52,22 @@ class Contact
         ?ContactActivityCollection $activities = null,
         protected ?string $vCardUri = null,
         protected ?string $vCardEtag = null,
-        protected ?DateTimeImmutable $vCardLastSyncAt = null
+        protected ?DateTimeImmutable $vCardLastSyncAt = null,
+        protected ?AddressBookId $addressBookId = null
     ) {
         $this->activities = $activities ?? new ContactActivityCollection();
     }
 
-    public static function new(string $displayName): self
+    public static function new(AccountId $accountId, string $displayName): self
     {
         return new self(
             id: ContactId::new(),
+            accountId: $accountId,
             displayName: $displayName
         );
     }
 
-    public function updateFromVCard(VCard $vCard, DateTimeImmutable $vCardSyncAt): Contact
+    public function updateFromVCard(VCard $vCard, DateTimeImmutable $vCardSyncAt, AddressBookId $addressBookId): Contact
     {
         $this->displayName = $vCard->displayName();
         $this->firstName = $vCard->firstName();
@@ -75,6 +81,7 @@ class Contact
         $this->vCardUri = $vCard->vCardUri();
         $this->vCardEtag = $vCard->vCardEtag();
         $this->vCardLastSyncAt = $vCardSyncAt;
+        $this->addressBookId = $addressBookId;
         return $this;
     }
 
