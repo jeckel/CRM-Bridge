@@ -14,14 +14,14 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CardDavConfig>
+ * @extends AbstractEntityRepository<CardDavConfig>
  *
  * @method CardDavConfig|null find($id, $lockMode = null, $lockVersion = null)
  * @method CardDavConfig|null findOneBy(array $criteria, array $orderBy = null)
  * @method CardDavConfig[]    findAll()
  * @method CardDavConfig[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CardDavConfigRepository extends ServiceEntityRepository
+class CardDavConfigRepository extends AbstractEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

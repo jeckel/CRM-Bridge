@@ -2,34 +2,26 @@ action:
   save: Enregistrer
   select: "Sélectionner"
 
-card_dav:
-  action:
-    configuration: "Configuration"
-    default_address_book: "Carnet d'adresses par défaut"
-    sync: "Synchronizer avec CardDav"
-  alert:
-    default_address_book_not_set: "Carnet d'adresses par défaut non défini"
-    missing_required_configuration: "Configuration CardDav incomplète"
-    synchronization_success: "Synchronization CardDav terminée"
-  field:
-    connection_uri: "URI"
-    connection_username: "Login"
-    connection_password: "Mot de passe"
-    default_address_book: "Carnet d'adresses par défaut"
-  title:
-    index: "Card Dav dashboard"
-    select_default_address_book: "Sélectionnez le carnet d'adresses par défaut"
-    setup_connection: "Configuration de la connexion CardDav"
-
 config:
-  field:
-    carddav:
-      uri: CardDav serveur
-      username: CardDav Login
-      password: CardDav Password
-      default_address_book: Carnet d'adresses par défaut
+  action:
+    actions: Actions
+  card_dav:
+    action:
+      disable_sync: Désactiver la synchro
+      enable_sync: Activer la synchro
+    field:
+      address_book: Carnet d'adresse
+      address_books: Carnet d'adresses
       last_sync_token: Token synchronization CardDav
-    imap:
+      login: CardDav Login
+      name: Libellé
+      uri: CardDav serveur
+      password: CardDav Password
+      sync_disabled: Désactivé
+      sync_enabled: Activé
+      sync_status: Synchronisation
+  imap:
+    field:
       host: Serveur IMAP
       login: Login IMAP
       password: Mot de passe IMAP

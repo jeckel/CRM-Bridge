@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
@@ -34,14 +36,16 @@ class CardDavConfig implements Stringable
     #[ORM\Column(length: 255, nullable: false)]
     private string $password;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $lastSyncToken = null;
-
     /**
-     * @var string[] $addressBooks
+     * @var Collection<string, CardDavAddressBook> $addressBooks
      */
-    #[ORM\Column]
-    private array $addressBooks = [];
+    #[ORM\OneToMany(
+        mappedBy: 'cardDavConfig',
+        targetEntity: CardDavAddressBook::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $addressBooks;
 
     #[ORM\ManyToOne(
         inversedBy: 'cardDavConfigs'
@@ -52,6 +56,11 @@ class CardDavConfig implements Stringable
         nullable: false
     )]
     private ?Account $account = null;
+
+    public function __construct()
+    {
+        $this->addressBooks = new ArrayCollection();
+    }
 
     public function getId(): UuidInterface|string
     {
@@ -108,34 +117,6 @@ class CardDavConfig implements Stringable
         return $this;
     }
 
-    public function getLastSyncToken(): ?string
-    {
-        return $this->lastSyncToken;
-    }
-
-    public function setLastSyncToken(?string $lastSyncToken): self
-    {
-        $this->lastSyncToken = $lastSyncToken;
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAddressBooks(): array
-    {
-        return $this->addressBooks;
-    }
-
-    /**
-     * @param string[] $addressBooks
-     */
-    public function setAddressBooks(array $addressBooks): self
-    {
-        $this->addressBooks = $addressBooks;
-        return $this;
-    }
-
     public function getAccount(): ?Account
     {
         return $this->account;
@@ -144,6 +125,36 @@ class CardDavConfig implements Stringable
     public function setAccount(?Account $account): CardDavConfig
     {
         $this->account = $account;
+        return $this;
+    }
+
+    /**
+     * @return Collection<string, CardDavAddressBook>
+     */
+    public function getAddressBooks(): Collection
+    {
+        return $this->addressBooks;
+    }
+
+    public function addAddressBook(CardDavAddressBook $addressBook): static
+    {
+        if (!$this->addressBooks->contains($addressBook)) {
+            $this->addressBooks->add($addressBook);
+            $addressBook->setCardDavConfig($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddressBook(CardDavAddressBook $addressBook): static
+    {
+        if ($this->addressBooks->removeElement($addressBook)) {
+            // set the owning side to null (unless already changed)
+            if ($addressBook->getCardDavConfig() === $this) {
+                $addressBook->setCardDavConfig(null);
+            }
+        }
+
         return $this;
     }
 

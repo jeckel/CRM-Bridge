@@ -2,6 +2,7 @@
 
 namespace App\Presentation\Controller\Admin;
 
+use App\Infrastructure\Doctrine\Entity\CardDavConfig;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
@@ -53,12 +54,12 @@ class DashboardController extends AbstractDashboardController
         //        yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
+                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class),
                 MenuItem::linkToRoute('menu.card_dav', 'fa fa-sync', 'card_dav_list'),
                 MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list'),
                 MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class),
                 MenuItem::linkToCrud('menu.setup_options', 'fas fa-wrench', Configuration::class)
             ]);
-
     }
 }

@@ -1,0 +1,47 @@
+{% trans_default_domain 'admin' %}
+<table class="table datagrid ">
+    <thead>
+    <tr>
+        <th>{{ 'config.card_dav.field.address_book' | trans }}</th>
+        <th>{{ 'config.card_dav.field.sync_status' | trans }}</th>
+        <th>{{ 'config.card_dav.field.last_sync_token' | trans }}</th>
+        <th>{{ 'config.action.actions' | trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+{% for address_book in field.value %}
+    <tr>
+        <td><span title="{{ address_book.uri }}">{{ address_book.name }}</span></td>
+        <td>
+            {% if address_book.enabled %}
+                <span class="badge badge-success">{{ 'config.card_dav.field.sync_enabled' | trans }}</span>
+            {% else %}
+                <span class="badge badge-danger">{{ 'config.card_dav.field.sync_disabled' | trans }}</span>
+            {% endif %}
+        </td>
+        <td>{{ address_book.lastSyncToken }}</td>
+        <td>
+            {% if address_book.enabled %}
+                <a href="{{ ea_url()
+                    .setController('App\\Presentation\\Controller\\Admin\\CardDavConfigCrudController')
+                    .setAction('disableSync')
+                    .setEntityId(entity.instance.id)
+                    .set('addressBookId', address_book.id)
+                }}" class="btn btn-secondary   ">
+                    {{ 'config.card_dav.action.disable_sync' | trans }}
+                </a>
+            {% else %}
+                <a href="{{ ea_url()
+                    .setController('App\\Presentation\\Controller\\Admin\\CardDavConfigCrudController')
+                    .setAction('enableSync')
+                    .setEntityId(entity.instance.id)
+                    .set('addressBookId', address_book.id)
+                }}" class="btn btn-secondary">
+                    {{ 'config.card_dav.action.enable_sync' | trans }}
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
