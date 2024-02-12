@@ -40,7 +40,8 @@ class CardDavAddressBook implements Stringable
     #[ORM\JoinColumn(
         name: 'card_dav_config_id',
         referencedColumnName: 'card_dav_config_id',
-        nullable: false
+        nullable: false,
+        onDelete: 'CASCADE'
     )]
     private ?CardDavConfig $cardDavConfig = null;
 

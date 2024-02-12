@@ -71,6 +71,8 @@ class ContactCrudController extends AbstractCrudController
             yield AssociationField::new('company');
             yield TextField::new('addressBook');
             yield AssociationField::new('mails');
+            yield AssociationField::new('account', 'config.field.account')
+                ->setPermission('ROLE_SUPER_ADMIN');
         }
         if ($pageName === Crud::PAGE_DETAIL) {
             yield FormField::addTab('sommaire');
@@ -81,6 +83,8 @@ class ContactCrudController extends AbstractCrudController
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
             yield TextField::new('addressBook');
+            yield AssociationField::new('account', 'config.field.account')
+                ->setPermission('ROLE_SUPER_ADMIN');
 
             yield FormField::addTab('Mails');
             yield AssociationField::new('mails')

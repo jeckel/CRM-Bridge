@@ -18,11 +18,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use function App\new_uuid;
 
-class EasyAdminEventSubscriber implements EventSubscriberInterface
+readonly class EasyAdminEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly AddressBookDiscovery $addressBookDiscovery,
-        private readonly CardDavAddressBookRepository $addressBookRepository
+        private AddressBookDiscovery $addressBookDiscovery,
+        private CardDavAddressBookRepository $addressBookRepository
     ) {}
 
 
@@ -39,7 +39,10 @@ class EasyAdminEventSubscriber implements EventSubscriberInterface
         $instance = $event->getEntityInstance();
         if ($instance instanceof CardDavConfig) {
             foreach($this->addressBookDiscovery->discoverAddressBooks($instance) as $addressBook) {
-                if (null !== $this->addressBookRepository->findOneBy(['uri' => $addressBook->getUri()])) {
+                if (null !== $this->addressBookRepository->findOneBy([
+                        'uri' => $addressBook->getUri(),
+                        'cardDavConfig' => $instance,
+                    ])) {
                     continue;
                 }
                 $entity = (new CardDavAddressBook())

@@ -17,9 +17,14 @@ use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use Stringable;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: CardDavConfigRepository::class)]
-class CardDavConfig implements Stringable
+class CardDavConfig implements Stringable, AccountAwareInterface
 {
+    use AccountAwareTrait;
+
     #[ORM\Id]
     #[ORM\Column(name: 'card_dav_config_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -118,24 +123,24 @@ class CardDavConfig implements Stringable
         return $this;
     }
 
-    public function getAccount(): ?Account
-    {
-        return $this->account;
-    }
-
-    public function getAccountOrFail(): Account
-    {
-        if (null === $this->account) {
-            throw new RuntimeException('Account not set');
-        }
-        return $this->account;
-    }
-
-    public function setAccount(?Account $account): CardDavConfig
-    {
-        $this->account = $account;
-        return $this;
-    }
+//    public function getAccount(): ?Account
+//    {
+//        return $this->account;
+//    }
+//
+//    public function getAccountOrFail(): Account
+//    {
+//        if (null === $this->account) {
+//            throw new RuntimeException('Account not set');
+//        }
+//        return $this->account;
+//    }
+//
+//    public function setAccount(?Account $account): CardDavConfig
+//    {
+//        $this->account = $account;
+//        return $this;
+//    }
 
     /**
      * @return Collection<string, CardDavAddressBook>

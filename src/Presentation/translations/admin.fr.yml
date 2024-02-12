@@ -9,6 +9,7 @@ config:
     action:
       disable_sync: Désactiver la synchro
       enable_sync: Activer la synchro
+      new: Ajouter un compte CardDav
       sync_now: Synchroniser maintenant
     field:
       address_book: Carnet d'adresse
@@ -21,6 +22,8 @@ config:
       sync_disabled: Désactivé
       sync_enabled: Activé
       sync_status: Synchronisation
+  field:
+    account: Organisation
   imap:
     field:
       host: Serveur IMAP

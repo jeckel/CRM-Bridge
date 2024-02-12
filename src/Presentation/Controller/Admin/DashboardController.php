@@ -9,6 +9,7 @@ use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\Mail;
+use App\Infrastructure\Doctrine\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -26,8 +27,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
+        /** @var User $user */
+        $user = $this->getUser();
         return Dashboard::new()
-            ->setTitle('CRM Bridge')
+            ->setTitle(sprintf('CRM Bridge<br /><small>%s</small>', $user->getAccountOrFail()))
             ->setTranslationDomain('admin')
             ->renderContentMaximized()
             ->setLocales(['fr'])
@@ -50,16 +53,17 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('menu.contacts', 'fas fa-id-card', Contact::class);
         yield MenuItem::linkToCrud('menu.companies', 'fa fa-building', Company::class);
         yield MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class);
-        //        yield MenuItem::linkToCrud('Contact Activities', 'fas fa-list', ContactActivity::class);
-        //        yield MenuItem::linkToRoute('EspoCRM Contacts', 'fa fa-helmet-safety', 'espo_crm_contacts');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
-                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class),
-                MenuItem::linkToRoute('menu.card_dav', 'fa fa-sync', 'card_dav_list'),
-                MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
-                MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list'),
-                MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class),
+                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class)
+                    ->setPermission('ROLE_ADMIN'),
+//                MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
+                MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list')
+                    ->setPermission('ROLE_SUPER_ADMIN'),
+                MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class)
+                    ->setPermission('ROLE_SUPER_ADMIN'),
                 MenuItem::linkToCrud('menu.setup_options', 'fas fa-wrench', Configuration::class)
+                    ->setPermission('ROLE_SUPER_ADMIN'),
             ]);
     }
 }
