@@ -14,6 +14,7 @@ use App\Infrastructure\Doctrine\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController as EAAbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -77,6 +78,19 @@ abstract class AbstractCrudController extends EAAbstractCrudController
                 ->setParameter('accountId', $user->getAccountOrFail()->getId());
         }
         return $queryBuilder;
+    }
+
+    #[\Override]
+    public function configureFilters(Filters $filters): Filters
+    {
+        if ($this->options[self::OPTION_FILTER_BY_ACCOUNT]) {
+            /** @var User $user */
+            $user = $this->getUser();
+            if ($user->hasRole('ROLE_SUPER_ADMIN')) {
+                $filters->add('account');
+            }
+        }
+        return $filters;
     }
 
     /**

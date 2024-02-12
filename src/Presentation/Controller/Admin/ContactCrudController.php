@@ -11,17 +11,20 @@ namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Infrastructure\Doctrine\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 use Override;
 use Ramsey\Uuid\Uuid;
 
@@ -30,17 +33,27 @@ use Ramsey\Uuid\Uuid;
  */
 class ContactCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        $this->enableFilterByAccount()
+            ->enableNewGenerateUuid()
+            ->enableNewAssignAccount();
+    }
+
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Contact::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->hideNullValues();
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         $syncVCard = Action::new('sync_vcard', 'card_dav.action.sync')
@@ -62,6 +75,7 @@ class ContactCrudController extends AbstractCrudController
      * @return iterable<FieldInterface>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         if ($pageName === Crud::PAGE_INDEX) {
@@ -103,18 +117,6 @@ class ContactCrudController extends AbstractCrudController
                 ->setCrudController(CompanyCrudController::class)
             ;
         }
-    }
-
-    /**
-     * @return Contact
-     */
-    #[Override]
-    public function createEntity(string $entityFqcn)
-    {
-        /** @var Contact $contact */
-        $contact = parent::createEntity($entityFqcn);
-        $contact->setId(Uuid::uuid4()->toString());
-        return $contact;
     }
 
     /**

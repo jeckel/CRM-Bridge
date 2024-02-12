@@ -29,9 +29,9 @@ readonly class ContactVCardUpdater
     public function sync(VCard $vCard, AccountId $accountId, AddressBookId $addressBookId): void
     {
         $newContact = false;
-        $contact = $this->repository->findByVCard($vCard->vCardUri());
+        $contact = $this->repository->findByVCard($vCard->vCardUri(), $accountId);
         if (null === $contact && ($email = $vCard->email()) !== null) {
-            $contact = $this->repository->findByEmail($email);
+            $contact = $this->repository->findByEmail($email, $accountId);
         }
         if (null === $contact) {
             $contact = Contact::new($accountId, $vCard->displayName());

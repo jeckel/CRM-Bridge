@@ -30,7 +30,7 @@ class Contact implements Stringable, AccountAwareInterface
     #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface|string $id;
 
-    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    #[ORM\Column(length: 180, nullable: false)]
     private string $displayName = '';
 
     #[ORM\Column(length: 180, nullable: true)]
@@ -39,7 +39,7 @@ class Contact implements Stringable, AccountAwareInterface
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 180, unique: true, nullable: true)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $email;
 
     #[ORM\Column(length: 30, nullable: true)]
@@ -96,6 +96,7 @@ class Contact implements Stringable, AccountAwareInterface
         referencedColumnName: 'account_id',
         nullable: false
     )]
+    /** @phpstan-ignore-next-line  */
     private ?Account $account = null;
 
     #[ORM\ManyToOne]
@@ -292,25 +293,6 @@ class Contact implements Stringable, AccountAwareInterface
         $this->company = $company;
         return $this;
     }
-
-//    public function getAccount(): ?Account
-//    {
-//        return $this->account;
-//    }
-//
-//    public function getAccountOrFail(): Account
-//    {
-//        if (null === $this->account) {
-//            throw new RuntimeException('Account not set');
-//        }
-//        return $this->account;
-//    }
-//
-//    public function setAccount(?Account $account): self
-//    {
-//        $this->account = $account;
-//        return $this;
-//    }
 
     public function getAddressBook(): ?CardDavAddressBook
     {

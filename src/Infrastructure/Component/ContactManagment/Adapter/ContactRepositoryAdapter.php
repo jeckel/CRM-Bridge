@@ -11,14 +11,18 @@ namespace App\Infrastructure\Component\ContactManagment\Adapter;
 
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
+use App\Identity\AccountId;
 use App\Infrastructure\Component\ContactManagment\Mapper\ContactMapper;
+use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
 use App\ValueObject\Email;
+use Doctrine\ORM\EntityManagerInterface;
 
 readonly class ContactRepositoryAdapter implements ContactRepository
 {
     public function __construct(
+        private EntityManagerInterface $entityManager,
         private DoctrineContactRepository $repository,
         private ContactMapper $contactMapper
     ) {}
@@ -32,9 +36,12 @@ readonly class ContactRepositoryAdapter implements ContactRepository
     }
 
     #[\Override]
-    public function findByEmail(Email $email): ?Contact
+    public function findByEmail(Email $email, AccountId $accountId): ?Contact
     {
-        $contact = $this->repository->findOneBy(['email' => $email->getEmail()]);
+        $contact = $this->repository->findOneBy([
+            'email' => $email->getEmail(),
+            'account' => $this->entityManager->getReference(Account::class, $accountId->id())
+        ]);
         if (null === $contact) {
             return null;
         }
@@ -42,9 +49,12 @@ readonly class ContactRepositoryAdapter implements ContactRepository
     }
 
     #[\Override]
-    public function findByVCard(string $vCardUri): ?Contact
+    public function findByVCard(string $vCardUri, AccountId $accountId): ?Contact
     {
-        $contact = $this->repository->findOneBy(['vCardUri' => $vCardUri]);
+        $contact = $this->repository->findOneBy([
+            'vCardUri' => $vCardUri,
+            'account' => $this->entityManager->getReference(Account::class, $accountId->id())
+        ]);
         if (null === $contact) {
             return null;
         }

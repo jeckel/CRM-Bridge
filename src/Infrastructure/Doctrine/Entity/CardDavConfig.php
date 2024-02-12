@@ -61,6 +61,7 @@ class CardDavConfig implements Stringable, AccountAwareInterface
         referencedColumnName: 'account_id',
         nullable: false
     )]
+    /** @phpstan-ignore-next-line  */
     private ?Account $account = null;
 
     public function __construct()
@@ -122,25 +123,6 @@ class CardDavConfig implements Stringable, AccountAwareInterface
         $this->password = $password;
         return $this;
     }
-
-//    public function getAccount(): ?Account
-//    {
-//        return $this->account;
-//    }
-//
-//    public function getAccountOrFail(): Account
-//    {
-//        if (null === $this->account) {
-//            throw new RuntimeException('Account not set');
-//        }
-//        return $this->account;
-//    }
-//
-//    public function setAccount(?Account $account): CardDavConfig
-//    {
-//        $this->account = $account;
-//        return $this;
-//    }
 
     /**
      * @return Collection<string, CardDavAddressBook>
