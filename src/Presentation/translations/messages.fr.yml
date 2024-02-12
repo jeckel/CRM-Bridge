@@ -3,4 +3,7 @@ config:
     title:
       index: Synchronisation des contacts CardDav
       new: Ajouter un nouveau compte CardDav
-#      edit: Modifier un contact CardDav
+  imap:
+    title:
+      index: Configurations des comptes IMAP
+      new: Ajouter un nouveau compte IMAP

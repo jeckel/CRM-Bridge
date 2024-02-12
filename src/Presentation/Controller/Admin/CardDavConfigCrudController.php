@@ -39,8 +39,6 @@ class CardDavConfigCrudController extends AbstractCrudController
         return CardDavConfig::class;
     }
 
-
-
     #[\Override]
     public function configureCrud(Crud $crud): Crud
     {

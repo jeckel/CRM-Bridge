@@ -14,9 +14,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: ImapConfigRepository::class)]
-class ImapConfig implements Stringable
+class ImapConfig implements Stringable, AccountAwareInterface
 {
+    use AccountAwareTrait;
+
     #[ORM\Id]
     #[ORM\Column(name: 'imap_config_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -42,7 +47,14 @@ class ImapConfig implements Stringable
         referencedColumnName: 'account_id',
         nullable: false
     )]
+    /** @phpstan-ignore-next-line  */
     private ?Account $account = null;
+
+    /**
+     * @var array<int, string>
+     */
+    #[ORM\Column(type: 'json')]
+    private array $folders = [];
 
     public function getId(): UuidInterface|string
     {
@@ -99,14 +111,21 @@ class ImapConfig implements Stringable
         return $this;
     }
 
-    public function getAccount(): ?Account
+    /**
+     * @return array<int, string>
+     */
+    public function getFolders(): array
     {
-        return $this->account;
+        return $this->folders;
     }
 
-    public function setAccount(?Account $account): ImapConfig
+    /**
+     * @param array<int, string> $folders
+     * @return $this
+     */
+    public function setFolders(array $folders): ImapConfig
     {
-        $this->account = $account;
+        $this->folders = $folders;
         return $this;
     }
 

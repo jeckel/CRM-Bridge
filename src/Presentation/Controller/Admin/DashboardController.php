@@ -7,6 +7,7 @@ use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity;
+use App\Infrastructure\Doctrine\Entity\ImapConfig;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Entity\User;
@@ -61,6 +62,10 @@ class DashboardController extends AbstractDashboardController
                 $this->filterByAccount(
                     MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class)
                     ->setPermission('ROLE_ADMIN')
+                ),
+                $this->filterByAccount(
+                    MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapConfig::class)
+                        ->setPermission('ROLE_ADMIN')
                 ),
 //                MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list')

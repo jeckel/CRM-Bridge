@@ -26,9 +26,14 @@ config:
     account: Organisation
   imap:
     field:
-      host: Serveur IMAP
       login: Login IMAP
+      name: Libellé
       password: Mot de passe IMAP
+      synced_folders: Dossiers
+      uri: Serveur IMAP
+    action:
+      new: Ajouter un compte IMAP
+      select_folders: Sélectionner les dossiers à synchroniser
 
 contact:
   field:
@@ -39,17 +44,17 @@ contact:
     last_name: Nom
     phone: Téléphone
 
-imap:
-  action:
-    sync: Synchroniser
-  alert:
-    synchronization_request_success: Synchronisation des mails en cours
-  field:
-    host: Serveur
-    login: Login
-    password: Mot de passe
-  title:
-    setup: IMAP Configuration
+#imap:
+#  action:
+#    sync: Synchroniser
+#  alert:
+#    synchronization_request_success: Synchronisation des mails en cours
+#  field:
+#    host: Serveur
+#    login: Login
+#    password: Mot de passe
+#  title:
+#    setup: IMAP Configuration
 
 mail:
   action:
