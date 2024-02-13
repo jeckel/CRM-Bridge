@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\DirectCommunicationHub\Model;
 
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
 use App\Domain\Shared\Model\ReadPropertyTrait;
-use App\Identity\ContactId;
-use App\Identity\MailId;
-use App\ValueObject\Email;
 use DateTimeImmutable;
 
 /**

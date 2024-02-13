@@ -5,7 +5,7 @@
  * Created at: 15/01/2024
  */
 
-namespace App\Event;
+namespace App\Component\Shared\Event;
 
 /**
  * Interface Event

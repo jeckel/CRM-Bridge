@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Service;
 
+use App\Component\Shared\Event\ContactCreated;
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Identity\AddressBookId;
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
 use App\Domain\Component\ContactManagment\Port\VCard;
-use App\Event\ContactCreated;
-use App\Identity\AccountId;
-use App\Identity\AddressBookId;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Psr\EventDispatcher\EventDispatcherInterface;
 

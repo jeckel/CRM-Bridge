@@ -9,12 +9,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Service;
 
+use App\Component\Shared\Event\ContactCreated;
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
-use App\Event\ContactCreated;
-use App\Event\Event;
-use App\Identity\ContactId;
-use App\ValueObject\Email;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Psr\EventDispatcher\EventDispatcherInterface;
 

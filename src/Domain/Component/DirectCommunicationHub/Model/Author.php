@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\DirectCommunicationHub\Model;
 
+use App\Component\Shared\Identity\ContactId;
 use App\Domain\Shared\Model\ReadPropertyTrait;
-use App\Identity\ContactId;
 
 /**
  * @property-read ContactId $id

@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Port;
 
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Entity\Contact;
-use App\Identity\AccountId;
-use App\ValueObject\Email;
 
 interface ContactRepository
 {

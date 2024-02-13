@@ -5,7 +5,7 @@
  * Created at: 15/01/2024
  */
 
-namespace App\ValueObject;
+namespace App\Component\Shared\ValueObject;
 
 enum WebHookSource: string
 {

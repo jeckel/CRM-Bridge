@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace App\Application\EventSubscriber;
 
+use App\Component\Shared\Event\NewIncomingEmail;
 use App\Domain\Component\ContactManagment\Service\AttachMailToContact;
-use App\Domain\Component\ContactManagment\Service\ContactProvider;
-use App\Event\NewIncomingEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 readonly class NewMailSubscriber implements EventSubscriberInterface

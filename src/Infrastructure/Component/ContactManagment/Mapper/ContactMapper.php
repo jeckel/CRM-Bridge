@@ -9,22 +9,20 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Component\ContactManagment\Mapper;
 
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Identity\ContactActivityId;
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Entity\Contact as DomainContact;
 use App\Domain\Component\ContactManagment\Entity\ContactActivity;
 use App\Domain\Component\ContactManagment\Entity\ContactActivityCollection;
-use App\Identity\AccountId;
-use App\Identity\ContactActivityId;
-use App\Identity\ContactId;
 use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
-use App\Infrastructure\Doctrine\Repository\AccountRepository;
-use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
-use App\ValueObject\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;

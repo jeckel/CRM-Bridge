@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Service;
 
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
-use App\Identity\MailId;
-use App\ValueObject\Email;
 use DateTimeImmutable;
 
 readonly class AttachMailToContact

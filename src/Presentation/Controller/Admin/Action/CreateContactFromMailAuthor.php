@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Action;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
 use App\Presentation\Async\Message\CreateContact;
 use App\Presentation\Controller\Admin\MailCrudController;
 use App\Presentation\Form\ContactFormType;
-use App\ValueObject\Email;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

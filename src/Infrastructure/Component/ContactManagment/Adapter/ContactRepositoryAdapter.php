@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Component\ContactManagment\Adapter;
 
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Entity\Contact;
 use App\Domain\Component\ContactManagment\Port\ContactRepository;
-use App\Identity\AccountId;
 use App\Infrastructure\Component\ContactManagment\Mapper\ContactMapper;
 use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
-use App\ValueObject\Email;
 use Doctrine\ORM\EntityManagerInterface;
 
 readonly class ContactRepositoryAdapter implements ContactRepository

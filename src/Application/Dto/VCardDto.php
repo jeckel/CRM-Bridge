@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Application\Dto;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Port\VCard as DomainVCard;
-use App\ValueObject\Email;
 use Override;
 use Sabre\VObject\Component\VCard;
 

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Imap;
 
-use App\Identity\MailId;
+use App\Component\Shared\Identity\MailId;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
 use App\Presentation\Async\Message\SyncMail;
 use Exception;

@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace App\Application\AsyncHandler;
 
 use App\Application\Dto\VCardDto;
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Identity\AddressBookId;
 use App\Domain\Component\ContactManagment\Service\ContactVCardUpdater;
-use App\Identity\AccountId;
-use App\Identity\AddressBookId;
 use MStilkerich\CardDavClient\Services\SyncHandler;
 use Sabre\VObject\Component\VCard;
 

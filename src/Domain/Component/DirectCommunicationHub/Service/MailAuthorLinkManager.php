@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\DirectCommunicationHub\Service;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Port\AuthorRepository;
 use App\Domain\Component\DirectCommunicationHub\Port\IncomingMailRepository;
-use App\ValueObject\Email;
 
 readonly class MailAuthorLinkManager
 {

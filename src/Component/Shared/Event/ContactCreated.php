@@ -7,10 +7,10 @@
 
 declare(strict_types=1);
 
-namespace App\Event;
+namespace App\Component\Shared\Event;
 
-use App\Identity\ContactId;
-use App\ValueObject\Email;
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
 readonly class ContactCreated implements Event

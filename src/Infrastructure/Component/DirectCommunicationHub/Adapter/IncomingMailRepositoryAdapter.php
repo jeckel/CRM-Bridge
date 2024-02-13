@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Component\DirectCommunicationHub\Adapter;
 
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Model\IncomingMail;
 use App\Domain\Component\DirectCommunicationHub\Port\IncomingMailRepository;
-use App\Identity\MailId;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
-use App\ValueObject\Email;
 use Override;
 
 readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository

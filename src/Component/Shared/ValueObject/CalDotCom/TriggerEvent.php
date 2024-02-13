@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\ValueObject\CalDotCom;
+namespace App\Component\Shared\ValueObject\CalDotCom;
 
 enum TriggerEvent: string
 {

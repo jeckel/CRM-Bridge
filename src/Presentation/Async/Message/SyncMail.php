@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Message;
 
-use App\Identity\MailId;
+use App\Component\Shared\Identity\MailId;
 
 final readonly class SyncMail
 {

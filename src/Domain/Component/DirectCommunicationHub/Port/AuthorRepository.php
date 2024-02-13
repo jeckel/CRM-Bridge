@@ -6,8 +6,8 @@
 
 namespace App\Domain\Component\DirectCommunicationHub\Port;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Model\Author;
-use App\ValueObject\Email;
 
 interface AuthorRepository
 {

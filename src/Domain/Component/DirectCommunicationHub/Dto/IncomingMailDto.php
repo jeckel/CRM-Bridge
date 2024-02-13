@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\DirectCommunicationHub\Dto;
 
-use App\Identity\MailId;
-use App\ValueObject\Email;
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
 final readonly class IncomingMailDto

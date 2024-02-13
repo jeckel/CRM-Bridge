@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Entity;
 
-use App\Identity\ContactActivityId;
+use App\Component\Shared\Identity\ContactActivityId;
 use DateTimeImmutable;
 
 readonly class ContactActivity

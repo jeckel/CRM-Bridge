@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Component\DirectCommunicationHub\Adapter;
 
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Model\Author;
 use App\Domain\Component\DirectCommunicationHub\Port\AuthorRepository;
-use App\Identity\ContactId;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
-use App\ValueObject\Email;
 use Override;
 
 readonly class AuthorRepositoryAdapter implements AuthorRepository

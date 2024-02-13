@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Message;
 
-use App\ValueObject\Email;
+use App\Component\Shared\ValueObject\Email;
 
 readonly class CreateContact
 {

@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace App\Application\AsyncHandler;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
 use App\Domain\Component\DirectCommunicationHub\Service\IncomingMailRegisterer;
 use App\Presentation\Async\Message\SyncMail;
-use App\ValueObject\Email;
 use DateTimeImmutable;
 use Exception;
 use PhpImap\Mailbox;

@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace App\Application\Service;
 
 use App\Application\Dto\VCardDto;
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Identity\AddressBookId;
 use App\Domain\Component\ContactManagment\Service\ContactVCardUpdater;
-use App\Identity\AccountId;
-use App\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Port;
 
-use App\ValueObject\Email;
+use App\Component\Shared\ValueObject\Email;
 
 interface VCard
 {

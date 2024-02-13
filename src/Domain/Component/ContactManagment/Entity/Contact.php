@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace App\Domain\Component\ContactManagment\Entity;
 
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Identity\AddressBookId;
+use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\ContactManagment\Error\VCardUriChangedError;
 use App\Domain\Component\ContactManagment\Port\VCard;
 use App\Domain\Error\LogicError;
-use App\Identity\AccountId;
-use App\Identity\AddressBookId;
-use App\Identity\ContactId;
-use App\Identity\MailId;
-use App\ValueObject\Email;
 use DateTimeImmutable;
 
 /**
