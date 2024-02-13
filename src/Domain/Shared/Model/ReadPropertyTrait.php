@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Shared\Model;
 
-use App\Domain\Error\LogicError;
+use App\Component\Shared\Error\LogicError;
 
 trait ReadPropertyTrait
 {
