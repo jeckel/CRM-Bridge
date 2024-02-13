@@ -12,11 +12,10 @@ namespace App\Component\ContactManagment\Application\Mapper;
 use App\Component\ContactManagment\Domain\Entity\Contact as DomainContact;
 use App\Component\ContactManagment\Domain\Entity\ContactActivity;
 use App\Component\ContactManagment\Domain\Entity\ContactActivityCollection;
-use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\Helper\ContextManager;
 use App\Component\Shared\Identity\ContactActivityId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
@@ -24,6 +23,7 @@ use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivit
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -36,14 +36,14 @@ readonly class ContactMapper
         private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
         private EntityManagerInterface $entityManager,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
+        private ContextManager $context
     ) {}
 
     public function mapToDomain(DoctrineContact $contact): DomainContact
     {
         return new DomainContact(
             id: ContactId::from((string) $contact->getId()),
-            accountId: AccountId::from((string) $contact->getAccountOrFail()->getId()),
             displayName: $contact->getDisplayName(),
             firstName: $contact->getFirstname(),
             lastName: $contact->getLastname(),
@@ -68,6 +68,9 @@ readonly class ContactMapper
         );
     }
 
+    /**
+     * @throws ORMException
+     */
     public function mapToDoctrine(DoctrineContact $entity, DomainContact $contact): DoctrineContact
     {
         $company = null;
@@ -81,12 +84,13 @@ readonly class ContactMapper
                     ->setId(Uuid::uuid4()->toString());
             }
         }
-        $account = $this->entityManager->getReference(Account::class, $contact->accountId);
+        if (null === $entity->getAccount()) {
+            $entity->setAccount($this->context->getAccountReference());
+        }
         $addressBook = $this->entityManager->getReference(CardDavAddressBook::class, $contact->addressBookId);
 
         $entity
             ->setId((string) $contact->id)
-            ->setAccount($account)
             ->setFirstname($contact->firstName)
             ->setLastname($contact->lastName)
             ->setDisplayName($contact->displayName)

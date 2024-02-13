@@ -41,7 +41,7 @@ class Contact
      */
     public function __construct(
         public readonly ContactId $id,
-        public readonly AccountId $accountId,
+//        public readonly AccountId $accountId,
         protected string $displayName,
         protected ?string $firstName = null,
         protected ?string $lastName = null,
@@ -58,11 +58,11 @@ class Contact
         $this->activities = $activities ?? new ContactActivityCollection();
     }
 
-    public static function new(AccountId $accountId, string $displayName): self
+    public static function new(string $displayName): self
     {
         return new self(
             id: ContactId::new(),
-            accountId: $accountId,
+//            accountId: $accountId,
             displayName: $displayName
         );
     }

@@ -11,6 +11,7 @@ namespace App\Component\ContactManagment\Application\Service;
 
 use App\Component\ContactManagment\Application\Dto\VCardDto;
 use App\Component\ContactManagment\Domain\Service\ContactVCardUpdater;
+use App\Component\Shared\Helper\ContextManager;
 use App\Component\Shared\Identity\AccountId;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
@@ -27,11 +28,11 @@ use Sabre\VObject\Component\VCard;
 
 class CardDavAddressBookSynchronizer implements SyncHandler
 {
-    private AccountId $accountId;
     private AddressBookId $addressBookId;
 
     public function __construct(
         private readonly ContactVCardUpdater $VCardUpdater,
+        private readonly ContextManager $context,
         LoggerInterface $logger
     ) {
         Config::init($logger, $logger);
@@ -57,7 +58,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
             account: $account,
             restype: [ElementNames::RESTYPE_ABOOK]
         );
-        $this->accountId = AccountId::from((string) $config->getAccountOrFail()->getId());
+        $this->context->setAccountId(AccountId::from((string) $config->getAccountOrFail()->getId()));
         $this->addressBookId = AddressBookId::from((string) $cardDavAddressBook->getId());
         $syncManager->synchronize($addressBook, $this, [ "FN" ], "");
     }
@@ -69,7 +70,6 @@ class CardDavAddressBookSynchronizer implements SyncHandler
         if (null !== $card) {
             $this->VCardUpdater->sync(
                 vCard: new VCardDto($uri, $etag, $card),
-                accountId: $this->accountId,
                 addressBookId: $this->addressBookId
             );
         }

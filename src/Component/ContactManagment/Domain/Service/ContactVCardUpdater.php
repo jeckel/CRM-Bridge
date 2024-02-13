@@ -26,15 +26,15 @@ readonly class ContactVCardUpdater
         private Clock $clock
     ) {}
 
-    public function sync(VCard $vCard, AccountId $accountId, AddressBookId $addressBookId): void
+    public function sync(VCard $vCard, AddressBookId $addressBookId): void
     {
         $newContact = false;
-        $contact = $this->repository->findByVCard($vCard->vCardUri(), $accountId);
+        $contact = $this->repository->findByVCard($vCard->vCardUri());
         if (null === $contact && ($email = $vCard->email()) !== null) {
-            $contact = $this->repository->findByEmail($email, $accountId);
+            $contact = $this->repository->findByEmail($email);
         }
         if (null === $contact) {
-            $contact = Contact::new($accountId, $vCard->displayName());
+            $contact = Contact::new($vCard->displayName());
             $newContact = true;
         }
         $contact->updateFromVCard($vCard, $this->clock->now(), $addressBookId);
