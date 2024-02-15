@@ -47,7 +47,6 @@ class ImapConfig implements Stringable, AccountAwareInterface
         referencedColumnName: 'account_id',
         nullable: false
     )]
-    /** @phpstan-ignore-next-line  */
     private ?Account $account = null;
 
     /**

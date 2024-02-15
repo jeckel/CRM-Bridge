@@ -67,7 +67,6 @@ class DashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapConfig::class)
                         ->setPermission('ROLE_ADMIN')
                 ),
-//                MenuItem::linkToRoute('menu.imap', 'fa fa-inbox', 'imap_setup'),
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list')
                     ->setPermission('ROLE_SUPER_ADMIN'),
                 MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class)

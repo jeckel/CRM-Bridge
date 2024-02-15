@@ -52,6 +52,9 @@ class ImapMailbox
         return $this->getMailbox()->getMailboxes('*');
     }
 
+    /**
+     * @return int[]
+     */
     public function searchFolder(string $folder, string $criteria = 'ALL'): array
     {
         $mailbox = new Mailbox(
