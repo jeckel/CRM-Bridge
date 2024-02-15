@@ -45,7 +45,8 @@ readonly class SyncMailHandler
         $mail = $mailBox->getMail($syncMail->mailId->id(), $syncMail->folder);
         $this->mailRegisterer->register(new IncomingMailDto(
             id: $syncMail->mailId,
-            messageId: $mail->messageId ?? throw new LogicException('Message Id can not be null'),
+            messageId: $mail->messageId ?? '',
+//            messageId: $mail->messageId ?? throw new LogicException('Message Id can not be null'),
             date: new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')),
             subject: $mail->subject ?? throw new LogicException('Subject can not be null'),
             fromName: $mail->fromName ?? $mail->fromAddress ?? throw new LogicException('Both fromName and fromAddress can not be null'),

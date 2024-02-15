@@ -58,7 +58,9 @@ class DashboardController extends AbstractDashboardController
         yield $this->filterByAccount(
             MenuItem::linkToCrud('menu.companies', 'fa fa-building', Company::class)
         );
-        yield MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class);
+        yield $this->filterByAccount(
+            MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class)
+        );
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
                 $this->filterByAccount(
