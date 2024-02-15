@@ -19,6 +19,7 @@ use App\Infrastructure\Imap\ImapMailbox;
 use App\Presentation\Async\Message\SyncMail;
 use DateTimeImmutable;
 use Exception;
+use LogicException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -44,12 +45,12 @@ readonly class SyncMailHandler
         $mail = $mailBox->getMail($syncMail->mailId->id(), $syncMail->folder);
         $this->mailRegisterer->register(new IncomingMailDto(
             id: $syncMail->mailId,
-            messageId: $mail->messageId,
-            date: new DateTimeImmutable($mail->date),
-            subject: $mail->subject,
-            fromName: $mail->fromName,
-            fromAddress: new Email($mail->fromAddress),
-            toString: $mail->toString,
+            messageId: $mail->messageId ?? throw new LogicException('Message Id can not be null'),
+            date: new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')),
+            subject: $mail->subject ?? throw new LogicException('Subject can not be null'),
+            fromName: $mail->fromName ?? throw new LogicException('fromName can not be null'),
+            fromAddress: new Email($mail->fromAddress ?? throw new LogicException('fromAddress can not be null')),
+            toString: $mail->toString ?? throw new LogicException('toString can not be null'),
             folder: $syncMail->folder,
             textPlain: $mail->textPlain,
             textHtml: $mail->textHtml
