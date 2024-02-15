@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 05/02/2024
+ */
+
+declare(strict_types=1);
+
+namespace App\Component\Shared\Event;
+
+use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\ValueObject\Email;
+use DateTimeImmutable;
+
+final readonly class NewIncomingEmail implements Event
+{
+    public function __construct(
+        public MailId $mailId,
+        public Email $email,
+        public DateTimeImmutable $sendAt,
+    ) {}
+}
