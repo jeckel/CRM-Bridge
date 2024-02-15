@@ -29,6 +29,7 @@ readonly class MailboxSynchronizer
      */
     public function sync(): void
     {
+        throw new \LogicException('Deprecated');
         $mailsIds = $this->mailbox->searchMailbox('ALL');
         foreach($mailsIds as $mailId) {
             if (null !== $this->mailRepository->find($mailId)) {

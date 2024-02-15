@@ -25,15 +25,18 @@ config:
   field:
     account: Organisation
   imap:
+    action:
+      new: Ajouter un compte IMAP
+      select_folders: Sélectionner les dossiers à synchroniser
+      sync_mails: Synchroniser
+    alert:
+      sync_mails_requested: Synchronisation des mails en cours
     field:
       login: Login IMAP
       name: Libellé
       password: Mot de passe IMAP
       synced_folders: Dossiers
       uri: Serveur IMAP
-    action:
-      new: Ajouter un compte IMAP
-      select_folders: Sélectionner les dossiers à synchroniser
 
 contact:
   field:

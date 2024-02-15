@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Imap;
 
 use App\Infrastructure\Doctrine\Entity\ImapConfig;
+use PhpImap\IncomingMail;
 use PhpImap\Mailbox;
 
 class ImapMailbox
@@ -49,5 +50,25 @@ class ImapMailbox
     public function listFolders(): array
     {
         return $this->getMailbox()->getMailboxes('*');
+    }
+
+    public function searchFolder(string $folder, string $criteria = 'ALL'): array
+    {
+        $mailbox = new Mailbox(
+            str_replace('INBOX', $folder, $this->host),
+            $this->login,
+            $this->password
+        );
+        return $mailbox->searchMailbox($criteria);
+    }
+
+    public function getMail(int|string $id, string $folder): IncomingMail
+    {
+        $mailBox = new Mailbox(
+            str_replace('INBOX', $folder, $this->host),
+            $this->login,
+            $this->password
+        );
+        return $mailBox->getMail($id);
     }
 }

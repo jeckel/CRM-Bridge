@@ -11,6 +11,8 @@ namespace App\Application\AsyncHandler;
 use App\Component\Shared\ValueObject\Email;
 use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
 use App\Domain\Component\DirectCommunicationHub\Service\IncomingMailRegisterer;
+use App\Infrastructure\Doctrine\Repository\ImapConfigRepository;
+use App\Infrastructure\Imap\ImapMailbox;
 use App\Presentation\Async\Message\SyncMail;
 use DateTimeImmutable;
 use Exception;
@@ -22,7 +24,8 @@ readonly class SyncMailHandler
 {
     public function __construct(
         private Mailbox $mailbox,
-        private IncomingMailRegisterer $mailRegisterer
+        private IncomingMailRegisterer $mailRegisterer,
+        private ImapConfigRepository $imapConfigRepository
     ) {}
 
     /**
@@ -30,7 +33,11 @@ readonly class SyncMailHandler
      */
     public function __invoke(SyncMail $syncMail): void
     {
-        $mail = $this->mailbox->getMail($syncMail->mailId->id());
+        $imapConfig = $this->imapConfigRepository->getById($syncMail->imapConfigId->id());
+        $mailBox = ImapMailbox::fromImapConfig($imapConfig);
+        $mail = $mailBox->getMail($syncMail->mailId->id(), $syncMail->folder);
+//        dd($mail);
+//        $mail = $this->mailbox->getMail($syncMail->mailId->id());
         $this->mailRegisterer->register(new IncomingMailDto(
             id: $syncMail->mailId,
             messageId: $mail->messageId,
