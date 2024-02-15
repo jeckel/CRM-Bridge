@@ -36,6 +36,11 @@ class MailContextManager
         $this->imapConfigId = $imapConfigId;
     }
 
+    public function hasImapConfig(): bool
+    {
+        return null !== $this->imapConfigId;
+    }
+
     /**
      * @throws ORMException
      */

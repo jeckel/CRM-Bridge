@@ -10,6 +10,7 @@ namespace App\Component\DirectCommunicationHub\Application\Adapter;
 
 use App\Component\DirectCommunicationHub\Domain\Model\Author;
 use App\Component\DirectCommunicationHub\Domain\Port\AuthorRepository;
+use App\Component\Shared\Helper\ContextManager;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
@@ -17,12 +18,18 @@ use Override;
 
 readonly class AuthorRepositoryAdapter implements AuthorRepository
 {
-    public function __construct(private ContactRepository $repository) {}
+    public function __construct(
+        private ContactRepository $repository,
+        private ContextManager $context
+    ) {}
 
     #[Override]
     public function findByEmail(Email $email): ?Author
     {
-        $contact = $this->repository->findOneBy(['email' => (string) $email]);
+        $contact = $this->repository->findOneBy([
+            'email' => (string) $email,
+            'account' => $this->context->getAccountReference()
+        ]);
         if (null === $contact) {
             return null;
         }

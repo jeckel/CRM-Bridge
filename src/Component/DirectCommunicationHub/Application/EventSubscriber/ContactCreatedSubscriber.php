@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\EventSubscriber;
+namespace App\Component\DirectCommunicationHub\Application\EventSubscriber;
 
 use App\Component\DirectCommunicationHub\Domain\Service\MailAuthorLinkManager;
 use App\Component\Shared\Event\ContactCreated;

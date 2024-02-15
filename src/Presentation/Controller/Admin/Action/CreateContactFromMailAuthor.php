@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Action;
 
+use App\Component\Shared\Identity\AccountId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
@@ -54,10 +55,11 @@ class CreateContactFromMailAuthor extends AbstractController
             $this->messageBus->dispatch(
                 new CreateContact(
                     displayName: $formData['displayName'],
+                    accountId: AccountId::from((string) $this->getUser()->getAccount()->getId()),
                     firstName: $formData['firstName'],
                     lastName: $formData['lastName'],
                     email: new Email($formData['email']),
-                    company: $formData['company'],
+                    company: $formData['company']
                 )
             );
             $this->addFlash('success', 'mail.alert.contact_adding_to_address_book');

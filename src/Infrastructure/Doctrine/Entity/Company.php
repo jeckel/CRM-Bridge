@@ -20,6 +20,8 @@ use function App\slug;
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
+    use AccountAwareTrait;
+
     #[ORM\Id]
     #[ORM\Column(name: 'company_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -33,6 +35,14 @@ class Company
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $espoCompanyId = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
 
     /**
      * @var Collection<int, Contact> $contacts

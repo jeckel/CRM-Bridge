@@ -34,7 +34,9 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
         $mail = $this->repository->findOneBy([
             'id' => $incomingMail->mailId->id(),
             'account' => $this->context->getAccountReference()
-        ]) ?? (new Mail())->setId($incomingMail->mailId->id());
+        ]) ?? (new Mail())
+            ->setId($incomingMail->mailId->id())
+            ->setImapConfig($this->mailContext->getImapConfigReference());
         $mail->setMessageId($incomingMail->messageId)
             ->setDate($incomingMail->date)
             ->setSubject($incomingMail->subject)
@@ -42,7 +44,6 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             ->setFromAddress((string) $incomingMail->fromAddress)
             ->setToString($incomingMail->toString)
             ->setAccount($this->context->getAccountReference())
-            ->setImapConfig($this->mailContext->getImapConfigReference())
             ->setFolder($incomingMail->folder)
             ->setTextPlain($incomingMail->textPlain ?? '')
             ->setTextHtml($incomingMail->textHtml ?? '');

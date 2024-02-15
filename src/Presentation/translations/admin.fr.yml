@@ -66,7 +66,9 @@ mail:
     contact_adding_to_address_book: Ajout de l'auteur au carnet d'adresses en cours
   field:
     date: Reçu le
+    folder: Dossier
     from: De
+    imap: Compte
     message: Message
     subject: Objet
     toString: A

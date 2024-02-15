@@ -81,13 +81,17 @@ readonly class ContactMapper
                 $company = (new Company())
                     ->setName($contact->company)
                     ->setSlug($slug)
-                    ->setId(Uuid::uuid4()->toString());
+                    ->setId(Uuid::uuid4()->toString())
+                    ->setAccount($this->context->getAccountReference());
             }
         }
         if (null === $entity->getAccount()) {
             $entity->setAccount($this->context->getAccountReference());
         }
-        $addressBook = $this->entityManager->getReference(CardDavAddressBook::class, $contact->addressBookId);
+        $addressBook = null;
+        if (null !== $contact->addressBookId) {
+            $addressBook = $this->entityManager->getReference(CardDavAddressBook::class, $contact->addressBookId);
+        }
 
         $entity
             ->setId((string) $contact->id)
