@@ -48,7 +48,7 @@ readonly class SyncMailHandler
             messageId: $mail->messageId ?? throw new LogicException('Message Id can not be null'),
             date: new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')),
             subject: $mail->subject ?? throw new LogicException('Subject can not be null'),
-            fromName: $mail->fromName ?? throw new LogicException('fromName can not be null'),
+            fromName: $mail->fromName ?? $mail->fromAddress ?? throw new LogicException('Both fromName and fromAddress can not be null'),
             fromAddress: new Email($mail->fromAddress ?? throw new LogicException('fromAddress can not be null')),
             toString: $mail->toString ?? throw new LogicException('toString can not be null'),
             folder: $syncMail->folder,
