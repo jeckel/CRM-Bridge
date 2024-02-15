@@ -17,6 +17,9 @@ use Ramsey\Uuid\UuidInterface;
 
 use function App\slug;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {

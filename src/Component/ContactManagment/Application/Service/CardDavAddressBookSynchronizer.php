@@ -26,6 +26,9 @@ use Override;
 use Psr\Log\LoggerInterface;
 use Sabre\VObject\Component\VCard;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CardDavAddressBookSynchronizer implements SyncHandler
 {
     private AddressBookId $addressBookId;
