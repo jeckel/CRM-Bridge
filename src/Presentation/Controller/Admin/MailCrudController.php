@@ -6,18 +6,27 @@ use App\Infrastructure\Doctrine\Entity\Mail;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Override;
 
 class MailCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        $this->enableFilterByAccount()
+        ;
+    }
+
+    #[Override]
     public static function getEntityFqcn(): string
     {
         return Mail::class;
     }
 
+    #[Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -27,6 +36,7 @@ class MailCrudController extends AbstractCrudController
         ;
     }
 
+    #[Override]
     public function configureActions(Actions $actions): Actions
     {
         $sync = Action::new('imap_sync', 'imap.action.sync')
@@ -51,10 +61,18 @@ class MailCrudController extends AbstractCrudController
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
             ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
                 return $action->setIcon('fa fa-eye')
                     ->setCssClass('btn btn-secondary');
             });
+    }
+
+    #[Override]
+    public function configureFilters(Filters $filters): Filters
+    {
+        $filters = parent::configureFilters($filters);
+        return $filters;
     }
 
     /**
@@ -62,6 +80,7 @@ class MailCrudController extends AbstractCrudController
      * @return iterable<FieldInterface>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[Override]
     public function configureFields(string $pageName): iterable
     {
         yield DateTimeField::new('date', label: 'mail.field.date');

@@ -1,6 +1,6 @@
 framework:
     messenger:
-#        failure_transport: failed
+        failure_transport: failed
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
@@ -12,13 +12,14 @@ framework:
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
+            failed: 'doctrine://default?queue_name=failed'
 
         routing:
-            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
-            Symfony\Component\Notifier\Message\ChatMessage: async
-            Symfony\Component\Notifier\Message\SmsMessage: async
-#            App\Presentation\Async\Message\SyncMailbox: async
-#            App\Presentation\Async\Message\SyncMail: async
+#            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
+#            Symfony\Component\Notifier\Message\ChatMessage: async
+#            Symfony\Component\Notifier\Message\SmsMessage: async
+            App\Presentation\Async\Message\SyncMailbox: async
+            App\Presentation\Async\Message\SyncMail: async
             App\Presentation\Async\Message\SyncAddressBook: async
 #            App\Presentation\Async\WebHook\WebHook: async
 #            App\Presentation\Async\WebHook\CalDotComWebhook: async

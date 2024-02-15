@@ -36,7 +36,7 @@ class Mail implements Stringable, AccountAwareInterface
     #[ORM\Column(length: 255)]
     private string $fromAddress;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private string $toString;
 
     #[ORM\Column(type: Types::TEXT)]
