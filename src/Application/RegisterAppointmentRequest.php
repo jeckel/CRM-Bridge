@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Application;
 
-use App\Domain\Component\ContactManagment\Service\AppointmentService;
-use App\Domain\Component\ContactManagment\Service\ContactProvider;
+use App\Component\ContactManagment\Domain\Service\AppointmentService;
+use App\Component\ContactManagment\Domain\Service\ContactProvider;
 use DateTimeImmutable;
 
 readonly class RegisterAppointmentRequest

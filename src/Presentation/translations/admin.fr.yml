@@ -2,37 +2,41 @@ action:
   save: Enregistrer
   select: "Sélectionner"
 
-card_dav:
-  action:
-    configuration: "Configuration"
-    default_address_book: "Carnet d'adresses par défaut"
-    sync: "Synchronizer avec CardDav"
-  alert:
-    default_address_book_not_set: "Carnet d'adresses par défaut non défini"
-    missing_required_configuration: "Configuration CardDav incomplète"
-    synchronization_success: "Synchronization CardDav terminée"
-  field:
-    connection_uri: "URI"
-    connection_username: "Login"
-    connection_password: "Mot de passe"
-    default_address_book: "Carnet d'adresses par défaut"
-  title:
-    index: "Card Dav dashboard"
-    select_default_address_book: "Sélectionnez le carnet d'adresses par défaut"
-    setup_connection: "Configuration de la connexion CardDav"
-
 config:
-  field:
-    carddav:
-      uri: CardDav serveur
-      username: CardDav Login
-      password: CardDav Password
-      default_address_book: Carnet d'adresses par défaut
+  action:
+    actions: Actions
+  card_dav:
+    action:
+      disable_sync: Désactiver la synchro
+      enable_sync: Activer la synchro
+      new: Ajouter un compte CardDav
+      sync_now: Synchroniser maintenant
+    field:
+      address_book: Carnet d'adresse
+      address_books: Carnet d'adresses
       last_sync_token: Token synchronization CardDav
-    imap:
-      host: Serveur IMAP
+      login: CardDav Login
+      name: Libellé
+      uri: CardDav serveur
+      password: CardDav Password
+      sync_disabled: Désactivé
+      sync_enabled: Activé
+      sync_status: Synchronisation
+  field:
+    account: Organisation
+  imap:
+    action:
+      new: Ajouter un compte IMAP
+      select_folders: Sélectionner les dossiers à synchroniser
+      sync_mails: Synchroniser
+    alert:
+      sync_mails_requested: Synchronisation des mails en cours
+    field:
       login: Login IMAP
+      name: Libellé
       password: Mot de passe IMAP
+      synced_folders: Dossiers
+      uri: Serveur IMAP
 
 contact:
   field:
@@ -43,17 +47,17 @@ contact:
     last_name: Nom
     phone: Téléphone
 
-imap:
-  action:
-    sync: Synchroniser
-  alert:
-    synchronization_request_success: Synchronisation des mails en cours
-  field:
-    host: Serveur
-    login: Login
-    password: Mot de passe
-  title:
-    setup: IMAP Configuration
+#imap:
+#  action:
+#    sync: Synchroniser
+#  alert:
+#    synchronization_request_success: Synchronisation des mails en cours
+#  field:
+#    host: Serveur
+#    login: Login
+#    password: Mot de passe
+#  title:
+#    setup: IMAP Configuration
 
 mail:
   action:
@@ -62,7 +66,9 @@ mail:
     contact_adding_to_address_book: Ajout de l'auteur au carnet d'adresses en cours
   field:
     date: Reçu le
+    folder: Dossier
     from: De
+    imap: Compte
     message: Message
     subject: Objet
     toString: A
