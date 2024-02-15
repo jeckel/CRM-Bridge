@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Handler;
 
+use App\Component\Shared\ValueObject\CalDotCom\TriggerEvent;
+use App\Component\Shared\ValueObject\WebHookSource;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Presentation\Async\WebHook\CalDotComWebhook;
-use App\ValueObject\CalDotCom\TriggerEvent;
-use App\ValueObject\WebHookSource;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

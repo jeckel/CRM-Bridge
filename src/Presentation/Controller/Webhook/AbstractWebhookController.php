@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
+use App\Component\Shared\ValueObject\WebHookSource;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
-use App\ValueObject\WebHookSource;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

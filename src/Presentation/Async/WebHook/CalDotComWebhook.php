@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\WebHook;
 
-use App\ValueObject\CalDotCom\TriggerEvent;
-use App\ValueObject\WebHookSource;
+use App\Component\Shared\ValueObject\CalDotCom\TriggerEvent;
+use App\Component\Shared\ValueObject\WebHookSource;
 use DateTimeImmutable;
 
 readonly class CalDotComWebhook implements WebhookInterface

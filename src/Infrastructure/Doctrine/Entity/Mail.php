@@ -8,9 +8,14 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: MailRepository::class)]
-class Mail implements Stringable
+class Mail implements Stringable, AccountAwareInterface
 {
+    use AccountAwareTrait;
+
     #[ORM\Id]
     #[ORM\Column(name: 'mail_id', unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -48,6 +53,25 @@ class Mail implements Stringable
         onDelete: 'SET NULL'
     )]
     private ?Contact $contact;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'imap_config_id',
+        referencedColumnName: 'imap_config_id',
+        nullable: false
+    )]
+    private ?ImapConfig $imapConfig = null;
+
+    #[ORM\Column(length: 255)]
+    private string $folder = '';
 
     public function getId(): int
     {
@@ -164,6 +188,28 @@ class Mail implements Stringable
     public function setContact(?Contact $contact): Mail
     {
         $this->contact = $contact;
+        return $this;
+    }
+
+    public function getFolder(): string
+    {
+        return $this->folder;
+    }
+
+    public function setFolder(string $folder): Mail
+    {
+        $this->folder = $folder;
+        return $this;
+    }
+
+    public function getImapConfig(): ?ImapConfig
+    {
+        return $this->imapConfig;
+    }
+
+    public function setImapConfig(?ImapConfig $imapConfig): Mail
+    {
+        $this->imapConfig = $imapConfig;
         return $this;
     }
 

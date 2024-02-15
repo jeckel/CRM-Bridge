@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Action;
 
+use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Mail;
+use App\Infrastructure\Doctrine\Entity\User;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
 use App\Presentation\Async\Message\CreateContact;
 use App\Presentation\Controller\Admin\MailCrudController;
 use App\Presentation\Form\ContactFormType;
-use App\ValueObject\Email;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,6 +42,8 @@ class CreateContactFromMailAuthor extends AbstractController
     {
         /** @var Mail $mail */
         $mail = $this->mailRepository->getById($mailId);
+        /** @var User $user */
+        $user = $this->getUser();
         $form = $this->createForm(
             ContactFormType::class,
             [
@@ -54,10 +58,11 @@ class CreateContactFromMailAuthor extends AbstractController
             $this->messageBus->dispatch(
                 new CreateContact(
                     displayName: $formData['displayName'],
+                    accountId: AccountId::from((string) $user->getAccountOrFail()->getId()),
                     firstName: $formData['firstName'],
                     lastName: $formData['lastName'],
                     email: new Email($formData['email']),
-                    company: $formData['company'],
+                    company: $formData['company']
                 )
             );
             $this->addFlash('success', 'mail.alert.contact_adding_to_address_book');
