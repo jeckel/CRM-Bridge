@@ -26,7 +26,7 @@
         "jeckel-lab/clock": "^1.2",
         "jeckel-lab/identity-contract": "~2.0",
         "mstilkerich/carddavclient": "^1.4",
-        "php-imap/php-imap": "^2.0",
+        "php-imap/php-imap": "^5.0",
         "ramsey/uuid-doctrine": "^2.0",
         "supervisorphp/supervisor": "^5.1",
         "symfony/amqp-messenger": "7.0.*",

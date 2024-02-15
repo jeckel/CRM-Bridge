@@ -45,7 +45,7 @@ class ImapMailbox
     }
 
     /**
-     * @return array<array{shortpath: string}>
+     * @return list<array{fullpath: string, attributes: mixed, delimiter: mixed, shortpath: false|string}>
      */
     public function listFolders(): array
     {
@@ -65,7 +65,7 @@ class ImapMailbox
         return $mailbox->searchMailbox($criteria);
     }
 
-    public function getMail(int|string $id, string $folder): IncomingMail
+    public function getMail(int $id, string $folder): IncomingMail
     {
         $mailBox = new Mailbox(
             str_replace('INBOX', $folder, $this->host),

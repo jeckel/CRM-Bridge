@@ -100,6 +100,7 @@ class ImapConfigCrudController extends AbstractCrudController
         /** @var ImapConfig $imap */
         $imap = $context->getEntity()->getInstance();
         $mailbox = ImapMailbox::fromImapConfig($imap);
+        /** @var string[] $folders */
         $folders = array_map(
             fn(array $folder) => $folder['shortpath'],
             $mailbox->listFolders()
