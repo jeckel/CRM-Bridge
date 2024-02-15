@@ -29,6 +29,7 @@ grumphp:
         - "feature/*"
         - "bugfix/*"
         - "hotfix/*"
+        - "dependabot/**"
       additional_modifiers: ''
       allow_detached_head: true
 #    infection:
