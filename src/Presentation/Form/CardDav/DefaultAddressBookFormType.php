@@ -17,11 +17,12 @@ class DefaultAddressBookFormType extends AbstractType
     {
         $builder
             ->add(
-                child: ConfigurationKey::CARDDAV_DEFAULT_ADDRESS_BOOK->value,
+                child: 'address_books',
                 type: ChoiceType::class,
                 options: [
                     'choices' => $options['addressBooks'],
                     'label' => 'card_dav.field.default_address_book',
+                    'multiple' => true,
                 ]
             )
             ->add(

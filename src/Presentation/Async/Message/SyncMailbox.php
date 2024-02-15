@@ -9,4 +9,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Message;
 
-final readonly class SyncMailbox {}
+use App\Component\Shared\Identity\ImapConfigId;
+
+final readonly class SyncMailbox
+{
+    public function __construct(
+        public ImapConfigId $imapConfigId
+    ) {}
+}

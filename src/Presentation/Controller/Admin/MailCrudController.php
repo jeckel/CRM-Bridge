@@ -66,6 +66,8 @@ class MailCrudController extends AbstractCrudController
     {
         yield DateTimeField::new('date', label: 'mail.field.date');
         yield TextField::new('subject', label: 'mail.field.subject');
+        yield TextField::new('imapConfig', label:'mail.field.imap');
+        yield TextField::new('folder', label:'mail.field.folder');
         yield TextField::new('fromName', 'mail.field.from')
             ->setTemplatePath('admin/field/mail_from.html.twig');
         yield TextField::new('toString', 'mail.field.toString')

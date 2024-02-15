@@ -9,4 +9,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Async\Message;
 
-final readonly class SyncAddressBook {}
+final readonly class SyncAddressBook
+{
+    public function __construct(
+        public string $addressBookId
+    ) {}
+}

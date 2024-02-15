@@ -14,11 +14,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
+use function App\slug;
+
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
+    use AccountAwareTrait;
+
     #[ORM\Id]
     #[ORM\Column(name: 'company_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -32,6 +38,14 @@ class Company
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $espoCompanyId = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
 
     /**
      * @var Collection<int, Contact> $contacts
@@ -68,7 +82,7 @@ class Company
     {
         $this->name = $name;
         if (!isset($this->slug)) {
-            $this->setSlug((string) (new AsciiSlugger())->slug($name));
+            $this->setSlug(slug($name));
         }
         return $this;
     }
