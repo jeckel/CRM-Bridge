@@ -1,0 +1,9 @@
+config:
+  card_dav:
+    title:
+      index: Synchronisation des contacts CardDav
+      new: Ajouter un nouveau compte CardDav
+  imap:
+    title:
+      index: Configurations des comptes IMAP
+      new: Ajouter un nouveau compte IMAP

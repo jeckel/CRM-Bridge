@@ -3,20 +3,32 @@
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
+use Stringable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $username = null;
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    private string $username = '';
+
+    #[ORM\Column(length: 180, nullable: false)]
+    private string $firstname = '';
+
+    #[ORM\Column(length: 180, nullable: false)]
+    private string $lastname = '';
+
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    private string $email;
 
     /**
      * @var string[] $roles
@@ -33,12 +45,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text', length: 1024, nullable: true)]
     private ?string $linkedInAccessToken = null;
 
+    #[ORM\ManyToOne(
+        cascade: ['persist'],
+        inversedBy: 'users'
+    )]
+    #[ORM\JoinColumn(
+        name: 'account_id',
+        referencedColumnName: 'account_id',
+        nullable: false
+    )]
+    private ?Account $account = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -57,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     /**
@@ -99,6 +122,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): User
+    {
+        $this->firstname = $firstname;
+        return $this;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): User
+    {
+        $this->lastname = $lastname;
+        return $this;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): User
+    {
+        $this->email = $email;
+        return $this;
+    }
+
     public function getLinkedInAccessToken(): ?string
     {
         return $this->linkedInAccessToken;
@@ -110,6 +166,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function getAccountOrFail(): Account
+    {
+        if (null === $this->account) {
+            throw new RuntimeException('Account not set');
+        }
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): User
+    {
+        $this->account = $account;
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -117,5 +192,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function __toString(): string
+    {
+        if ($this->firstname !== '' || $this->lastname !== '') {
+            return trim(sprintf('%s %s', $this->firstname, $this->lastname));
+        }
+        return $this->username;
+    }
+
+    public function hasRole(string $string): bool
+    {
+        return in_array($string, $this->getRoles(), true);
     }
 }

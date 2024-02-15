@@ -32,7 +32,9 @@ class CompanyCrudController extends AbstractCrudController
                 ->hideOnIndex()
                 ->hideWhenCreating(),
             TextField::new('espoCompanyId'),
-            AssociationField::new('contacts')
+            AssociationField::new('contacts'),
+            AssociationField::new('account', 'config.field.account')
+                ->setPermission('ROLE_SUPER_ADMIN')
         ];
     }
 

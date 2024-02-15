@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Webhook;
 
-use App\ValueObject\WebHookSource;
+use App\Component\Shared\ValueObject\WebHookSource;
 use DateTimeImmutable;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
