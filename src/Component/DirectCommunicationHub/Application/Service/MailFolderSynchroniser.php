@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Component\DirectCommunicationHub\Service;
+namespace App\Component\DirectCommunicationHub\Application\Service;
 
 use App\Component\Shared\Identity\ImapConfigId;
 use App\Component\Shared\Identity\MailId;

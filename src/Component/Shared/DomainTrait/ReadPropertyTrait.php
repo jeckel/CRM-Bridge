@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @author Julien Mercier-Rojas <julien@jeckel-lab.fr>
- * Created at: 06/02/2024 15:25
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 15/02/2024
  */
+
 declare(strict_types=1);
 
-namespace App\Domain\Shared\Model;
+namespace App\Component\Shared\DomainTrait;
 
 use App\Component\Shared\Error\LogicError;
 

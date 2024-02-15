@@ -6,10 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Domain\Component\DirectCommunicationHub\Model;
+namespace App\Component\DirectCommunicationHub\Domain\Model;
 
+use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Identity\ContactId;
-use App\Domain\Shared\Model\ReadPropertyTrait;
 
 /**
  * @property-read ContactId $id

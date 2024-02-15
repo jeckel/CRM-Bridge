@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Domain\Component\DirectCommunicationHub\Dto;
+namespace App\Component\DirectCommunicationHub\Domain\Dto;
 
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
@@ -14,6 +14,9 @@ use DateTimeImmutable;
 
 final readonly class IncomingMailDto
 {
+    /**
+     * @suppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         public MailId $id,
         public string $messageId,
@@ -22,6 +25,7 @@ final readonly class IncomingMailDto
         public string $fromName,
         public EMail $fromAddress,
         public string $toString,
+        public string $folder,
         public ?string $textPlain = null,
         public ?string $textHtml = null
     ) {}

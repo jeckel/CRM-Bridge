@@ -10,8 +10,7 @@ namespace App\Component\ContactManagment\Domain\Entity;
 
 use App\Component\ContactManagment\Domain\Error\VCardUriChangedError;
 use App\Component\ContactManagment\Domain\Port\VCard;
-use App\Component\Shared\Error\LogicError;
-use App\Component\Shared\Identity\AccountId;
+use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\Identity\MailId;
@@ -34,6 +33,8 @@ use DateTimeImmutable;
  */
 class Contact
 {
+    use ReadPropertyTrait;
+
     protected ContactActivityCollection $activities;
 
     /**
@@ -41,7 +42,6 @@ class Contact
      */
     public function __construct(
         public readonly ContactId $id,
-//        public readonly AccountId $accountId,
         protected string $displayName,
         protected ?string $firstName = null,
         protected ?string $lastName = null,
@@ -62,7 +62,6 @@ class Contact
     {
         return new self(
             id: ContactId::new(),
-//            accountId: $accountId,
             displayName: $displayName
         );
     }
@@ -118,14 +117,4 @@ class Contact
         );
         return $this;
     }
-
-    public function __get(string $name): mixed
-    {
-        if (property_exists($this, $name)) {
-            /** @phpstan-ignore-next-line  */
-            return $this->$name;
-        }
-        throw new LogicError("Undefined property: {$name}");
-    }
-
 }

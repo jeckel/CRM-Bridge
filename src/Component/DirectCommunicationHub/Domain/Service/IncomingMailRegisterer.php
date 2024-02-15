@@ -6,12 +6,12 @@
  */
 declare(strict_types=1);
 
-namespace App\Domain\Component\DirectCommunicationHub\Service;
+namespace App\Component\DirectCommunicationHub\Domain\Service;
 
-use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
-use App\Domain\Component\DirectCommunicationHub\Model\IncomingMail;
-use App\Domain\Component\DirectCommunicationHub\Port\AuthorRepository;
-use App\Domain\Component\DirectCommunicationHub\Port\IncomingMailRepository;
+use App\Component\DirectCommunicationHub\Domain\Dto\IncomingMailDto;
+use App\Component\DirectCommunicationHub\Domain\Model\IncomingMail;
+use App\Component\DirectCommunicationHub\Domain\Port\AuthorRepository;
+use App\Component\DirectCommunicationHub\Domain\Port\IncomingMailRepository;
 
 readonly class IncomingMailRegisterer
 {

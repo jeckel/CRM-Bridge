@@ -6,12 +6,12 @@
  */
 declare(strict_types=1);
 
-namespace App\Infrastructure\Component\DirectCommunicationHub\Adapter;
+namespace App\Component\DirectCommunicationHub\Application\Adapter;
 
+use App\Component\DirectCommunicationHub\Domain\Model\Author;
+use App\Component\DirectCommunicationHub\Domain\Port\AuthorRepository;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
-use App\Domain\Component\DirectCommunicationHub\Model\Author;
-use App\Domain\Component\DirectCommunicationHub\Port\AuthorRepository;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Override;
 

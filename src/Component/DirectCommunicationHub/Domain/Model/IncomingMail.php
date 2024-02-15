@@ -6,18 +6,19 @@
  */
 declare(strict_types=1);
 
-namespace App\Domain\Component\DirectCommunicationHub\Model;
+namespace App\Component\DirectCommunicationHub\Domain\Model;
 
+use App\Component\DirectCommunicationHub\Domain\Dto\IncomingMailDto;
+use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
-use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
-use App\Domain\Shared\Model\ReadPropertyTrait;
 use DateTimeImmutable;
 
 /**
  * @property-read MailId $mailId
  * @property-read string $messageId
+ * @property-read string $folder
  * @property-read DateTimeImmutable $date
  * @property-read string $subject
  * @property-read string $fromName
@@ -37,6 +38,7 @@ class IncomingMail
     public function __construct(
         protected MailId $mailId,
         protected string $messageId,
+        protected string $folder,
         protected DateTimeImmutable $date,
         protected string $subject,
         protected string $fromName,
@@ -52,6 +54,7 @@ class IncomingMail
         return new self(
             $incomingMail->id,
             $incomingMail->messageId,
+            $incomingMail->folder,
             $incomingMail->date,
             $incomingMail->subject,
             $incomingMail->fromName,

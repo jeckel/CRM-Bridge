@@ -6,26 +6,29 @@
  */
 declare(strict_types=1);
 
-namespace App\Application\AsyncHandler;
+namespace App\Component\DirectCommunicationHub\Application\MessageHandler;
 
+use App\Component\DirectCommunicationHub\Application\Helper\MailContextManager;
+use App\Component\DirectCommunicationHub\Domain\Dto\IncomingMailDto;
+use App\Component\DirectCommunicationHub\Domain\Service\IncomingMailRegisterer;
+use App\Component\Shared\Helper\ContextManager;
+use App\Component\Shared\Identity\AccountId;
 use App\Component\Shared\ValueObject\Email;
-use App\Domain\Component\DirectCommunicationHub\Dto\IncomingMailDto;
-use App\Domain\Component\DirectCommunicationHub\Service\IncomingMailRegisterer;
 use App\Infrastructure\Doctrine\Repository\ImapConfigRepository;
 use App\Infrastructure\Imap\ImapMailbox;
 use App\Presentation\Async\Message\SyncMail;
 use DateTimeImmutable;
 use Exception;
-use PhpImap\Mailbox;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 readonly class SyncMailHandler
 {
     public function __construct(
-        private Mailbox $mailbox,
         private IncomingMailRegisterer $mailRegisterer,
-        private ImapConfigRepository $imapConfigRepository
+        private ImapConfigRepository $imapConfigRepository,
+        private ContextManager $context,
+        private MailContextManager $mailContext
     ) {}
 
     /**
@@ -35,9 +38,10 @@ readonly class SyncMailHandler
     {
         $imapConfig = $this->imapConfigRepository->getById($syncMail->imapConfigId->id());
         $mailBox = ImapMailbox::fromImapConfig($imapConfig);
+        $this->context->setAccountId(AccountId::from((string) $imapConfig->getAccountOrFail()->getId()));
+        $this->mailContext->setImapConfigId($syncMail->imapConfigId);
+
         $mail = $mailBox->getMail($syncMail->mailId->id(), $syncMail->folder);
-//        dd($mail);
-//        $mail = $this->mailbox->getMail($syncMail->mailId->id());
         $this->mailRegisterer->register(new IncomingMailDto(
             id: $syncMail->mailId,
             messageId: $mail->messageId,
@@ -46,6 +50,7 @@ readonly class SyncMailHandler
             fromName: $mail->fromName,
             fromAddress: new Email($mail->fromAddress),
             toString: $mail->toString,
+            folder: $syncMail->folder,
             textPlain: $mail->textPlain,
             textHtml: $mail->textHtml
         ));

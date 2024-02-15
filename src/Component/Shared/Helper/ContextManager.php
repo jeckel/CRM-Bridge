@@ -40,8 +40,8 @@ class ContextManager
      */
     public function getAccountReference(): Account
     {
-        /** @var Account $accountRed */
-        $accountRed = $this->entityManager->getReference(Account::class, $this->getAccountId()->id());
-        return $accountRed;
+        /** @var Account $account */
+        $account = $this->entityManager->getReference(Account::class, $this->getAccountId()->id());
+        return $account;
     }
 }

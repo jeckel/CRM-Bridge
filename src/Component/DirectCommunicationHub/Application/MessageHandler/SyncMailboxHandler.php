@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\DirectCommunicationHub\Application;
+namespace App\Component\DirectCommunicationHub\Application\MessageHandler;
 
-use App\Component\DirectCommunicationHub\Service\MailFolderSynchroniser;
+use App\Component\DirectCommunicationHub\Application\Service\MailFolderSynchroniser;
 use App\Infrastructure\Doctrine\Repository\ImapConfigRepository;
 use App\Presentation\Async\Message\SyncMailbox;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -41,7 +41,5 @@ readonly class SyncMailboxHandler
         }
     }
 
-    public function onSchedule(): void
-    {
-    }
+    public function onSchedule(): void {}
 }

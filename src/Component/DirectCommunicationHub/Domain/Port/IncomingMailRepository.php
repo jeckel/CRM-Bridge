@@ -4,10 +4,10 @@
  * Created at: 06/02/2024 15:15
  */
 
-namespace App\Domain\Component\DirectCommunicationHub\Port;
+namespace App\Component\DirectCommunicationHub\Domain\Port;
 
+use App\Component\DirectCommunicationHub\Domain\Model\IncomingMail;
 use App\Component\Shared\ValueObject\Email;
-use App\Domain\Component\DirectCommunicationHub\Model\IncomingMail;
 
 interface IncomingMailRepository
 {
