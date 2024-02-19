@@ -14,10 +14,15 @@ use App\Infrastructure\Doctrine\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController as EAAbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+
+use Override;
 
 use function App\new_uuid;
 
@@ -26,7 +31,8 @@ abstract class AbstractCrudController extends EAAbstractCrudController
     private const string
         OPTION_FILTER_BY_ACCOUNT = 'filter_by_account',
     OPTION_NEW_GENERATE_UUID = 'new_generate_uuid',
-    OPTION_NEW_ASSIGN_ACCOUNT = 'new_assign_account';
+    OPTION_NEW_ASSIGN_ACCOUNT = 'new_assign_account',
+    OPTION_ENABLE_DETAIL_PAGE = 'enable_detail_page';
 
     /**
      * @var array<string, bool>
@@ -35,6 +41,7 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         self::OPTION_FILTER_BY_ACCOUNT => false,
         self::OPTION_NEW_GENERATE_UUID => false,
         self::OPTION_NEW_ASSIGN_ACCOUNT => false,
+        self::OPTION_ENABLE_DETAIL_PAGE => false,
     ];
 
     protected function enableFilterByAccount(): self
@@ -55,7 +62,37 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         return $this;
     }
 
-    #[\Override]
+    protected function enableDetailPage(): self
+    {
+        $this->options[self::OPTION_ENABLE_DETAIL_PAGE] = true;
+        return $this;
+    }
+
+    #[Override]
+    public function configureActions(Actions $actions): Actions
+    {
+        if ($this->options[self::OPTION_ENABLE_DETAIL_PAGE]) {
+            $actions
+                ->add(Crud::PAGE_INDEX, Action::DETAIL)
+                ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
+                    return $action->setIcon('fa fa-eye')
+                        ->setCssClass('btn btn-secondary');
+                });
+        }
+        // Setup EDIT button on index page
+        $actions->update(Crud::PAGE_INDEX, Action::EDIT, static function (Action $action) {
+            return $action->setIcon('fa fa-pencil')
+                ->setCssClass('btn btn-secondary');
+        });
+        // Setup DELETE button on index page
+        $actions->update(Crud::PAGE_INDEX, Action::DELETE, static function (Action $action) {
+            return $action->setIcon('fa fa-trash-o')
+                ->setCssClass('btn btn-secondary text-danger');
+        });
+        return $actions;
+    }
+
+    #[Override]
     public function createIndexQueryBuilder(
         SearchDto $searchDto,
         EntityDto $entityDto,
@@ -80,7 +117,7 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         return $queryBuilder;
     }
 
-    #[\Override]
+    #[Override]
     public function configureFilters(Filters $filters): Filters
     {
         if ($this->options[self::OPTION_FILTER_BY_ACCOUNT]) {
@@ -97,7 +134,7 @@ abstract class AbstractCrudController extends EAAbstractCrudController
      * @param string $entityFqcn
      * @return object
      */
-    #[\Override]
+    #[Override]
     public function createEntity(string $entityFqcn)
     {
         $entity = parent::createEntity($entityFqcn);

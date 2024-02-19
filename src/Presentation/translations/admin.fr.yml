@@ -88,5 +88,17 @@ menu:
   imap: IMAP
   incoming_webhooks: Webhook Logs
   mail: Mails
+  services: Services
   setup_options: Options
   workers: Workers
+
+services:
+  available_services:
+    CAL_DOT_COM: Cal.com
+  field:
+    auth_bearer: Bearer
+    enabled: Activé
+    service_type: Service
+  label:
+    singular: Service
+    plural: Services
