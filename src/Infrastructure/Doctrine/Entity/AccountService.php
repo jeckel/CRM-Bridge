@@ -102,6 +102,6 @@ class AccountService implements Stringable, AccountAwareInterface, UserInterface
 
     public function isValid(): bool
     {
-        return $this->accessToken !== 'undefined';
+        return $this->enabled === true && $this->accessToken !== 'undefined';
     }
 }
