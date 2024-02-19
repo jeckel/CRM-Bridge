@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-
 use Stringable;
 
 use function App\slug;
@@ -66,11 +65,23 @@ class Account implements Stringable
     )]
     private Collection $imapConfigs;
 
+    /**
+     * @var Collection<int, AccountService> $services
+     */
+    #[ORM\OneToMany(
+        mappedBy: 'account',
+        targetEntity: AccountService::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $services;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->cardDavConfigs = new ArrayCollection();
         $this->imapConfigs = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -202,5 +213,35 @@ class Account implements Stringable
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, AccountService>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(AccountService $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(AccountService $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getAccount() === $this) {
+                $service->setAccount(null);
+            }
+        }
+
+        return $this;
     }
 }
