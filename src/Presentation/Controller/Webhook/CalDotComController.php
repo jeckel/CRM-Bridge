@@ -17,6 +17,7 @@ use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CalDotComController extends AbstractWebhookController
 {
@@ -24,23 +25,24 @@ class CalDotComController extends AbstractWebhookController
         path: '/webhook/cal-dot-com',
         methods: ['GET', 'POST']
     )]
+    #[IsGranted('ROLE_CAL_DOT_COM', statusCode: 403, exceptionCode: 10010)]
     public function __invoke(Request $request, WebhookDispatcher $webhookDispatcher, Clock $clock): Response
     {
-        $content = $request->toArray();
-        $source = WebHookSource::CAL_DOT_COM;
-        $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
-        $event = TriggerEvent::tryFrom($content['triggerEvent']);
-
-        $webhook = $this->persistWebhook(
-            source: $source,
-            createdAt: $createdAt,
-            event: $event->value ?? $content['triggerEvent'],
-            content: $content
-        );
-
-        if ($event !== null) {
-            $webhookDispatcher->dispatch($webhook);
-        }
+//        $content = $request->toArray();
+//        $source = WebHookSource::CAL_DOT_COM;
+//        $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
+//        $event = TriggerEvent::tryFrom($content['triggerEvent']);
+//
+//        $webhook = $this->persistWebhook(
+//            source: $source,
+//            createdAt: $createdAt,
+//            event: $event->value ?? $content['triggerEvent'],
+//            content: $content
+//        );
+//
+//        if ($event !== null) {
+//            $webhookDispatcher->dispatch($webhook);
+//        }
         return new Response('200 OK');
     }
 }

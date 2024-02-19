@@ -49,7 +49,7 @@ class AccountServiceCrudController extends AbstractCrudController
                 ->hideOnForm(),
             ChoiceField::new('service', 'services.field.service_type')
                 ->setChoices(['services.available_services.' . Service::CAL_DOT_COM->name => Service::CAL_DOT_COM->value]),
-            TextField::new('authBearer', 'services.field.auth_bearer')
+            TextField::new('accessToken', 'services.field.access_token')
                 ->onlyOnDetail(),
             BooleanField::new('enabled', 'services.field.enabled'),
         ];
@@ -64,7 +64,7 @@ class AccountServiceCrudController extends AbstractCrudController
     {
         /** @var AccountService $entity */
         $entity = parent::createEntity($entityFqcn);
-        $entity->setAuthBearer(new_uuid());
+        $entity->setAccessToken(new_uuid());
         return $entity;
     }
 }

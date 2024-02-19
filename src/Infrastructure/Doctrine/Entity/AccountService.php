@@ -2,12 +2,14 @@
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\ValueObject\Service;
 use App\Infrastructure\Doctrine\Repository\AccountServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: AccountServiceRepository::class)]
-class AccountService implements Stringable, AccountAwareInterface
+class AccountService implements Stringable, AccountAwareInterface, UserInterface
 {
     use AccountAwareTrait;
 
@@ -27,8 +29,8 @@ class AccountService implements Stringable, AccountAwareInterface
     #[ORM\Column(length: 255, nullable: false)]
     private string $service = 'undefined';
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $authBearer = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $accessToken = 'undefined';
 
     #[ORM\Column(nullable: false)]
     private bool $enabled = false;
@@ -50,15 +52,14 @@ class AccountService implements Stringable, AccountAwareInterface
         return $this;
     }
 
-    public function getAuthBearer(): ?string
+    public function getAccessToken(): string
     {
-        return $this->authBearer;
+        return $this->accessToken;
     }
 
-    public function setAuthBearer(?string $authBearer): static
+    public function setAccessToken(string $accessToken): AccountService
     {
-        $this->authBearer = $authBearer;
-
+        $this->accessToken = $accessToken;
         return $this;
     }
 
@@ -77,5 +78,30 @@ class AccountService implements Stringable, AccountAwareInterface
     public function __toString(): string
     {
         return $this->service;
+    }
+
+    #[\Override]
+    public function getRoles(): array
+    {
+        return [
+            Service::from($this->service)->toRole(),
+        ];
+    }
+
+    #[\Override]
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    #[\Override]
+    public function getUserIdentifier(): string
+    {
+        return $this->accessToken;
+    }
+
+    public function isValid(): bool
+    {
+        return $this->accessToken !== 'undefined';
     }
 }

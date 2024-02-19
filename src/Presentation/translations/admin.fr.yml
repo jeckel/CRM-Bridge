@@ -96,7 +96,7 @@ services:
   available_services:
     CAL_DOT_COM: Cal.com
   field:
-    auth_bearer: Bearer
+    access_token: Bearer
     enabled: Activé
     service_type: Service
   label:

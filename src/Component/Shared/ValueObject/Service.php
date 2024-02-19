@@ -12,4 +12,9 @@ namespace App\Component\Shared\ValueObject;
 enum Service: string
 {
     case CAL_DOT_COM = 'cal.com';
+
+    public function toRole(): string
+    {
+        return 'ROLE_' . $this->name;
+    }
 }
