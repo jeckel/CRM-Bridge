@@ -38,8 +38,8 @@ class Account implements Stringable, SlugAwareInterface
      * @var Collection<int, User> $users
      */
     #[ORM\OneToMany(
-        mappedBy: 'account',
         targetEntity: User::class,
+        mappedBy: 'account',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -49,8 +49,8 @@ class Account implements Stringable, SlugAwareInterface
      * @var Collection<string, CardDavConfig> $cardDavConfigs
      */
     #[ORM\OneToMany(
-        mappedBy: 'account',
         targetEntity: CardDavConfig::class,
+        mappedBy: 'account',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -60,8 +60,8 @@ class Account implements Stringable, SlugAwareInterface
      * @var Collection<string, ImapConfig> $imapConfigs
      */
     #[ORM\OneToMany(
-        mappedBy: 'account',
         targetEntity: ImapConfig::class,
+        mappedBy: 'account',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -71,8 +71,8 @@ class Account implements Stringable, SlugAwareInterface
      * @var Collection<int, AccountService> $services
      */
     #[ORM\OneToMany(
-        mappedBy: 'account',
         targetEntity: AccountService::class,
+        mappedBy: 'account',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
