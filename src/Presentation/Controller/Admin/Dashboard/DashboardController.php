@@ -38,6 +38,7 @@ class DashboardController extends AbstractDashboardController
             ->setDateTimeFormat('dd/MM/yyyy HH:mm')
             ->setTimeFormat('HH:mm')
             ->setPaginatorPageSize(100)
-            ->showEntityActionsInlined();
+            ->showEntityActionsInlined()
+            ->hideNullValues();
     }
 }

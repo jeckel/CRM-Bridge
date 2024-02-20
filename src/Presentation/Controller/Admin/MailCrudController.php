@@ -6,7 +6,6 @@ use App\Infrastructure\Doctrine\Entity\Mail;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -14,12 +13,6 @@ use Override;
 
 class MailCrudController extends AbstractCrudController
 {
-    public function __construct()
-    {
-        $this->enableFilterByAccount()
-        ;
-    }
-
     #[Override]
     public static function getEntityFqcn(): string
     {
@@ -39,11 +32,7 @@ class MailCrudController extends AbstractCrudController
     #[Override]
     public function configureActions(Actions $actions): Actions
     {
-        $sync = Action::new('imap_sync', 'imap.action.sync')
-            ->linkToRoute(routeName: 'imap_sync')
-            ->setIcon('fa fa-sync')
-            ->setCssClass('btn btn-success')
-            ->createAsGlobalAction();
+        $actions = parent::configureActions($actions);
         $createContact = Action::new('mail_add_to_address_book', 'mail.action.add_to_address_book')
             ->linkToRoute(
                 routeName: 'create_contact_from_mail_author',
@@ -54,25 +43,12 @@ class MailCrudController extends AbstractCrudController
             ->displayIf(static fn(Mail $mail): bool => $mail->getContact() === null)
         ;
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $sync)
             ->add(Crud::PAGE_DETAIL, $createContact)
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
-            ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
-                return $action->setIcon('fa fa-eye')
-                    ->setCssClass('btn btn-secondary');
-            });
-    }
-
-    #[Override]
-    public function configureFilters(Filters $filters): Filters
-    {
-        $filters = parent::configureFilters($filters);
-        return $filters;
+        ;
     }
 
     /**

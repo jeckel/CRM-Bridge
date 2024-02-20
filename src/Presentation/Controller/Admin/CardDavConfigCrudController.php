@@ -7,7 +7,6 @@ use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Presentation\Async\Message\SyncAddressBook;
 use Doctrine\ORM\EntityNotFoundException;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -17,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -26,20 +26,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class CardDavConfigCrudController extends AbstractCrudController
 {
-    public function __construct()
-    {
-        $this->enableFilterByAccount()
-            ->enableNewGenerateUuid()
-            ->enableNewAssignAccount();
-    }
-
-    #[\Override]
+    #[Override]
     public static function getEntityFqcn(): string
     {
         return CardDavConfig::class;
     }
 
-    #[\Override]
+    #[Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -47,29 +40,7 @@ class CardDavConfigCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_NEW, 'config.card_dav.title.new');
     }
 
-    #[\Override]
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->update(Crud::PAGE_INDEX, Action::NEW, static function (Action $action) {
-                return $action->setIcon('fa fa-plus')
-                    ->setLabel('config.card_dav.action.new')
-                    ->setCssClass('btn btn-secondary');
-            })
-            ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
-                return $action->setIcon('fa fa-eye')
-                    ->setCssClass('btn btn-secondary');
-            })
-            ->update(Crud::PAGE_INDEX, Action::EDIT, static function (Action $action) {
-                return $action->setIcon('fa fa-pencil')
-                    ->setCssClass('btn btn-secondary');
-            })
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->remove(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER);
-    }
-
-    #[\Override]
+    #[Override]
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('name', 'config.card_dav.field.name');

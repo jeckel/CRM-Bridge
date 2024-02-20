@@ -14,7 +14,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -28,20 +27,16 @@ class IncomingWebhookCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $actions = parent::configureActions($actions);
         $replayAction = Action::new('webhook_replay', 'Replay')
+            ->setIcon('fas fa-recycle')
+            ->setCssClass('btn btn-secondary')
             ->linkToRoute(
                 routeName: 'webhook_replay',
                 routeParameters: static fn(IncomingWebhook $webhook) => ['webhookId' => (string) $webhook->getId()]
             );
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
-            ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
-                return $action->setIcon('fa fa-eye')
-                    ->setLabel(false)
-                    ->setCssClass('btn btn-secondary');
-            })
             ->add(Crud::PAGE_DETAIL, $replayAction)
             ->add(Crud::PAGE_INDEX, $replayAction);
     }

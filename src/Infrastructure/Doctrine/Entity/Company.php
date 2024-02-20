@@ -13,6 +13,7 @@ use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Ramsey\Uuid\UuidInterface;
 
 use function App\slug;
@@ -21,7 +22,7 @@ use function App\slug;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-class Company
+class Company implements AccountAwareInterface, SlugAwareInterface
 {
     use AccountAwareTrait;
 
@@ -92,10 +93,17 @@ class Company
         return $this->slug;
     }
 
+    #[Override]
     public function setSlug(string $slug): Company
     {
         $this->slug = $slug;
         return $this;
+    }
+
+    #[Override]
+    public function getSlugSource(): string
+    {
+        return $this->name;
     }
 
     public function getEspoCompanyId(): ?string
