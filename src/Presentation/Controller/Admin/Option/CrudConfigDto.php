@@ -21,6 +21,8 @@ use ReflectionClass;
  * @property-read bool $onCreateAssignAccount
  * @property-read bool $detailPage
  * @property-read bool $onCreateGenerateSlug
+ *
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class CrudConfigDto
 {
