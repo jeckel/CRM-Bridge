@@ -10,9 +10,11 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Webhook;
 
 use App\Component\Shared\ValueObject\WebHookSource;
+use App\Infrastructure\Doctrine\Entity\AccountService;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
 use DateTimeImmutable;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 abstract class AbstractWebhookController extends AbstractController
@@ -30,11 +32,16 @@ abstract class AbstractWebhookController extends AbstractController
         string|\Stringable $event,
         array $content
     ): IncomingWebhook {
+        $user = $this->getUser();
+        if (! $user instanceof AccountService) {
+            throw new RuntimeException('User is not an AccountService');
+        }
         $webhook = (new IncomingWebhook())
             ->setSource($source->value)
             ->setCreatedAt($createdAt)
             ->setEvent((string) $event)
-            ->setPayload($content);
+            ->setPayload($content)
+            ->setService($user);
         $this->incomingWebhookRepository->persist(
             $webhook
         );

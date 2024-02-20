@@ -46,6 +46,10 @@ contact:
     first_name: Prénom
     last_name: Nom
     phone: Téléphone
+  tab:
+    activities: Activités
+    mails: Mails
+    summary: Sommaire
 
 #imap:
 #  action:
@@ -88,5 +92,17 @@ menu:
   imap: IMAP
   incoming_webhooks: Webhook Logs
   mail: Mails
+  services: Services
   setup_options: Options
   workers: Workers
+
+services:
+  available_services:
+    CAL_DOT_COM: Cal.com
+  field:
+    access_token: Bearer
+    enabled: Activé
+    service_type: Service
+  label:
+    singular: Service
+    plural: Services

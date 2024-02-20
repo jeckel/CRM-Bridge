@@ -1,54 +1,28 @@
 <?php
 
-namespace App\Presentation\Controller\Admin;
+/**
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 19/02/2024
+ */
 
+declare(strict_types=1);
+
+namespace App\Presentation\Controller\Admin\Dashboard;
+
+use App\Infrastructure\Doctrine\Entity\AccountService;
 use App\Infrastructure\Doctrine\Entity\CardDavConfig;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
-use App\Infrastructure\Doctrine\Entity\ContactActivity;
 use App\Infrastructure\Doctrine\Entity\ImapConfig;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\Mail;
 use App\Infrastructure\Doctrine\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Menu\CrudMenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-class DashboardController extends AbstractDashboardController
+trait DashboardMenuTrait
 {
-    #[Route('/admin', name: 'admin')]
-    public function index(): Response
-    {
-        return $this->render('admin/dashboard.html.twig');
-    }
-
-    public function configureDashboard(): Dashboard
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        return Dashboard::new()
-            ->setTitle(sprintf('CRM Bridge<br /><small>%s</small>', $user->getAccountOrFail()))
-            ->setTranslationDomain('admin')
-            ->renderContentMaximized()
-            ->setLocales(['fr'])
-        ;
-    }
-
-    public function configureCrud(): Crud
-    {
-        return Crud::new()
-            ->setDateFormat('dd/MM/yyyy')
-            ->setDateTimeFormat('dd/MM/yyyy HH:mm')
-            ->setTimeFormat('HH:mm')
-            ->setPaginatorPageSize(100)
-            ->showEntityActionsInlined();
-    }
-
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('menu.dashboard', 'fa fa-home');
@@ -65,10 +39,14 @@ class DashboardController extends AbstractDashboardController
             ->setSubItems([
                 $this->filterByAccount(
                     MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class)
-                    ->setPermission('ROLE_ADMIN')
+                        ->setPermission('ROLE_ADMIN')
                 ),
                 $this->filterByAccount(
                     MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapConfig::class)
+                        ->setPermission('ROLE_ADMIN')
+                ),
+                $this->filterByAccount(
+                    MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', AccountService::class)
                         ->setPermission('ROLE_ADMIN')
                 ),
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list')

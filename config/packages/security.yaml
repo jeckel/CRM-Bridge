@@ -12,11 +12,20 @@ security:
             entity:
                 class: App\Infrastructure\Doctrine\Entity\User
                 property: username
+        account_service_provider:
+            entity:
+                class: App\Infrastructure\Doctrine\Entity\AccountService
+                property: accessToken
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        webhook:
+            pattern: ^/webhook/
+            provider: account_service_provider
+            access_token:
+                token_handler: App\Presentation\Security\AccessTokenHandler
         main:
             lazy: true
             provider: app_user_provider

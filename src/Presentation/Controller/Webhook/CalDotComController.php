@@ -11,21 +11,29 @@ namespace App\Presentation\Controller\Webhook;
 
 use App\Component\Shared\ValueObject\CalDotCom\TriggerEvent;
 use App\Component\Shared\ValueObject\WebHookSource;
-use App\Presentation\Service\WebhookDispatcher;
+use App\Presentation\Service\WebHookMessageFactory;
 use DateTimeImmutable;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CalDotComController extends AbstractWebhookController
 {
     #[Route(
         path: '/webhook/cal-dot-com',
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        format: 'json'
     )]
-    public function __invoke(Request $request, WebhookDispatcher $webhookDispatcher, Clock $clock): Response
-    {
+    #[IsGranted('ROLE_CAL_DOT_COM', statusCode: 403, exceptionCode: 10010)]
+    public function __invoke(
+        Request $request,
+        MessageBusInterface $messageBus,
+        WebHookMessageFactory $messageFactory,
+        Clock $clock
+    ): Response {
         $content = $request->toArray();
         $source = WebHookSource::CAL_DOT_COM;
         $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
@@ -37,10 +45,11 @@ class CalDotComController extends AbstractWebhookController
             event: $event->value ?? $content['triggerEvent'],
             content: $content
         );
-
         if ($event !== null) {
-            $webhookDispatcher->dispatch($webhook);
+            $messageBus->dispatch(
+                $messageFactory->from($webhook)
+            );
         }
-        return new Response('200 OK');
+        return $this->json(['status' => 'ok']);
     }
 }

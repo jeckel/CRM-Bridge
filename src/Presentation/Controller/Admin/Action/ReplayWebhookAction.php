@@ -10,11 +10,12 @@ namespace App\Presentation\Controller\Admin\Action;
 
 use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
 use App\Presentation\Controller\Admin\IncomingWebhookCrudController;
-use App\Presentation\Service\WebhookDispatcher;
+use App\Presentation\Service\WebHookMessageFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ReplayWebhookAction extends AbstractController
@@ -26,11 +27,12 @@ class ReplayWebhookAction extends AbstractController
     )]
     public function __invoke(
         string $webhookId,
-        WebhookDispatcher $dispatcher,
+        MessageBusInterface $messageBus,
         IncomingWebhookRepository $repository,
+        WebHookMessageFactory $messageFactory,
         AdminUrlGenerator $urlGenerator
     ): Response {
-        $dispatcher->dispatch($repository->getById($webhookId));
+        $messageBus->dispatch($messageFactory->from($repository->getById($webhookId)));
         $this->addFlash('success', 'Webhook re-added to the queue.');
         return $this->redirect(
             $urlGenerator->setAction(Action::DETAIL)

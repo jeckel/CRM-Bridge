@@ -5,13 +5,14 @@ namespace App\DataFixtures;
 use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use function App\new_uuid;
 
-class AppFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher
@@ -19,28 +20,15 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $rebelAlliance = (new Account())
-            ->setId(new_uuid())
-            ->setName('Rebel Alliance');
-        $manager->persist($rebelAlliance);
-
-        $empire = (new Account())
-            ->setId(new_uuid())
-            ->setName('Galactic Empire');
-        $manager->persist($empire);
-
-        $jeckelLab = (new Account())
-            ->setId(new_uuid())
-            ->setName('Jeckel-Lab');
-        $manager->persist($jeckelLab);
-
         $luke = new User();
         $luke->setRoles(['ROLE_USER'])
             ->setUsername('luke')
             ->setFirstname('Luke')
             ->setLastname('Skywalker')
             ->setEmail('luke@rebel-alliance.com')
-            ->setAccount($rebelAlliance)
+            ->setAccount(
+                $this->getReference(AccountFixtures::REBEL_ALLIANCE, Account::class)
+            )
             ->setPassword(
                 $this->passwordHasher->hashPassword(
                     $luke,
@@ -55,7 +43,9 @@ class AppFixtures extends Fixture
             ->setFirstname('Leia')
             ->setLastname('Organa')
             ->setEmail('leia@rebel-alliance.com')
-            ->setAccount($rebelAlliance)
+            ->setAccount(
+                $this->getReference(AccountFixtures::REBEL_ALLIANCE, Account::class)
+            )
             ->setPassword(
                 $this->passwordHasher->hashPassword(
                     $leia,
@@ -70,7 +60,9 @@ class AppFixtures extends Fixture
             ->setFirstname('Darth')
             ->setLastname('Vader')
             ->setEmail('darth@galactic-empire.com')
-            ->setAccount($empire)
+            ->setAccount(
+                $this->getReference(AccountFixtures::GALACTIC_EMPIRE, Account::class)
+            )
             ->setPassword(
                 $this->passwordHasher->hashPassword(
                     $vader,
@@ -85,7 +77,9 @@ class AppFixtures extends Fixture
             ->setFirstname('Sheev')
             ->setLastname('Palpatine')
             ->setEmail('palpatine@galactic-empire.com')
-            ->setAccount($empire)
+            ->setAccount(
+                $this->getReference(AccountFixtures::GALACTIC_EMPIRE, Account::class)
+            )
             ->setPassword(
                 $this->passwordHasher->hashPassword(
                     $palpatine,
@@ -100,7 +94,9 @@ class AppFixtures extends Fixture
             ->setFirstname('Julien')
             ->setLastname('Mercier-Rojas')
             ->setEmail('julien@jeckel-lab.com')
-            ->setAccount($jeckelLab)
+            ->setAccount(
+                $this->getReference(AccountFixtures::SUPER_ADMIN, Account::class)
+            )
             ->setPassword(
                 $this->passwordHasher->hashPassword(
                     $jeckel,
@@ -110,5 +106,12 @@ class AppFixtures extends Fixture
         $manager->persist($jeckel);
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            AccountFixtures::class,
+        ];
     }
 }

@@ -1,0 +1,9 @@
+<table class="table">
+    {% for activity in field.value %}
+        <tr>
+            <td>{{ activity.subject }}</td>
+            <td>{{ activity.description }}</td>
+            <td><time datetime="{{ activity.date|date('c') }}" title="{{ activity.date|date('r') }}">{{ activity.date|date('d/m/y H:i:s') }}</time></td>
+        </tr>
+    {% endfor %}
+</table>

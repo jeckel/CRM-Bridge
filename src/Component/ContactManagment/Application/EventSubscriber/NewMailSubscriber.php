@@ -11,12 +11,14 @@ namespace App\Component\ContactManagment\Application\EventSubscriber;
 
 use App\Component\ContactManagment\Domain\Service\AttachMailToContact;
 use App\Component\Shared\Event\NewIncomingEmail;
+use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 readonly class NewMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(private AttachMailToContact $mailAttacher) {}
 
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

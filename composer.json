@@ -27,6 +27,8 @@
         "jeckel-lab/identity-contract": "~2.0",
         "mstilkerich/carddavclient": "^1.4",
         "php-imap/php-imap": "^5.0",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.25",
         "ramsey/uuid-doctrine": "^2.0",
         "supervisorphp/supervisor": "^5.1",
         "symfony/amqp-messenger": "7.0.*",
