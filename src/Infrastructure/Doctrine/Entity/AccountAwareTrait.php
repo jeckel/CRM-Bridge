@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\AccountId;
 use RuntimeException;
 
 /**
@@ -33,5 +34,10 @@ trait AccountAwareTrait
     {
         $this->account = $account;
         return $this;
+    }
+
+    public function getAccountId(): AccountId
+    {
+        return $this->getAccountOrFail()->getAccountId();
     }
 }

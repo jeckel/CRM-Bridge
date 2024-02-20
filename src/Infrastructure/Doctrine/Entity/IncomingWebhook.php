@@ -2,11 +2,14 @@
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\AccountId;
 use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use RuntimeException;
 
 #[ORM\Entity(repositoryClass: IncomingWebhookRepository::class)]
 class IncomingWebhook
@@ -17,8 +20,8 @@ class IncomingWebhook
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(nullable: false)]
+    private DateTimeImmutable $createdAt;
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $source = '';
@@ -26,8 +29,8 @@ class IncomingWebhook
     #[ORM\Column(length: 255, nullable: false)]
     private string $event = '';
 
-    #[ORM\Column(type: Types::JSON)]
-    private ?array $payload = null; /** @phpstan-ignore-line */
+    #[ORM\Column(type: Types::JSON, nullable: false)]
+    private array $payload; /** @phpstan-ignore-line */
 
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(
@@ -53,12 +56,12 @@ class IncomingWebhook
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -78,9 +81,9 @@ class IncomingWebhook
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string, mixed>
      */
-    public function getPayload(): ?array
+    public function getPayload(): array
     {
         return $this->payload;
     }
@@ -101,5 +104,13 @@ class IncomingWebhook
     {
         $this->service = $service;
         return $this;
+    }
+
+    public function getAccountId(): AccountId
+    {
+        if (null === $this->service) {
+            throw new RuntimeException('Service not set');
+        }
+        return $this->service->getAccountId();
     }
 }

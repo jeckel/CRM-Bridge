@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\AccountId;
 use App\Infrastructure\Doctrine\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -93,6 +94,11 @@ class Account implements Stringable
     {
         $this->id = $id;
         return $this;
+    }
+
+    public function getAccountId(): AccountId
+    {
+        return AccountId::from((string) $this->getId());
     }
 
     public function getName(): string
