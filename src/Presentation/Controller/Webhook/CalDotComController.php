@@ -11,7 +11,7 @@ namespace App\Presentation\Controller\Webhook;
 
 use App\Component\Shared\ValueObject\CalDotCom\TriggerEvent;
 use App\Component\Shared\ValueObject\WebHookSource;
-use App\Presentation\Async\Message\AppointmentRequest;
+use App\Presentation\Service\WebHookMessageFactory;
 use DateTimeImmutable;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +31,7 @@ class CalDotComController extends AbstractWebhookController
     public function __invoke(
         Request $request,
         MessageBusInterface $messageBus,
+        WebHookMessageFactory $messageFactory,
         Clock $clock
     ): Response {
         $content = $request->toArray();
@@ -46,7 +47,7 @@ class CalDotComController extends AbstractWebhookController
         );
         if ($event !== null) {
             $messageBus->dispatch(
-                AppointmentRequest::fromCalDotComWebhook($webhook)
+                $messageFactory->from($webhook)
             );
         }
         return $this->json(['status' => 'ok']);
