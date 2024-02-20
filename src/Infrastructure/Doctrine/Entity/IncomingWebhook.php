@@ -12,10 +12,10 @@ use Ramsey\Uuid\UuidInterface;
 class IncomingWebhook
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'incoming_webhook_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\Column(name: 'incoming_webhook_id', type: "integer", unique: true)]
+    #[ORM\GeneratedValue]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id; /** @phpstan-ignore-line */
+    private ?int $id = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -29,7 +29,15 @@ class IncomingWebhook
     #[ORM\Column(type: Types::JSON)]
     private ?array $payload = null; /** @phpstan-ignore-line */
 
-    public function getId(): UuidInterface|string
+    #[ORM\ManyToOne()]
+    #[ORM\JoinColumn(
+        name: 'account_service_id',
+        referencedColumnName: 'account_service_id',
+        nullable: false
+    )]
+    private ?AccountService $service = null;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -81,6 +89,17 @@ class IncomingWebhook
     {
         $this->payload = $payload;
 
+        return $this;
+    }
+
+    public function getService(): ?AccountService
+    {
+        return $this->service;
+    }
+
+    public function setService(?AccountService $service): IncomingWebhook
+    {
+        $this->service = $service;
         return $this;
     }
 }
