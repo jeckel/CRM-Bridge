@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 #[ORM\Entity(repositoryClass: AccountServiceRepository::class)]
 class AccountService implements Stringable, AccountAwareInterface, UserInterface
 {

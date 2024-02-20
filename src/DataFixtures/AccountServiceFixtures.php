@@ -20,7 +20,7 @@ use Override;
 class AccountServiceFixtures extends Fixture implements DependentFixtureInterface
 {
     #[Override]
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $manager->persist(
             (new AccountService())

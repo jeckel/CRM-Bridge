@@ -7,7 +7,4 @@
 
 namespace App\Presentation\Async\Message;
 
-interface Message
-{
-
-}
+interface Message {}
