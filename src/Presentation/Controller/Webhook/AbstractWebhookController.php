@@ -37,7 +37,7 @@ abstract class AbstractWebhookController extends AbstractController
             throw new RuntimeException('User is not an AccountService');
         }
         $webhook = (new IncomingWebhook())
-            ->setSource($source->value)
+            ->setSource($source)
             ->setCreatedAt($createdAt)
             ->setEvent((string) $event)
             ->setPayload($content)

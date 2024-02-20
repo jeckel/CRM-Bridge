@@ -23,7 +23,7 @@ readonly class WebHookMessageFactory
 {
     public function from(IncomingWebhook $webhook): Message
     {
-        if ($webhook->getSource() === WebHookSource::CAL_DOT_COM->value && $webhook->getEvent() === TriggerEvent::CREATED->value) {
+        if ($webhook->getSource() === WebHookSource::CAL_DOT_COM && $webhook->getEvent() === TriggerEvent::CREATED->value) {
             return $this->fromCalDotComWebhook($webhook);
         }
         throw new RuntimeException('Unknown webhook');

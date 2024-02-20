@@ -24,7 +24,7 @@ class AccountServiceFixtures extends Fixture implements DependentFixtureInterfac
     {
         $manager->persist(
             (new AccountService())
-            ->setService(Service::CAL_DOT_COM->value)
+            ->setService(Service::CAL_DOT_COM)
             ->setAccount($this->getReference(AccountFixtures::REBEL_ALLIANCE, Account::class))
             ->setEnabled(true)
             ->setAccessToken('1c496f66-04ac-4671-a115-6b9c0f66111e')
@@ -32,7 +32,7 @@ class AccountServiceFixtures extends Fixture implements DependentFixtureInterfac
 
         $manager->persist(
             (new AccountService())
-            ->setService(Service::CAL_DOT_COM->value)
+            ->setService(Service::CAL_DOT_COM)
             ->setAccount($this->getReference(AccountFixtures::GALACTIC_EMPIRE, Account::class))
             ->setEnabled(false)
             ->setAccessToken('c4411ebb-7d61-4f94-9702-b681c15e7ae0')
@@ -40,7 +40,7 @@ class AccountServiceFixtures extends Fixture implements DependentFixtureInterfac
 
         $manager->persist(
             (new AccountService())
-                ->setService(Service::CAL_DOT_COM->value)
+                ->setService(Service::CAL_DOT_COM)
                 ->setAccount($this->getReference(AccountFixtures::SUPER_ADMIN, Account::class))
                 ->setEnabled(true)
                 ->setAccessToken('5fa36ef4-2baf-4129-aab0-ed3dabb2bf4c')

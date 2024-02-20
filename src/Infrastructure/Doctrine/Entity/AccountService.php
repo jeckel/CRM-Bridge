@@ -29,8 +29,8 @@ class AccountService implements Stringable, AccountAwareInterface, UserInterface
     )]
     private ?Account $account = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
-    private string $service = 'undefined';
+    #[ORM\Column(length: 255, nullable: false, enumType: Service::class)]
+    private Service $service;
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $accessToken = 'undefined';
@@ -43,12 +43,12 @@ class AccountService implements Stringable, AccountAwareInterface, UserInterface
         return $this->id;
     }
 
-    public function getService(): string
+    public function getService(): Service
     {
         return $this->service;
     }
 
-    public function setService(string $service): static
+    public function setService(Service $service): static
     {
         $this->service = $service;
 
@@ -80,14 +80,14 @@ class AccountService implements Stringable, AccountAwareInterface, UserInterface
 
     public function __toString(): string
     {
-        return $this->service;
+        return $this->service->value;
     }
 
     #[\Override]
     public function getRoles(): array
     {
         return [
-            Service::from($this->service)->toRole(),
+            $this->service->toRole(),
         ];
     }
 
