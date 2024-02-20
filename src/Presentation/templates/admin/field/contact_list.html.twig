@@ -1,0 +1,14 @@
+<table class="table">
+    {% for contact in field.value %}
+        <tr>
+            <td>
+                <a href="{{ ea_url()
+                    .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
+                    .setAction('detail')
+                    .setEntityId(contact.id)
+                }}">{{ contact.displayName }}</a>
+            </td>
+            <td>{{ contact.email }}</td>
+        </tr>
+    {% endfor %}
+</table>

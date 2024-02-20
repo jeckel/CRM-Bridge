@@ -2,6 +2,14 @@ action:
   save: Enregistrer
   select: "Sélectionner"
 
+company:
+  field:
+    name: Société
+    slug: Slug
+  tab:
+    contacts: Contacts
+    summary: Sommaire
+
 config:
   action:
     actions: Actions
@@ -84,6 +92,7 @@ mail:
     add_to_address_book: Ajouter au carnet d'adresses
 
 menu:
+  admin: Admin
   card_dav: Card Dav
   companies: Sociétés
   config: Configuration
@@ -94,6 +103,7 @@ menu:
   mail: Mails
   services: Services
   setup_options: Options
+  super_admin: Super Admin
   workers: Workers
 
 services:

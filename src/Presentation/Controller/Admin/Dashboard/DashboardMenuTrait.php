@@ -35,6 +35,7 @@ trait DashboardMenuTrait
         yield $this->filterByAccount(
             MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class)
         );
+        yield MenuItem::section('menu.admin');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
                 $this->filterByAccount(
@@ -49,6 +50,9 @@ trait DashboardMenuTrait
                     MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', AccountService::class)
                         ->setPermission('ROLE_ADMIN')
                 ),
+            ]);
+        yield MenuItem::subMenu('menu.super_admin', 'fa fa-wrench')
+            ->setSubItems([
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list')
                     ->setPermission('ROLE_SUPER_ADMIN'),
                 MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class)

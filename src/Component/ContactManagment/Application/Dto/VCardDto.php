@@ -65,7 +65,8 @@ readonly class VCardDto implements DomainVCard
     public function company(): ?string
     {
         /** @phpstan-ignore-next-line  */
-        return explode(';', (string) $this->card->ORG)[0];
+        $company = trim(explode(';', (string) $this->card->ORG)[0]);
+        return $company === '' ? null : $company;
     }
 
 
