@@ -26,13 +26,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class ImapConfigCrudController extends AbstractCrudController
 {
-    public function __construct()
-    {
-        $this->enableFilterByAccount()
-            ->enableNewGenerateUuid()
-            ->enableNewAssignAccount();
-    }
-
     public static function getEntityFqcn(): string
     {
         return ImapConfig::class;
@@ -49,28 +42,14 @@ class ImapConfigCrudController extends AbstractCrudController
     #[\Override]
     public function configureActions(Actions $actions): Actions
     {
+        $actions = parent::configureActions($actions);
         $listFolders = Action::new('select_folders', 'config.imap.action.select_folders')
             ->linkToCrudAction('selectFolders');
         $syncMail = Action::new('sync_mail', 'config.imap.action.sync_mails')
             ->displayIf(static fn(ImapConfig $config): bool => count($config->getFolders()) > 0)
             ->linkToCrudAction('syncFolders');
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->update(Crud::PAGE_INDEX, Action::DETAIL, static function (Action $action) {
-                return $action->setIcon('fa fa-eye')
-                    ->setCssClass('btn btn-secondary');
-            })
-            ->update(Crud::PAGE_INDEX, Action::NEW, static function (Action $action) {
-                return $action->setIcon('fa fa-plus')
-                    ->setLabel('config.imap.action.new')
-                    ->setCssClass('btn btn-secondary');
-            })
-            ->update(Crud::PAGE_INDEX, Action::EDIT, static function (Action $action) {
-                return $action->setIcon('fa fa-pencil')
-                    ->setCssClass('btn btn-secondary');
-            })
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->remove(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER)
             ->add(Crud::PAGE_DETAIL, $listFolders)
             ->add(Crud::PAGE_DETAIL, $syncMail);
         ;

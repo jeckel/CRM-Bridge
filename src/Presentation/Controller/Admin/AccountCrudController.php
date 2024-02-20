@@ -3,7 +3,6 @@
 namespace App\Presentation\Controller\Admin;
 
 use App\Infrastructure\Doctrine\Entity\Account;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;

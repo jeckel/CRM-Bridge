@@ -16,13 +16,6 @@ use function App\new_uuid;
 
 class AccountServiceCrudController extends AbstractCrudController
 {
-    public function __construct()
-    {
-        $this->enableFilterByAccount()
-            ->enableNewAssignAccount()
-            ->enableDetailPage();
-    }
-
     public static function getEntityFqcn(): string
     {
         return AccountService::class;

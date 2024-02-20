@@ -14,13 +14,14 @@ use App\Infrastructure\Doctrine\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
 use function App\slug;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
-class Account implements Stringable
+class Account implements Stringable, SlugAwareInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'account_id', type: "uuid", unique: true)]
@@ -120,11 +121,19 @@ class Account implements Stringable
         return $this->slug;
     }
 
+    #[Override]
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
         return $this;
     }
+
+    #[Override]
+    public function getSlugSource(): string
+    {
+        return $this->name;
+    }
+
 
     /**
      * @return Collection<int, User>

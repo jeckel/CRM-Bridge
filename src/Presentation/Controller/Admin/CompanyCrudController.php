@@ -7,19 +7,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Ramsey\Uuid\Uuid;
 
 class CompanyCrudController extends AbstractCrudController
 {
-    public function __construct()
-    {
-        $this->enableFilterByAccount()
-            ->enableNewGenerateUuid()
-            ->enableNewAssignAccount()
-            ->enableDetailPage()
-        ;
-    }
-
     public static function getEntityFqcn(): string
     {
         return Company::class;
@@ -38,8 +28,6 @@ class CompanyCrudController extends AbstractCrudController
                 TextField::new('name', 'company.field.name'),
                 TextField::new('slug', 'company.field.slug')
                     ->setPermission('ROLE_SUPER_ADMIN'),
-    //            TextField::new('espoCompanyId'),
-    //            AssociationField::new('contacts'),
                 AssociationField::new('account', 'config.field.account')
                     ->setPermission('ROLE_SUPER_ADMIN'),
                 FormField::addTab('company.tab.contacts', 'fas fa-id-card'),
@@ -54,22 +42,10 @@ class CompanyCrudController extends AbstractCrudController
             TextField::new('slug')
                 ->hideOnIndex()
                 ->hideWhenCreating(),
-            TextField::new('espoCompanyId'),
-            AssociationField::new('contacts'),
+            AssociationField::new('contacts')
+                ->hideOnForm(),
             AssociationField::new('account', 'config.field.account')
                 ->setPermission('ROLE_SUPER_ADMIN')
         ];
-    }
-
-    /**
-     * @return Company
-     */
-    #[\Override]
-    public function createEntity(string $entityFqcn)
-    {
-        /** @var Company $company */
-        $company = parent::createEntity($entityFqcn);
-        $company->setId(Uuid::uuid4()->toString());
-        return $company;
     }
 }

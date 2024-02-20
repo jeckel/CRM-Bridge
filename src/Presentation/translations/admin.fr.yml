@@ -93,6 +93,7 @@ mail:
 
 menu:
   admin: Admin
+  accounts: Organisations
   card_dav: Card Dav
   companies: Sociétés
   config: Configuration
