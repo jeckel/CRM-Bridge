@@ -46,6 +46,10 @@ contact:
     first_name: Prénom
     last_name: Nom
     phone: Téléphone
+  tab:
+    activities: Activités
+    mails: Mails
+    summary: Sommaire
 
 #imap:
 #  action:

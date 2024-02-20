@@ -89,7 +89,7 @@ class ContactCrudController extends AbstractCrudController
                 ->setPermission('ROLE_SUPER_ADMIN');
         }
         if ($pageName === Crud::PAGE_DETAIL) {
-            yield FormField::addTab('sommaire');
+            yield FormField::addTab('contact.tab.summary', 'fas fa-id-card');
             yield TextField::new('displayName');
             yield EmailField::new('email');
             yield TextField::new('firstName');
@@ -100,10 +100,16 @@ class ContactCrudController extends AbstractCrudController
             yield AssociationField::new('account', 'config.field.account')
                 ->setPermission('ROLE_SUPER_ADMIN');
 
-            yield FormField::addTab('Mails');
+            yield FormField::addTab('contact.tab.mails', 'fa fa-inbox');
             yield AssociationField::new('mails')
+                ->setLabel(false)
                 ->setSortProperty('date')
                 ->setTemplatePath('admin/field/contact_mails.html.twig');
+            yield FormField::addTab('contact.tab.activities', 'fas fa-bell');
+            yield AssociationField::new('activities')
+                ->setLabel(false)
+                ->setSortProperty('date')
+                ->setTemplatePath('admin/field/contact_activities.html.twig');
         }
 
         if ($pageName === Crud::PAGE_EDIT || $pageName === Crud::PAGE_NEW) {
