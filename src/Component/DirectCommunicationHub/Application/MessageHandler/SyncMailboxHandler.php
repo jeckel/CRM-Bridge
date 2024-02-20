@@ -41,5 +41,15 @@ readonly class SyncMailboxHandler
         }
     }
 
-    public function onSchedule(): void {}
+    public function onSchedule(): void
+    {
+        foreach($this->repository->findAll() as $imapConfig) {
+            foreach($imapConfig->getFolders() as $folder) {
+                $this->mailFolderSynchroniser->syncFolder(
+                    $imapConfig,
+                    $folder
+                );
+            }
+        }
+    }
 }
