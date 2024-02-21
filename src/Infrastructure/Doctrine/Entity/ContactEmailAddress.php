@@ -66,4 +66,9 @@ class ContactEmailAddress
         $this->contact = $contact;
         return $this;
     }
+
+    public function isPrimary(): bool
+    {
+        return $this->emailType === EmailType::PRIMARY;
+    }
 }

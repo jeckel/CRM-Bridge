@@ -287,6 +287,17 @@ class Contact implements Stringable
         return $this;
     }
 
+    public function getEmail(): ?string
+    {
+        $filtered = $this->emailAddresses->filter(
+            fn(ContactEmailAddress $emailAddress) => $emailAddress->isPrimary()
+        );
+        if (count($filtered) > 0) {
+            return array_values($filtered->toArray())[0]->getEmailAddress();
+        }
+        return null;
+    }
+
     public function removeEmailAddress(ContactEmailAddress $emailAddress): static
     {
         if ($this->emailAddresses->removeElement($emailAddress)) {
