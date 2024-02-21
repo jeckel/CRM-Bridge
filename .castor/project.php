@@ -11,17 +11,8 @@ namespace project;
 
 use Castor\Attribute\AsTask;
 
-use function Castor\io;
 use function Castor\run;
 use function docker\compose_run_or_exec;
-use function docker\build_docker_images;
-
-#[AsTask(name: 'install', description: 'Install the project', aliases: ['install'])]
-function task_install(): void
-{
-//    io()->writeln('<info>Hello world</info>');
-    build_docker_images();
-}
 
 #[AsTask(name: 'database:build', description: 'Build database')]
 function task_build_database(): void

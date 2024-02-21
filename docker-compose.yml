@@ -2,6 +2,7 @@ version: '3.2'
 
 volumes:
   mysql_db:
+  postgres_db:
 
 services:
   traefik:
@@ -21,14 +22,14 @@ services:
     volumes:
       - ./:/var/www
     environment:
-      DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
+      DATABASE_URL: "postgresql://user:password@postgres:5432/crm_bridge?serverVersion=16&charset=utf8"
       SUPERVISOR_URL: "http://worker:9001/RPC2"
       SUPERVISOR_USER: "user"
       SUPERVISOR_PASSWORD: "password"
     env_file:
       - .env.local
     depends_on:
-      - mysql
+      - postgres
       - traefik
 
   worker:
@@ -38,25 +39,22 @@ services:
       - ./:/var/www
       - ./.docker/worker/conf.d/:/etc/supervisor/conf.d/:ro
     environment:
-      DATABASE_URL: "mysql://root:root@mysql:3306/crm-bridge?serverVersion=8&charset=utf8mb4"
+      DATABASE_URL: "postgresql://user:password@postgres:5432/crm_bridge?serverVersion=16&charset=utf8"
     depends_on:
-      - mysql
+      - postgres
       - traefik
 
-  mysql:
-    image: mysql:8.0
-    hostname: mysql.localhost
+  postgres:
+    image: postgres:16
+    hostname: postgres.localhost
     volumes:
-      - mysql_db:/var/lib/mysql
+      - postgres_db:/var/lib/postgresql/data
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "crm-bridge"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "crm_bridge"
     ports:
-      - "${MYSQL_PUBLIC_PORT:-3306}:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 20s
-      retries: 10
+      - "5432:5432"
 
   ngrok:
     image: ngrok/ngrok:alpine

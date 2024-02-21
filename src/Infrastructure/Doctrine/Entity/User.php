@@ -3,14 +3,13 @@
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use RuntimeException;
 use Stringable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, Stringable
 {
     #[ORM\Id]
