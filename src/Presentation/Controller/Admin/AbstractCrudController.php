@@ -75,44 +75,6 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         return $actions;
     }
 
-    #[Override]
-    public function createIndexQueryBuilder(
-        SearchDto $searchDto,
-        EntityDto $entityDto,
-        FieldCollection $fields,
-        FilterCollection $filters
-    ): QueryBuilder {
-        $queryBuilder = parent::createIndexQueryBuilder(
-            $searchDto,
-            $entityDto,
-            $fields,
-            $filters
-        );
-        if ($this->config->filterByAccount) {
-            /** @var User $user */
-            $user = $this->getUser();
-            if ($user->hasRole('ROLE_SUPER_ADMIN')) {
-                return $queryBuilder;
-            }
-            $queryBuilder->andWhere('entity.account = :accountId')
-                ->setParameter('accountId', $user->getAccountOrFail()->getId());
-        }
-        return $queryBuilder;
-    }
-
-    #[Override]
-    public function configureFilters(Filters $filters): Filters
-    {
-        if ($this->config->filterByAccount) {
-            /** @var User $user */
-            $user = $this->getUser();
-            if ($user->hasRole('ROLE_SUPER_ADMIN')) {
-                $filters->add('account');
-            }
-        }
-        return $filters;
-    }
-
     /**
      * @param string $entityFqcn
      * @return object

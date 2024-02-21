@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use ReflectionClass;
 
 /**
- * @property-read bool $filterByAccount
  * @property-read bool $onCreateGenerateUuid
  * @property-read bool $onCreateAssignAccount
  * @property-read bool $detailPage
@@ -26,17 +25,10 @@ use ReflectionClass;
  */
 class CrudConfigDto
 {
-    private bool $filterByAccount = false;
     private bool $onCreateGenerateUuid = false;
     private bool $onCreateAssignAccount = false;
     private bool $onCreateGenerateSlug = false;
     private bool $detailPage = true;
-
-    public function setFilterByAccount(): CrudConfigDto
-    {
-        $this->filterByAccount = true;
-        return $this;
-    }
 
     public function setOnCreateGenerateUuid(): CrudConfigDto
     {
@@ -73,8 +65,7 @@ class CrudConfigDto
     {
         $config = new CrudConfigDto();
         if (is_a($entityFqcn, AccountAwareInterface::class, true)) {
-            $config->setFilterByAccount()
-                ->setOnCreateAssignAccount();
+            $config->setOnCreateAssignAccount();
         }
 
         if (is_a($entityFqcn, SlugAwareInterface::class, true)) {
