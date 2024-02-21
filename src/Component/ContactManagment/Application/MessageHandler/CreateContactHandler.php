@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace App\Component\ContactManagment\Application\MessageHandler;
 
 use App\Component\ContactManagment\Domain\Service\ContactProvider;
-use App\Component\Shared\Helper\ContextManager;
 use App\Presentation\Async\Message\CreateContact;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

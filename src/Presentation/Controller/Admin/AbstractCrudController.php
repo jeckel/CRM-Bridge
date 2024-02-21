@@ -9,33 +9,19 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Infrastructure\Doctrine\Entity\AccountAwareInterface;
 use App\Infrastructure\Doctrine\Entity\SlugAwareInterface;
-use App\Infrastructure\Doctrine\Entity\User;
 use App\Presentation\Controller\Admin\Option\CrudConfigDto;
-use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController as EAAbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Override;
 use ReflectionException;
-
-use UnitEnum;
 
 use function App\new_uuid;
 use function App\slug;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 abstract class AbstractCrudController extends EAAbstractCrudController
 {
     protected CrudConfigDto $config;
@@ -90,11 +76,6 @@ abstract class AbstractCrudController extends EAAbstractCrudController
             $entity->setId(new_uuid());
         }
 
-        if ($this->config->onCreateAssignAccount && is_a($entity, AccountAwareInterface::class)) {
-            /** @var User $user */
-            $user = $this->getUser();
-            $entity->setAccount($user->getAccount());
-        }
         return $entity;
     }
 

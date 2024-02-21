@@ -21,10 +21,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
-        /** @var User $user */
-        $user = $this->getUser();
         return Dashboard::new()
-            ->setTitle(sprintf('CRM Bridge<br /><small>%s</small>', $user->getAccountOrFail()))
+            ->setTitle('CRM Bridge')
             ->setTranslationDomain('admin')
             ->renderContentMaximized()
             ->setLocales(['fr'])

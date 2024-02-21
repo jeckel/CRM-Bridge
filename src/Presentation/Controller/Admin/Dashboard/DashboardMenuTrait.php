@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Dashboard;
 
-use App\Infrastructure\Doctrine\Entity\Account;
 use App\Infrastructure\Doctrine\Entity\ServiceConnector;
 use App\Infrastructure\Doctrine\Entity\CardDavConfig;
 use App\Infrastructure\Doctrine\Entity\Company;
@@ -41,7 +40,6 @@ trait DashboardMenuTrait
                 MenuItem::linkToRoute('menu.workers', 'fa fa-helmet-safety', 'worker_list'),
                 MenuItem::linkToCrud('menu.incoming_webhooks', 'fas fa-sign-in-alt', IncomingWebhook::class),
                 MenuItem::linkToCrud('menu.setup_options', 'fas fa-wrench', Configuration::class),
-                MenuItem::linkToCrud('menu.accounts', 'fas fa-wrench', Account::class),
             ])
             ->setPermission('ROLE_SUPER_ADMIN');
     }

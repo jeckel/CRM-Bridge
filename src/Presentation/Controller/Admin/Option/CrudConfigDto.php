@@ -10,14 +10,12 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Admin\Option;
 
 use App\Component\Shared\Error\LogicError;
-use App\Infrastructure\Doctrine\Entity\AccountAwareInterface;
 use App\Infrastructure\Doctrine\Entity\SlugAwareInterface;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use ReflectionClass;
 
 /**
  * @property-read bool $onCreateGenerateUuid
- * @property-read bool $onCreateAssignAccount
  * @property-read bool $detailPage
  * @property-read bool $onCreateGenerateSlug
  *
@@ -26,19 +24,12 @@ use ReflectionClass;
 class CrudConfigDto
 {
     private bool $onCreateGenerateUuid = false;
-    private bool $onCreateAssignAccount = false;
     private bool $onCreateGenerateSlug = false;
     private bool $detailPage = true;
 
     public function setOnCreateGenerateUuid(): CrudConfigDto
     {
         $this->onCreateGenerateUuid = true;
-        return $this;
-    }
-
-    public function setOnCreateAssignAccount(): CrudConfigDto
-    {
-        $this->onCreateAssignAccount = true;
         return $this;
     }
 
@@ -64,9 +55,6 @@ class CrudConfigDto
     public static function fromEntityFqcn(string $entityFqcn): CrudConfigDto
     {
         $config = new CrudConfigDto();
-        if (is_a($entityFqcn, AccountAwareInterface::class, true)) {
-            $config->setOnCreateAssignAccount();
-        }
 
         if (is_a($entityFqcn, SlugAwareInterface::class, true)) {
             $config->onCreateGenerateSlug = true;
