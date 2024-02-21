@@ -26,7 +26,6 @@ readonly class AppointmentRequestHandler
             $this->eventDispatcher->dispatch(new AppointmentCreated(
                 attendeeName: $attendee->displayName,
                 attendeeEmail: $attendee->email,
-                accountId: $webhook->accountId,
                 requestDate: $webhook->requestDate,
                 appointmentDate: $webhook->appointmentDate,
                 appointmentSubject: $webhook->appointmentSubject

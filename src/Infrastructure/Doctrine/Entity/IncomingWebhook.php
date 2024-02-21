@@ -39,7 +39,7 @@ class IncomingWebhook
         referencedColumnName: 'account_service_id',
         nullable: false
     )]
-    private ?AccountService $service = null;
+    private ?ServiceConnector $service = null;
 
     public function getId(): ?int
     {
@@ -96,22 +96,14 @@ class IncomingWebhook
         return $this;
     }
 
-    public function getService(): ?AccountService
+    public function getService(): ?ServiceConnector
     {
         return $this->service;
     }
 
-    public function setService(?AccountService $service): IncomingWebhook
+    public function setService(?ServiceConnector $service): IncomingWebhook
     {
         $this->service = $service;
         return $this;
-    }
-
-    public function getAccountId(): AccountId
-    {
-        if (null === $this->service) {
-            throw new RuntimeException('Service not set');
-        }
-        return $this->service->getAccountId();
     }
 }

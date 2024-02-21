@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Admin\Dashboard;
 
 use App\Infrastructure\Doctrine\Entity\Account;
-use App\Infrastructure\Doctrine\Entity\AccountService;
+use App\Infrastructure\Doctrine\Entity\ServiceConnector;
 use App\Infrastructure\Doctrine\Entity\CardDavConfig;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
@@ -33,7 +33,7 @@ trait DashboardMenuTrait
             ->setSubItems([
                 MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class),
                 MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapConfig::class),
-                MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', AccountService::class),
+                MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', ServiceConnector::class),
             ])
             ->setPermission('ROLE_ADMIN');
         yield MenuItem::subMenu('menu.super_admin', 'fa fa-wrench')

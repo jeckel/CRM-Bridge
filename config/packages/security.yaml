@@ -14,7 +14,7 @@ security:
                 property: username
         account_service_provider:
             entity:
-                class: App\Infrastructure\Doctrine\Entity\AccountService
+                class: App\Infrastructure\Doctrine\Entity\ServiceConnector
                 property: accessToken
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:

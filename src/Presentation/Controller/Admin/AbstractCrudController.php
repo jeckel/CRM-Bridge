@@ -13,6 +13,7 @@ use App\Infrastructure\Doctrine\Entity\AccountAwareInterface;
 use App\Infrastructure\Doctrine\Entity\SlugAwareInterface;
 use App\Infrastructure\Doctrine\Entity\User;
 use App\Presentation\Controller\Admin\Option\CrudConfigDto;
+use BackedEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -26,6 +27,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Override;
 use ReflectionException;
+
+use UnitEnum;
 
 use function App\new_uuid;
 use function App\slug;
@@ -103,5 +106,17 @@ abstract class AbstractCrudController extends EAAbstractCrudController
             $entityInstance->setSlug(slug($entityInstance->getSlugSource()));
         }
         parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    /**
+     * @param class-string<BackedEnum> $enumClass)
+     * @return array<string, int|string>
+     */
+    public function enumToChoices(string $enumClass, string $i18nPrefix): array
+    {
+        return array_combine(
+            array_map(fn(BackedEnum $service) => $i18nPrefix . '.' . $service->name, $enumClass::cases()),
+            array_map(fn(BackedEnum $service) => $service->value, $enumClass::cases())
+        );
     }
 }

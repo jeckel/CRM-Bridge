@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Webhook;
 
 use App\Component\Shared\ValueObject\WebHookSource;
-use App\Infrastructure\Doctrine\Entity\AccountService;
+use App\Infrastructure\Doctrine\Entity\ServiceConnector;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Repository\IncomingWebhookRepository;
 use DateTimeImmutable;
@@ -33,7 +33,7 @@ abstract class AbstractWebhookController extends AbstractController
         array $content
     ): IncomingWebhook {
         $user = $this->getUser();
-        if (! $user instanceof AccountService) {
+        if (! $user instanceof ServiceConnector) {
             throw new RuntimeException('User is not an AccountService');
         }
         $webhook = (new IncomingWebhook())
