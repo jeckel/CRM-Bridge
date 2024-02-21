@@ -21,7 +21,4 @@ framework:
             App\Presentation\Async\Message\SyncMailbox: async
             App\Presentation\Async\Message\SyncMail: async
             App\Presentation\Async\Message\SyncAddressBook: async
-#            App\Presentation\Async\WebHook\WebHook: async
-#            App\Presentation\Async\WebHook\CalDotComWebhook: async
-#            App\Async\Message\AsyncIrcMessage: async
-#            App\Async\Message\AsyncIrcCommand: irc_command
+
