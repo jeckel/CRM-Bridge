@@ -12,7 +12,6 @@ namespace App\Component\ContactManagment\Application\Mapper;
 use App\Component\ContactManagment\Domain\Entity\Contact as DomainContact;
 use App\Component\ContactManagment\Domain\Entity\ContactActivity;
 use App\Component\ContactManagment\Domain\Entity\ContactActivityCollection;
-use App\Component\Shared\Helper\ContextManager;
 use App\Component\Shared\Identity\ContactActivityId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
@@ -24,8 +23,9 @@ use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;
+
+use function App\new_uuid;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -36,8 +36,7 @@ readonly class ContactMapper
         private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
         private EntityManagerInterface $entityManager,
-        private SluggerInterface $slugger,
-        private ContextManager $context
+        private SluggerInterface $slugger
     ) {}
 
     public function mapToDomain(DoctrineContact $contact): DomainContact
@@ -81,12 +80,8 @@ readonly class ContactMapper
                 $company = (new Company())
                     ->setName($contact->company)
                     ->setSlug($slug)
-                    ->setId(Uuid::uuid4()->toString())
-                    ->setAccount($this->context->getAccountReference());
+                    ->setId(new_uuid());
             }
-        }
-        if (null === $entity->getAccount()) {
-            $entity->setAccount($this->context->getAccountReference());
         }
         $addressBook = null;
         if (null !== $contact->addressBookId) {

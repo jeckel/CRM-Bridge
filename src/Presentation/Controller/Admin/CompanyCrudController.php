@@ -28,8 +28,6 @@ class CompanyCrudController extends AbstractCrudController
                 TextField::new('name', 'company.field.name'),
                 TextField::new('slug', 'company.field.slug')
                     ->setPermission('ROLE_SUPER_ADMIN'),
-                AssociationField::new('account', 'config.field.account')
-                    ->setPermission('ROLE_SUPER_ADMIN'),
                 FormField::addTab('company.tab.contacts', 'fas fa-id-card'),
                 AssociationField::new('contacts')
                     ->setLabel(false)
@@ -44,8 +42,6 @@ class CompanyCrudController extends AbstractCrudController
                 ->hideWhenCreating(),
             AssociationField::new('contacts')
                 ->hideOnForm(),
-            AssociationField::new('account', 'config.field.account')
-                ->setPermission('ROLE_SUPER_ADMIN')
         ];
     }
 }

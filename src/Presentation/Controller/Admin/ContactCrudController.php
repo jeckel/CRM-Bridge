@@ -20,7 +20,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Override;
-use Ramsey\Uuid\Uuid;
+
+use function App\new_uuid;
 
 class ContactCrudController extends AbstractCrudController
 {
@@ -45,8 +46,6 @@ class ContactCrudController extends AbstractCrudController
             yield AssociationField::new('company');
             yield TextField::new('addressBook');
             yield AssociationField::new('mails');
-            yield AssociationField::new('account', 'config.field.account')
-                ->setPermission('ROLE_SUPER_ADMIN');
         }
         if ($pageName === Crud::PAGE_DETAIL) {
             yield FormField::addTab('contact.tab.summary', 'fas fa-id-card');
@@ -57,8 +56,6 @@ class ContactCrudController extends AbstractCrudController
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
             yield TextField::new('addressBook');
-            yield AssociationField::new('account', 'config.field.account')
-                ->setPermission('ROLE_SUPER_ADMIN');
 
             yield FormField::addTab('contact.tab.mails', 'fa fa-inbox');
             yield AssociationField::new('mails')
@@ -97,7 +94,7 @@ class ContactCrudController extends AbstractCrudController
                 ->findOneBy(['name' => $entityInstance->getCompany()->getName()]);
 
             (null === $company) ?
-                $entityInstance->getCompany()->setId(Uuid::uuid4()->toString()) :
+                $entityInstance->getCompany()->setId(new_uuid()) :
                 $entityInstance->setCompany($company)
             ;
         }

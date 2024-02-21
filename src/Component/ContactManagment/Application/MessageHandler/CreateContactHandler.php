@@ -18,13 +18,11 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 readonly class CreateContactHandler
 {
     public function __construct(
-        private ContactProvider $contactProvider,
-        private ContextManager $context,
+        private ContactProvider $contactProvider
     ) {}
 
     public function __invoke(CreateContact $message): void
     {
-        $this->context->setAccountId($message->accountId);
         $this->contactProvider->findOrCreate(
             firstName: $message->firstName,
             lastName: $message->lastName,

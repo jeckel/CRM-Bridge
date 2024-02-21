@@ -13,7 +13,6 @@ use App\Component\ContactManagment\Domain\Entity\Contact;
 use App\Component\ContactManagment\Domain\Port\ContactRepository;
 use App\Component\ContactManagment\Domain\Port\VCard;
 use App\Component\Shared\Event\ContactCreated;
-use App\Component\Shared\Identity\AccountId;
 use App\Component\Shared\Identity\AddressBookId;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 use Psr\EventDispatcher\EventDispatcherInterface;

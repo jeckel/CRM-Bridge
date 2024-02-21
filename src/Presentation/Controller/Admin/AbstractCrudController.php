@@ -107,16 +107,4 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         }
         parent::persistEntity($entityManager, $entityInstance);
     }
-
-    /**
-     * @param class-string<BackedEnum> $enumClass)
-     * @return array<string, int|string>
-     */
-    public function enumToChoices(string $enumClass, string $i18nPrefix): array
-    {
-        return array_combine(
-            array_map(fn(BackedEnum $service) => $i18nPrefix . '.' . $service->name, $enumClass::cases()),
-            array_map(fn(BackedEnum $service) => $service->value, $enumClass::cases())
-        );
-    }
 }

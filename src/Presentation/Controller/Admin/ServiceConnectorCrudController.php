@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Override;
 
+use function App\enum_to_choices;
 use function App\new_uuid;
 
 class ServiceConnectorCrudController extends AbstractCrudController
@@ -37,7 +38,7 @@ class ServiceConnectorCrudController extends AbstractCrudController
     {
         return [
             ChoiceField::new('service', 'services.field.service_type')
-                ->setChoices($this->enumToChoices(Service::class, 'services.available_services')),
+                ->setChoices(enum_to_choices(Service::class, 'services.available_services')),
             TextField::new('accessToken', 'services.field.access_token')
                 ->onlyOnDetail(),
             BooleanField::new('enabled', 'services.field.enabled'),

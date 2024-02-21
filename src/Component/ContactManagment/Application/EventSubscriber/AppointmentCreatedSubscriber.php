@@ -26,7 +26,7 @@ readonly class AppointmentCreatedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-//            AppointmentCreated::class => 'onAppointmentCreated',
+            AppointmentCreated::class => 'onAppointmentCreated',
         ];
     }
 
