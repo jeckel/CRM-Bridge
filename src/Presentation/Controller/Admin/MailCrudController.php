@@ -33,7 +33,7 @@ class MailCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $actions = parent::configureActions($actions);
-        $createContact = Action::new('mail_add_to_address_book', 'mail.action.add_to_address_book')
+        $createContact = Action::new('create_contact', 'mail.action.create_contact')
             ->linkToRoute(
                 routeName: 'create_contact_from_mail_author',
                 routeParameters: static fn(Mail $mail): array => ['mailId' => $mail->getId()]
@@ -42,8 +42,18 @@ class MailCrudController extends AbstractCrudController
             ->setCssClass('btn btn-success')
             ->displayIf(static fn(Mail $mail): bool => $mail->getContact() === null)
         ;
+        $linkToContact = Action::new('attach_contact', 'mail.action.attach_contact')
+            ->linkToRoute(
+                routeName: 'attach_contact_from_mail_author',
+                routeParameters: static fn(Mail $mail): array => ['mailId' => $mail->getId()]
+            )
+            ->setIcon('fas fa-user-plus')
+            ->setCssClass('btn btn-success')
+            ->displayIf(static fn(Mail $mail): bool => $mail->getContact() === null)
+        ;
         return $actions
             ->add(Crud::PAGE_DETAIL, $createContact)
+            ->add(Crud::PAGE_DETAIL, $linkToContact)
             ->remove(Crud::PAGE_DETAIL, Action::EDIT)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->remove(Crud::PAGE_DETAIL, Action::DELETE)

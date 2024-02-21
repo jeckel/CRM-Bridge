@@ -2,19 +2,20 @@
 
 /**
  * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
- * Created at: 07/02/2024
+ * Created at: 21/02/2024
  */
 
 declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Action;
 
-use App\Component\ContactManagment\Application\Command\UpsertContact;
-use App\Component\ContactManagment\Application\Dto\ContactDto;
+use App\Component\ContactManagment\Application\Command\AddEmailAddress;
+use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
+use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
 use App\Presentation\Controller\Admin\MailCrudController;
-use App\Presentation\Form\ContactFormType;
+use App\Presentation\Form\SelectContactFormType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class CreateContactFromMailAuthor extends AbstractController
+class AttachContactFromMailAuthor extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $messageBus,
@@ -32,37 +33,28 @@ class CreateContactFromMailAuthor extends AbstractController
     ) {}
 
     #[Route(
-        path: "/admin/mail/{mailId}/create_contact",
-        name: "create_contact_from_mail_author",
+        path: "/admin/mail/{mailId}/attach_contact",
+        name: "attach_contact_from_mail_author",
         methods: ['GET', 'POST']
     )]
     public function __invoke(string $mailId, Request $request): Response
     {
         $mail = $this->mailRepository->getById($mailId);
         $form = $this->createForm(
-            ContactFormType::class,
-            [
-                'displayName' => $mail->getFromName(),
-                'email' => $mail->getFromAddress()
-            ]
+            SelectContactFormType::class,
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var array<string, string> $formData */
+            /** @var array{contact: Contact} $formData */
             $formData = $form->getData();
+            $contact = $formData['contact'];
             $this->messageBus->dispatch(
-                new UpsertContact(
-                    contactData: new ContactDto(
-                        displayName: $formData['displayName'],
-                        firstName: $formData['firstName'],
-                        lastName: $formData['lastName'],
-                        emailAddress: new Email($formData['email']),
-                        company: $formData['company']
-                    ),
-                    contactId: null
+                new AddEmailAddress(
+                    emailAddress: new Email($mail->getFromAddress()),
+                    contactId: ContactId::from((string) $contact->getId())
                 )
             );
-            $this->addFlash('success', 'mail.alert.create_contact');
+            $this->addFlash('success', 'mail.alert.attach_contact');
             return $this->redirect(
                 $this->urlGenerator->setAction(Action::DETAIL)
                     ->setController(MailCrudController::class)
@@ -70,10 +62,11 @@ class CreateContactFromMailAuthor extends AbstractController
                     ->generateUrl()
             );
         }
+
         return $this->render(
             'admin/page/form.html.twig',
             [
-                'page_title' => 'mail.title.create_contact',
+                'page_title' => 'mail.title.attach_contact',
                 'form' => $form->createView()
             ]
         );

@@ -49,11 +49,13 @@ config:
 contact:
   field:
     company: Société
+    contact: Contact
     display_name: Nom d'affichage
-    primary_email: Email principal
     first_name: Prénom
     last_name: Nom
     phone: Téléphone
+    primary_email: Email principal
+    secondary_emails: Autre emails
   tab:
     activities: Activités
     mails: Mails
@@ -73,9 +75,11 @@ contact:
 
 mail:
   action:
-    add_to_address_book: Ajouter au carnet d'adresses
+    create_contact: Créer un contact
+    attach_contact: Lier à un contact
   alert:
-    contact_adding_to_address_book: Ajout de l'auteur au carnet d'adresses en cours
+    create_contact: Ajout de l'auteur au carnet d'adresses en cours
+    attach_contact: Adresse mail associée au contact
   field:
     date: Reçu le
     folder: Dossier
@@ -88,8 +92,9 @@ mail:
     singular: Mail
     plural: Mails
   title:
+    attach_contact: Lier à un contact existant
+    create_contact: Créer un nouveau contact
     list: Mails entrant
-    add_to_address_book: Ajouter au carnet d'adresses
 
 menu:
   admin: Admin

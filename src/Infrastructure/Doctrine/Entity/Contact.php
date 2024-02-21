@@ -287,7 +287,7 @@ class Contact implements Stringable
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getPrimaryEmailAddress(): ?string
     {
         $filtered = $this->emailAddresses->filter(
             fn(ContactEmailAddress $emailAddress) => $emailAddress->isPrimary()
