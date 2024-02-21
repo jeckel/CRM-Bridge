@@ -12,6 +12,7 @@ namespace App\Component\ContactManagment\Application\Mapper;
 use App\Component\ContactManagment\Domain\Entity\Contact as DomainContact;
 use App\Component\ContactManagment\Domain\Entity\ContactActivity;
 use App\Component\ContactManagment\Domain\Entity\ContactActivityCollection;
+use App\Component\ContactManagment\Domain\Entity\EmailAddressCollection;
 use App\Component\Shared\Identity\ContactActivityId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
@@ -19,6 +20,7 @@ use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
+use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,7 +48,7 @@ readonly class ContactMapper
             displayName: $contact->getDisplayName(),
             firstName: $contact->getFirstname(),
             lastName: $contact->getLastname(),
-            email: $contact->getEmail() !== null ? new Email($contact->getEmail()) : null,
+            emailAddresses: $this->mapEmailAddressesToDomain($contact),
             phoneNumber: $contact->getPhoneNumber(),
             company: $contact->getCompany()?->getName(),
             espoContactId: $contact->getEspoContactId(),
@@ -93,7 +95,6 @@ readonly class ContactMapper
             ->setFirstname($contact->firstName)
             ->setLastname($contact->lastName)
             ->setDisplayName($contact->displayName)
-            ->setEmail($contact->email !== null ? (string) $contact->email : null)
             ->setPhoneNumber($contact->phoneNumber)
             ->setEspoContactId($contact->espoContactId)
             ->setCompany($company)
@@ -101,6 +102,8 @@ readonly class ContactMapper
             ->setVCardEtag($contact->vCardEtag)
             ->setVCardLastSyncAt($contact->vCardLastSyncAt)
             ->setAddressBook($addressBook);
+
+        $this->mapEmailAddressesToDoctrineEntity($contact, $entity);
 
         if ($contact->activities->hasChanged()) {
             foreach ($contact->activities as $activity) {
@@ -114,5 +117,31 @@ readonly class ContactMapper
             }
         }
         return $entity;
+    }
+
+    protected function mapEmailAddressesToDomain(DoctrineContact $contact): EmailAddressCollection
+    {
+        $addresses = [];
+        foreach ($contact->getEmailAddresses() as $emailAddress) {
+            $addresses[$emailAddress->getEmailAddress()] = [
+                'email' => new Email($emailAddress->getEmailAddress()),
+                'type' => $emailAddress->getEmailType(),
+            ];
+        }
+        return new EmailAddressCollection($addresses);
+    }
+
+    /**
+     * @param DomainContact $contact
+     * @param DoctrineContact $entity
+     * @return void
+     */
+    protected function mapEmailAddressesToDoctrineEntity(DomainContact $contact, DoctrineContact $entity): void
+    {
+        $repository = $this->entityManager->getRepository(ContactEmailAddress::class);
+        foreach ($contact->emailAddresses as $strEmail => $emailAddressData) {
+            $email = $repository->find($strEmail);
+            $entity->addEmailAddress($email ?? (new ContactEmailAddress())->setEmailAddress($strEmail)->setEmailType($emailAddressData['type']));
+        }
     }
 }

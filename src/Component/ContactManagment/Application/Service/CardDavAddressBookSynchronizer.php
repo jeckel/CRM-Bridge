@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Service;
 
-use App\Component\ContactManagment\Application\Dto\VCardDto;
-use App\Component\ContactManagment\Domain\Service\ContactVCardUpdater;
+use App\Component\ContactManagment\Application\Command\UpsertContactVCard;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use MStilkerich\CardDavClient\Account;
@@ -23,6 +22,7 @@ use MStilkerich\CardDavClient\XmlElements\ElementNames;
 use Override;
 use Psr\Log\LoggerInterface;
 use Sabre\VObject\Component\VCard;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,7 +32,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
     private AddressBookId $addressBookId;
 
     public function __construct(
-        private readonly ContactVCardUpdater $VCardUpdater,
+        private readonly MessageBusInterface $messageBus,
         LoggerInterface $logger
     ) {
         Config::init($logger, $logger);
@@ -66,12 +66,17 @@ class CardDavAddressBookSynchronizer implements SyncHandler
     #[Override]
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
     {
-        if (null !== $card) {
-            $this->VCardUpdater->sync(
-                vCard: new VCardDto($uri, $etag, $card),
-                addressBookId: $this->addressBookId
-            );
+        if (null === $card) {
+            return;
         }
+        $this->messageBus->dispatch(
+            new UpsertContactVCard(
+                vCardUri: $uri,
+                vCardEtag: $etag,
+                card: $card,
+                addressBookId: $this->addressBookId
+            )
+        );
     }
 
     /**

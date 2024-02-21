@@ -50,7 +50,7 @@ contact:
   field:
     company: Société
     display_name: Nom d'affichage
-    email: Email
+    primary_email: Email principal
     first_name: Prénom
     last_name: Nom
     phone: Téléphone

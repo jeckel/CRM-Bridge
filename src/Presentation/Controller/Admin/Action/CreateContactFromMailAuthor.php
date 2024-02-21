@@ -9,12 +9,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin\Action;
 
-use App\Component\Shared\Identity\AccountId;
+use App\Component\ContactManagment\Application\Command\UpsertContact;
+use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Mail;
-use App\Infrastructure\Doctrine\Entity\User;
 use App\Infrastructure\Doctrine\Repository\MailRepository;
-use App\Presentation\Async\Message\CreateContact;
 use App\Presentation\Controller\Admin\MailCrudController;
 use App\Presentation\Form\ContactFormType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -53,12 +51,15 @@ class CreateContactFromMailAuthor extends AbstractController
             /** @var array<string, string> $formData */
             $formData = $form->getData();
             $this->messageBus->dispatch(
-                new CreateContact(
-                    displayName: $formData['displayName'],
-                    firstName: $formData['firstName'],
-                    lastName: $formData['lastName'],
-                    email: new Email($formData['email']),
-                    company: $formData['company']
+                new UpsertContact(
+                    contactData: new ContactDto(
+                        displayName: $formData['displayName'],
+                        firstName: $formData['firstName'],
+                        lastName: $formData['lastName'],
+                        emailAddress: new Email($formData['email']),
+                        company: $formData['company']
+                    ),
+                    contactId: null
                 )
             );
             $this->addFlash('success', 'mail.alert.contact_adding_to_address_book');

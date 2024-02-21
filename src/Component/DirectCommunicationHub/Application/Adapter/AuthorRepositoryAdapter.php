@@ -25,12 +25,10 @@ readonly class AuthorRepositoryAdapter implements AuthorRepository
     #[Override]
     public function findByEmail(Email $email): ?Author
     {
-        $contact = $this->repository->findOneBy([
-            'email' => (string) $email
-        ]);
-        if (null === $contact) {
+        $author = $this->repository->findByEmail((string) $email);
+        if (null === $author) {
             return null;
         }
-        return new Author(ContactId::from((string) $contact->getId()));
+        return new Author(ContactId::from((string) $author->getId()));
     }
 }

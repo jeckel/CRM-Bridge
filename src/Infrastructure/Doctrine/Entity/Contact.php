@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use RuntimeException;
 use Stringable;
 
 /**
@@ -36,9 +35,6 @@ class Contact implements Stringable
 
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $firstname = null;
-
-    #[ORM\Column(length: 180, nullable: true)]
-    private ?string $email;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $phoneNumber;
@@ -65,6 +61,17 @@ class Contact implements Stringable
         orphanRemoval: true
     )]
     private Collection $activities;
+
+    /**
+     * @var Collection<string, ContactEmailAddress> $emailAddresses
+     */
+    #[ORM\OneToMany(
+        targetEntity: ContactEmailAddress::class,
+        mappedBy: 'contact',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $emailAddresses;
 
     /**
      * @var Collection<int, Mail> $mails
@@ -100,6 +107,7 @@ class Contact implements Stringable
     {
         $this->activities = new ArrayCollection();
         $this->mails = new ArrayCollection();
+        $this->emailAddresses = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -143,17 +151,6 @@ class Contact implements Stringable
     public function setLastname(?string $lastname): Contact
     {
         $this->lastname = $lastname;
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): Contact
-    {
-        $this->email = $email;
         return $this;
     }
 
@@ -266,6 +263,36 @@ class Contact implements Stringable
             // set the owning side to null (unless already changed)
             if ($mail->getContact() === $this) {
                 $mail->setContact(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string, ContactEmailAddress>
+     */
+    public function getEmailAddresses(): Collection
+    {
+        return $this->emailAddresses;
+    }
+
+    public function addEmailAddress(ContactEmailAddress $emailAddress): static
+    {
+        if (!$this->emailAddresses->contains($emailAddress)) {
+            $this->emailAddresses->add($emailAddress);
+            $emailAddress->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmailAddress(ContactEmailAddress $emailAddress): static
+    {
+        if ($this->emailAddresses->removeElement($emailAddress)) {
+            // set the owning side to null (unless already changed)
+            if ($emailAddress->getContact() === $this) {
+                $emailAddress->setContact(null);
             }
         }
 

@@ -11,6 +11,7 @@ namespace App\Component\DirectCommunicationHub\Application\EventSubscriber;
 
 use App\Component\DirectCommunicationHub\Domain\Service\MailAuthorLinkManager;
 use App\Component\Shared\Event\ContactCreated;
+use App\Component\Shared\Event\ContactEmailAdded;
 use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -24,15 +25,12 @@ readonly class ContactCreatedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ContactCreated::class => 'onContactCreated',
+            ContactEmailAdded::class => 'onContactCreated',
         ];
     }
 
-    public function onContactCreated(ContactCreated $event): void
+    public function onContactCreated(ContactEmailAdded $event): void
     {
-        if (null === $event->email) {
-            return;
-        }
-        $this->attachMailsToAuthor->linkToAuthor($event->email);
+        $this->attachMailsToAuthor->linkToAuthor($event->emailAddress);
     }
 }
