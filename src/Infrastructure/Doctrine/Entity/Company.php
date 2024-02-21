@@ -22,10 +22,8 @@ use function App\slug;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-class Company implements AccountAwareInterface, SlugAwareInterface
+class Company implements SlugAwareInterface
 {
-    use AccountAwareTrait;
-
     #[ORM\Id]
     #[ORM\Column(name: 'company_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -40,20 +38,12 @@ class Company implements AccountAwareInterface, SlugAwareInterface
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $espoCompanyId = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
-
     /**
      * @var Collection<int, Contact> $contacts
      */
     #[ORM\OneToMany(
-        mappedBy: 'company',
         targetEntity: Contact::class,
+        mappedBy: 'company',
         cascade: ['persist']
     )]
     private Collection $contacts;

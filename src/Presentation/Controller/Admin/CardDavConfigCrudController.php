@@ -46,8 +46,6 @@ class CardDavConfigCrudController extends AbstractCrudController
         yield TextField::new('name', 'config.card_dav.field.name');
         yield UrlField::new('uri', 'config.card_dav.field.uri');
         yield TextField::new('login', 'config.card_dav.field.login');
-        yield AssociationField::new('account', 'config.field.account')
-            ->setPermission('ROLE_SUPER_ADMIN');
         yield Field::new('password', 'config.card_dav.field.password')
             ->onlyOnForms()
             ->setFormType(PasswordType::class)

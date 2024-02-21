@@ -16,7 +16,6 @@ readonly class CreateContact
 {
     public function __construct(
         public string $displayName,
-        public AccountId $accountId,
         public ?string $firstName = null,
         public ?string $lastName = null,
         public ?Email $email = null,

@@ -18,7 +18,6 @@ final readonly class AppointmentCreated implements Event
     public function __construct(
         public string $attendeeName,
         public Email $attendeeEmail,
-        public AccountId $accountId,
         public DateTimeImmutable $requestDate,
         public DateTimeImmutable $appointmentDate,
         public string $appointmentSubject

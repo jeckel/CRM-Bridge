@@ -12,10 +12,8 @@ use Stringable;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: MailRepository::class)]
-class Mail implements Stringable, AccountAwareInterface
+class Mail implements Stringable
 {
-    use AccountAwareTrait;
-
     #[ORM\Id]
     #[ORM\Column(name: 'mail_id', unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -53,14 +51,6 @@ class Mail implements Stringable, AccountAwareInterface
         onDelete: 'SET NULL'
     )]
     private ?Contact $contact;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(

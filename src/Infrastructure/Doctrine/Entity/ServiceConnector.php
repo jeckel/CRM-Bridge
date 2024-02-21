@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\ValueObject\Service;
-use App\Infrastructure\Doctrine\Repository\AccountServiceRepository;
+use App\Infrastructure\Doctrine\Repository\ServiceConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,23 +11,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
-#[ORM\Entity(repositoryClass: AccountServiceRepository::class)]
-class AccountService implements Stringable, AccountAwareInterface, UserInterface
+#[ORM\Entity(repositoryClass: ServiceConnectorRepository::class)]
+class ServiceConnector implements Stringable, UserInterface
 {
-    use AccountAwareTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'account_service_id', type: "integer", unique: true)]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
 
     #[ORM\Column(length: 255, nullable: false, enumType: Service::class)]
     private Service $service;
@@ -60,7 +50,7 @@ class AccountService implements Stringable, AccountAwareInterface, UserInterface
         return $this->accessToken;
     }
 
-    public function setAccessToken(string $accessToken): AccountService
+    public function setAccessToken(string $accessToken): ServiceConnector
     {
         $this->accessToken = $accessToken;
         return $this;

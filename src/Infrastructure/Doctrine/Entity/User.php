@@ -45,17 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Stringa
     #[ORM\Column(type: 'text', length: 1024, nullable: true)]
     private ?string $linkedInAccessToken = null;
 
-    #[ORM\ManyToOne(
-        cascade: ['persist'],
-        inversedBy: 'users'
-    )]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -163,25 +152,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Stringa
     public function setLinkedInAccessToken(?string $linkedInAccessToken): User
     {
         $this->linkedInAccessToken = $linkedInAccessToken;
-        return $this;
-    }
-
-    public function getAccount(): ?Account
-    {
-        return $this->account;
-    }
-
-    public function getAccountOrFail(): Account
-    {
-        if (null === $this->account) {
-            throw new RuntimeException('Account not set');
-        }
-        return $this->account;
-    }
-
-    public function setAccount(?Account $account): User
-    {
-        $this->account = $account;
         return $this;
     }
 

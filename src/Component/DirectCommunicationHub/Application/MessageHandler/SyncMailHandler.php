@@ -28,7 +28,6 @@ readonly class SyncMailHandler
     public function __construct(
         private IncomingMailRegisterer $mailRegisterer,
         private ImapConfigRepository $imapConfigRepository,
-        private ContextManager $context,
         private MailContextManager $mailContext
     ) {}
 
@@ -39,7 +38,6 @@ readonly class SyncMailHandler
     {
         $imapConfig = $this->imapConfigRepository->getById($syncMail->imapConfigId->id());
         $mailBox = ImapMailbox::fromImapConfig($imapConfig);
-        $this->context->setAccountId(AccountId::from((string) $imapConfig->getAccountOrFail()->getId()));
         $this->mailContext->setImapConfigId($syncMail->imapConfigId);
 
         $mail = $mailBox->getMail($syncMail->mailId->id(), $syncMail->folder);

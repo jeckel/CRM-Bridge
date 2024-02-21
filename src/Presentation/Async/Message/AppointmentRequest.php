@@ -19,7 +19,6 @@ final readonly class AppointmentRequest implements Message
      * @param Attendee[] $attendees
      */
     public function __construct(
-        public AccountId $accountId,
         public DateTimeImmutable $appointmentDate,
         public DateTimeImmutable $requestDate,
         public string $appointmentSubject,

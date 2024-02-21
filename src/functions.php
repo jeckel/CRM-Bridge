@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use BackedEnum;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -23,5 +24,19 @@ if (! function_exists('App\new_uuid')) {
     function new_uuid(): string
     {
         return Uuid::uuid4()->toString();
+    }
+}
+
+if (! function_exists('App\enum_to_choices')) {
+    /**
+     * @param class-string<BackedEnum> $enumClass)
+     * @return array<string, int|string>
+     */
+    function enum_to_choices(string $enumClass, string $i18nPrefix): array
+    {
+        return array_combine(
+            array_map(fn(BackedEnum $service) => $i18nPrefix . '.' . $service->name, $enumClass::cases()),
+            array_map(fn(BackedEnum $service) => $service->value, $enumClass::cases())
+        );
     }
 }

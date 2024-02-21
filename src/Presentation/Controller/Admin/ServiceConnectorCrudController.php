@@ -3,22 +3,22 @@
 namespace App\Presentation\Controller\Admin;
 
 use App\Component\Shared\ValueObject\Service;
-use App\Infrastructure\Doctrine\Entity\AccountService;
+use App\Infrastructure\Doctrine\Entity\ServiceConnector;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Override;
 
+use function App\enum_to_choices;
 use function App\new_uuid;
 
-class AccountServiceCrudController extends AbstractCrudController
+class ServiceConnectorCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return AccountService::class;
+        return ServiceConnector::class;
     }
 
     #[Override]
@@ -37,11 +37,8 @@ class AccountServiceCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('account', 'config.field.account')
-                ->setPermission('ROLE_SUPER_ADMIN')
-                ->hideOnForm(),
             ChoiceField::new('service', 'services.field.service_type')
-                ->setChoices(['services.available_services.' . Service::CAL_DOT_COM->name => Service::CAL_DOT_COM->value]),
+                ->setChoices(enum_to_choices(Service::class, 'services.available_services')),
             TextField::new('accessToken', 'services.field.access_token')
                 ->onlyOnDetail(),
             BooleanField::new('enabled', 'services.field.enabled'),
@@ -55,7 +52,7 @@ class AccountServiceCrudController extends AbstractCrudController
     #[Override]
     public function createEntity(string $entityFqcn)
     {
-        /** @var AccountService $entity */
+        /** @var ServiceConnector $entity */
         $entity = parent::createEntity($entityFqcn);
         $entity->setAccessToken(new_uuid());
         return $entity;

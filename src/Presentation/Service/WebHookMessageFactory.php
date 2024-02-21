@@ -47,7 +47,6 @@ readonly class WebHookMessageFactory
             );
         }
         return new AppointmentRequest(
-            accountId: $webhook->getAccountId(),
             appointmentDate: new DateTimeImmutable($payload['payload']['startTime']),
             requestDate: $webhook->getCreatedAt(),
             appointmentSubject: $payload['payload']['title'],

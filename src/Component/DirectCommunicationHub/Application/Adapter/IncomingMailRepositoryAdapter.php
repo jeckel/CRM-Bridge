@@ -24,7 +24,6 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
     public function __construct(
         private MailRepository $repository,
         private ContactRepository $contactRepository,
-        private ContextManager $context,
         private MailContextManager $mailContext
     ) {}
 
@@ -32,8 +31,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
     public function save(IncomingMail $incomingMail): void
     {
         $mail = $this->repository->findOneBy([
-            'id' => $incomingMail->mailId->id(),
-            'account' => $this->context->getAccountReference()
+            'id' => $incomingMail->mailId->id()
         ]) ?? (new Mail())
             ->setId($incomingMail->mailId->id())
             ->setImapConfig($this->mailContext->getImapConfigReference());
@@ -43,7 +41,6 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             ->setFromName($incomingMail->fromName)
             ->setFromAddress((string) $incomingMail->fromAddress)
             ->setToString($incomingMail->toString)
-            ->setAccount($this->context->getAccountReference())
             ->setFolder($incomingMail->folder)
             ->setTextPlain($incomingMail->textPlain ?? '')
             ->setTextHtml($incomingMail->textHtml ?? '');
@@ -58,8 +55,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
     public function findByAuthorEmail(Email $authorEmail): iterable
     {
         $mails = $this->repository->findBy([
-            'fromAddress' => (string) $authorEmail,
-            'account' => $this->context->getAccountReference()
+            'fromAddress' => (string) $authorEmail
         ]);
         foreach ($mails as $mail) {
             yield new IncomingMail(

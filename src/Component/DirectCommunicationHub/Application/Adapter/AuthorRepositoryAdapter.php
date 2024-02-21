@@ -19,16 +19,14 @@ use Override;
 readonly class AuthorRepositoryAdapter implements AuthorRepository
 {
     public function __construct(
-        private ContactRepository $repository,
-        private ContextManager $context
+        private ContactRepository $repository
     ) {}
 
     #[Override]
     public function findByEmail(Email $email): ?Author
     {
         $contact = $this->repository->findOneBy([
-            'email' => (string) $email,
-            'account' => $this->context->getAccountReference()
+            'email' => (string) $email
         ]);
         if (null === $contact) {
             return null;

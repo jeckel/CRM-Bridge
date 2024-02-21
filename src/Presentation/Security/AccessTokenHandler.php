@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Security;
 
-use App\Infrastructure\Doctrine\Repository\AccountServiceRepository;
+use App\Infrastructure\Doctrine\Repository\ServiceConnectorRepository;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 readonly class AccessTokenHandler implements AccessTokenHandlerInterface
 {
     public function __construct(
-        private AccountServiceRepository $repository
+        private ServiceConnectorRepository $repository
     ) {}
 
     public function getUserBadgeFrom(string $accessToken): UserBadge
