@@ -43,7 +43,8 @@ class ContactCrudController extends AbstractCrudController
     {
         if ($pageName === Crud::PAGE_INDEX) {
             yield TextField::new('displayName');
-            yield EmailField::new('email');
+            yield EmailField::new('email', 'contact.field.primary_email')
+                ->setTemplatePath('admin/field/contact_primary_email.html.twig');
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
             yield TextField::new('addressBook');
@@ -52,12 +53,15 @@ class ContactCrudController extends AbstractCrudController
         if ($pageName === Crud::PAGE_DETAIL) {
             yield FormField::addTab('contact.tab.summary', 'fas fa-id-card');
             yield TextField::new('displayName');
-            yield EmailField::new('email');
+            yield EmailField::new('email', 'contact.field.primary_email')
+                ->setTemplatePath('admin/field/contact_primary_email.html.twig');
+            yield TextField::new('email', 'contact.field.secondary_emails')
+                ->setTemplatePath('admin/field/contact_secondary_emails.html.twig');
             yield TextField::new('firstName');
             yield TextField::new('lastName');
             yield TelephoneField::new('phoneNumber');
             yield AssociationField::new('company');
-            yield TextField::new('addressBook');
+            yield AssociationField::new('addressBook');
 
             yield FormField::addTab('contact.tab.mails', 'fa fa-inbox');
             yield AssociationField::new('mails')
@@ -73,7 +77,6 @@ class ContactCrudController extends AbstractCrudController
 
         if ($pageName === Crud::PAGE_EDIT || $pageName === Crud::PAGE_NEW) {
             yield TextField::new('displayName');
-            yield EmailField::new('email');
             yield TextField::new('firstName');
             yield TextField::new('lastName');
             yield TelephoneField::new('phoneNumber');

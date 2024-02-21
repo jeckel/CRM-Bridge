@@ -9,8 +9,9 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\EventSubscriber;
 
+use App\Component\ContactManagment\Application\Dto\ContactDto;
+use App\Component\ContactManagment\Application\Service\UpsertContactManager;
 use App\Component\ContactManagment\Domain\Service\AppointmentService;
-use App\Component\ContactManagment\Domain\Service\ContactProvider;
 use App\Component\Shared\Event\AppointmentCreated;
 use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,8 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 readonly class AppointmentCreatedSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private ContactProvider $contactProvider,
-        private AppointmentService $appointmentService
+        private AppointmentService $appointmentService,
+        private UpsertContactManager $upsertContactManager
     ) {}
 
     #[Override]
@@ -32,12 +33,15 @@ readonly class AppointmentCreatedSubscriber implements EventSubscriberInterface
 
     public function onAppointmentCreated(AppointmentCreated $event): void
     {
-        $contact = $this->contactProvider->findOrCreate(
-            firstName: null,
-            lastName: null,
-            displayName: $event->attendeeName,
-            email: $event->attendeeEmail,
-            phoneNumber: null
+        $contact = $this->upsertContactManager->upsertContact(
+            data: new ContactDto(
+                displayName: $event->attendeeName,
+                firstName: null,
+                lastName: null,
+                emailAddress: $event->attendeeEmail,
+                phoneNumber: null,
+                company: null
+            )
         );
 
         $this->appointmentService->addAppointmentRequest(

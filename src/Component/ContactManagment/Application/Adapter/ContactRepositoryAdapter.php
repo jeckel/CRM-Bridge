@@ -12,6 +12,7 @@ namespace App\Component\ContactManagment\Application\Adapter;
 use App\Component\ContactManagment\Application\Mapper\ContactMapper;
 use App\Component\ContactManagment\Domain\Entity\Contact;
 use App\Component\ContactManagment\Domain\Port\ContactRepository;
+use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
@@ -35,9 +36,7 @@ readonly class ContactRepositoryAdapter implements ContactRepository
     #[Override]
     public function findByEmail(Email $email): ?Contact
     {
-        $contact = $this->repository->findOneBy([
-            'email' => $email->getEmail()
-        ]);
+        $contact = $this->repository->findByEmail((string) $email);
         if (null === $contact) {
             return null;
         }
@@ -54,5 +53,13 @@ readonly class ContactRepositoryAdapter implements ContactRepository
             return null;
         }
         return $this->contactMapper->mapToDomain($contact);
+    }
+
+    #[Override]
+    public function getById(ContactId $contactId): Contact
+    {
+        return $this->contactMapper->mapToDomain(
+            $this->repository->getById((string) $contactId)
+        );
     }
 }

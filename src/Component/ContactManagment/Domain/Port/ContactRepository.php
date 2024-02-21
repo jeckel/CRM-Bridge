@@ -9,11 +9,14 @@ declare(strict_types=1);
 namespace App\Component\ContactManagment\Domain\Port;
 
 use App\Component\ContactManagment\Domain\Entity\Contact;
+use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 
 interface ContactRepository
 {
     public function save(Contact $contact): void;
+
+    public function getById(ContactId $contactId): Contact;
 
     public function findByEmail(EMail $email): ?Contact;
 

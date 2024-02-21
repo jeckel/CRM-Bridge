@@ -1,0 +1,5 @@
+{% for address in entity.instance.emailAddresses %}
+    {% if address.emailType.value == 'secondary' %}
+        <li><a href="mailto:{{ address.emailAddress }}">{{ address.emailAddress }}</a></li>
+    {% endif %}
+{% endfor %}

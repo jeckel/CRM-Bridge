@@ -2,48 +2,44 @@
 
 /**
  * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
- * Created at: 05/02/2024
+ * Created at: 21/02/2024
  */
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\Dto;
+namespace App\Component\ContactManagment\Application\Command;
 
-use App\Component\ContactManagment\Domain\Port\VCard as DomainVCard;
+use App\Component\Shared\Identity\AddressBookId;
 use App\Component\Shared\ValueObject\Email;
-use Override;
 use Sabre\VObject\Component\VCard;
 
-readonly class VCardDto implements DomainVCard
+readonly class UpsertContactVCard
 {
     public function __construct(
-        private string $uri,
-        private string $etag,
-        private VCard $card
+        public string $vCardUri,
+        public string $vCardEtag,
+        public VCard $card,
+        public AddressBookId $addressBookId
     ) {}
 
-    #[Override]
     public function firstName(): ?string
     {
         /** @phpstan-ignore-next-line  */
         return explode(';', (string) $this->card->N)[1];
     }
 
-    #[Override]
     public function lastName(): ?string
     {
         /** @phpstan-ignore-next-line  */
         return explode(';', (string) $this->card->N)[0];
     }
 
-    #[Override]
     public function displayName(): string
     {
         /** @phpstan-ignore-next-line  */
         return (string) $this->card->FN;
     }
 
-    #[Override]
     public function email(): ?Email
     {
         /** @phpstan-ignore-next-line  */
@@ -54,14 +50,12 @@ readonly class VCardDto implements DomainVCard
         return new Email((string) $email);
     }
 
-    #[Override]
     public function phoneNumber(): ?string
     {
         /** @phpstan-ignore-next-line  */
         return (string) $this->card->TEL;
     }
 
-    #[\Override]
     public function company(): ?string
     {
         /** @phpstan-ignore-next-line  */
@@ -69,16 +63,8 @@ readonly class VCardDto implements DomainVCard
         return $company === '' ? null : $company;
     }
 
-
-    #[Override]
-    public function vCardUri(): string
-    {
-        return $this->uri;
-    }
-
-    #[Override]
     public function vCardEtag(): string
     {
-        return $this->etag;
+        return $this->vCardEtag;
     }
 }
