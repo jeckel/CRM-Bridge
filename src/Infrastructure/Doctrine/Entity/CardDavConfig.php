@@ -14,17 +14,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use RuntimeException;
 use Stringable;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: CardDavConfigRepository::class)]
-class CardDavConfig implements Stringable, AccountAwareInterface
+class CardDavConfig implements Stringable
 {
-    use AccountAwareTrait;
-
     #[ORM\Id]
     #[ORM\Column(name: 'card_dav_config_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -46,22 +43,12 @@ class CardDavConfig implements Stringable, AccountAwareInterface
      * @var Collection<string, CardDavAddressBook> $addressBooks
      */
     #[ORM\OneToMany(
-        mappedBy: 'cardDavConfig',
         targetEntity: CardDavAddressBook::class,
+        mappedBy: 'cardDavConfig',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
     private Collection $addressBooks;
-
-    #[ORM\ManyToOne(
-        inversedBy: 'cardDavConfigs'
-    )]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
 
     public function __construct()
     {

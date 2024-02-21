@@ -46,17 +46,6 @@ class Account implements Stringable, SlugAwareInterface
     private Collection $users;
 
     /**
-     * @var Collection<string, CardDavConfig> $cardDavConfigs
-     */
-    #[ORM\OneToMany(
-        targetEntity: CardDavConfig::class,
-        mappedBy: 'account',
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    private Collection $cardDavConfigs;
-
-    /**
      * @var Collection<string, ImapConfig> $imapConfigs
      */
     #[ORM\OneToMany(
@@ -70,7 +59,6 @@ class Account implements Stringable, SlugAwareInterface
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->cardDavConfigs = new ArrayCollection();
         $this->imapConfigs = new ArrayCollection();
     }
 
@@ -147,36 +135,6 @@ class Account implements Stringable, SlugAwareInterface
             // set the owning side to null (unless already changed)
             if ($user->getAccount() === $this) {
                 $user->setAccount(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<string, CardDavConfig>
-     */
-    public function getCardDavConfigs(): Collection
-    {
-        return $this->cardDavConfigs;
-    }
-
-    public function addCardDavConfig(CardDavConfig $cardDavConfig): static
-    {
-        if (!$this->cardDavConfigs->contains($cardDavConfig)) {
-            $this->cardDavConfigs->add($cardDavConfig);
-            $cardDavConfig->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCardDavConfig(CardDavConfig $cardDavConfig): static
-    {
-        if ($this->cardDavConfigs->removeElement($cardDavConfig)) {
-            // set the owning side to null (unless already changed)
-            if ($cardDavConfig->getAccount() === $this) {
-                $cardDavConfig->setAccount(null);
             }
         }
 
