@@ -18,10 +18,8 @@ use Stringable;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: ImapConfigRepository::class)]
-class ImapConfig implements Stringable, AccountAwareInterface
+class ImapConfig implements Stringable
 {
-    use AccountAwareTrait;
-
     #[ORM\Id]
     #[ORM\Column(name: 'imap_config_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -38,16 +36,6 @@ class ImapConfig implements Stringable, AccountAwareInterface
 
     #[ORM\Column(length: 255, nullable: false)]
     private string $password;
-
-    #[ORM\ManyToOne(
-        inversedBy: 'imapConfigs'
-    )]
-    #[ORM\JoinColumn(
-        name: 'account_id',
-        referencedColumnName: 'account_id',
-        nullable: false
-    )]
-    private ?Account $account = null;
 
     /**
      * @var array<int, string>

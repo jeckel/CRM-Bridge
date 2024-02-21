@@ -45,21 +45,10 @@ class Account implements Stringable, SlugAwareInterface
     )]
     private Collection $users;
 
-    /**
-     * @var Collection<string, ImapConfig> $imapConfigs
-     */
-    #[ORM\OneToMany(
-        targetEntity: ImapConfig::class,
-        mappedBy: 'account',
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    private Collection $imapConfigs;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->imapConfigs = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -135,36 +124,6 @@ class Account implements Stringable, SlugAwareInterface
             // set the owning side to null (unless already changed)
             if ($user->getAccount() === $this) {
                 $user->setAccount(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<string, ImapConfig>
-     */
-    public function getImapConfigs(): Collection
-    {
-        return $this->imapConfigs;
-    }
-
-    public function addImapConfig(ImapConfig $imapConfig): static
-    {
-        if (!$this->imapConfigs->contains($imapConfig)) {
-            $this->imapConfigs->add($imapConfig);
-            $imapConfig->setAccount($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImapConfig(ImapConfig $imapConfig): static
-    {
-        if ($this->imapConfigs->removeElement($imapConfig)) {
-            // set the owning side to null (unless already changed)
-            if ($imapConfig->getAccount() === $this) {
-                $imapConfig->setAccount(null);
             }
         }
 

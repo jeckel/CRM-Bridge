@@ -24,7 +24,7 @@ readonly class ContactCreatedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-//            ContactCreated::class => 'onContactCreated',
+            ContactCreated::class => 'onContactCreated',
         ];
     }
 

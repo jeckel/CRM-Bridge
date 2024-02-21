@@ -64,9 +64,6 @@ class ImapConfigCrudController extends AbstractCrudController
             ->onlyOnForms()
             ->setFormType(PasswordType::class)
             ->setRequired($pageName === Crud::PAGE_NEW);
-        yield AssociationField::new('account', 'config.field.account')
-            ->setPermission('ROLE_SUPER_ADMIN')
-            ->hideOnForm();
         yield ArrayField::new('folders', 'config.imap.field.synced_folders')
             ->hideOnForm();
     }
