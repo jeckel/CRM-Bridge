@@ -27,6 +27,7 @@ trait DashboardMenuTrait
         yield MenuItem::linkToCrud('menu.contacts', 'fas fa-id-card', Contact::class);
         yield MenuItem::linkToCrud('menu.companies', 'fa fa-building', Company::class);
         yield MenuItem::linkToCrud('menu.mail', 'fa fa-inbox', Mail::class);
+        yield MenuItem::linkToRoute('menu.webmail', 'fa fa-inbox', 'webmail_index');
         yield MenuItem::section('menu.admin');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([

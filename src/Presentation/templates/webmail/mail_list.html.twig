@@ -1,0 +1,20 @@
+<div>{{ imapConfigId }}</div>
+<div>{{ folder }}</div>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Subject</th>
+        <th>From</th>
+    </tr>
+    </thead>
+</table>
+
+{% for mailId in mailIds %}
+<div
+    hx-get="{{ path('webmail_mail_row', {imapConfigId, folder, mailId}) }}"
+    hx-trigger="revealed"
+    class="row">
+    <div class="col-1">{{ mailId }}</div>
+</div>
+{% endfor %}

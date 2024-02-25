@@ -1,0 +1,31 @@
+<div class="accordion" id="imapAccounts">
+{% for imapAccount in imapAccounts %}
+    <h2 class="accordion-header">
+        <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
+            aria-expanded="true"
+            aria-controls="collapseOne"
+        >
+            {{ imapAccount.imap.name }}
+        </button>
+    </h2>
+    <div
+        id="collapseOne"
+        class="accordion-collapse collapse show"
+        data-bs-parent="#imapAccounts">
+        <div class="accordion-body">
+            <table class="table table-hover">
+        {% for folder in imapAccount.folders %}
+            <tr><td
+                hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.imap.id, folderPath: folder.shortpath }) }}"
+                hx-target="#mailList"
+                >{{ folder.shortpath }}</td></tr>
+        {% endfor %}
+        </table>
+        </div>
+    </div>
+{% endfor %}
+</div>

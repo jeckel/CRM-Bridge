@@ -1,0 +1,20 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block javascripts %}
+{% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
+
+
+{% block page_content %}
+<h1>WebMail</h1>
+    <div class="row">
+        <div
+            class="col-md-2"
+            hx-get="{{ path('webmail_folders') }}"
+            hx-trigger="load delay:1s"
+        >Directories
+        </div>
+        <div class="col-md-10" id="mailList">Mails</div>
+    </div>
+{% endblock %}
