@@ -27,12 +27,12 @@ class ReplayWebhookAction extends AbstractController
     )]
     public function __invoke(
         string $webhookId,
-        MessageBusInterface $messageBus,
-        IncomingWebhookRepository $repository,
-        WebHookMessageFactory $messageFactory,
+        //        MessageBusInterface $messageBus,
+        //        IncomingWebhookRepository $repository,
+        //        WebHookMessageFactory $messageFactory,
         AdminUrlGenerator $urlGenerator
     ): Response {
-        $messageBus->dispatch($messageFactory->from($repository->getById($webhookId)));
+        //        $messageBus->dispatch($messageFactory->from($repository->getById($webhookId)));
         $this->addFlash('success', 'Webhook re-added to the queue.');
         return $this->redirect(
             $urlGenerator->setAction(Action::DETAIL)

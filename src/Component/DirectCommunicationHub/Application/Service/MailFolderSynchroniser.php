@@ -8,29 +8,44 @@ declare(strict_types=1);
 
 namespace App\Component\DirectCommunicationHub\Application\Service;
 
-use App\Component\Shared\Identity\ImapConfigId;
-use App\Component\Shared\Identity\MailId;
-use App\Infrastructure\Doctrine\Entity\ImapConfig;
+use App\Infrastructure\Doctrine\Entity\ImapFolder;
+use App\Infrastructure\Doctrine\Repository\ImapFolderRepository;
 use App\Infrastructure\Imap\ImapMailbox;
-use App\Presentation\Async\Message\SyncMail;
-use Symfony\Component\Messenger\MessageBusInterface;
+use App\Infrastructure\Imap\Mail\MailProvider;
+use JeckelLab\Contract\Infrastructure\System\Clock;
 
 readonly class MailFolderSynchroniser
 {
     public function __construct(
-        private MessageBusInterface $messageBus,
+        private MailProvider $mailProvider,
+        private ImapFolderRepository $folderRepo,
+        private Clock $clock
     ) {}
 
-    public function syncFolder(ImapConfig $imapConfig, string $folder): void
+    public function syncFolderEntity(ImapFolder $folder): void
     {
-        $mailbox = ImapMailbox::fromImapConfig($imapConfig);
-        $mailsIds = $mailbox->searchFolder($folder);
-        foreach($mailsIds as $mailId) {
-            $this->messageBus->dispatch(new SyncMail(
-                mailId: MailId::from($mailId),
-                imapConfigId: ImapConfigId::from((string) $imapConfig->getId()),
-                folder: $folder
-            ));
+        $account = $folder->getImapAccount();
+        $mailbox = ImapMailbox::fromImapAccount($account);
+
+        $searchCriteria = 'ALL';
+        if (null !== $folder->getLastSyncUid()) {
+            $searchCriteria = sprintf('SEARCH UID %d:*', $folder->getLastSyncUid());
         }
+        $mailIds = $mailbox->searchFolder($folder->getName(), $searchCriteria);
+        sort($mailIds);
+
+        $count = 0;
+        foreach($mailIds as $mailId) {
+            $this->mailProvider->getMail($account, $folder->getName(), $mailId)->sync();
+            $folder->setLastSyncUid($mailId);
+            $count++;
+            if ($count % 20 === 0) {
+                $folder->setLastSyncDate($this->clock->now());
+                $this->folderRepo->persist($folder);
+            }
+        }
+
+        $folder->setLastSyncDate($this->clock->now());
+        $this->folderRepo->persist($folder);
     }
 }

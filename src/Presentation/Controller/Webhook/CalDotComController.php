@@ -30,8 +30,8 @@ class CalDotComController extends AbstractWebhookController
     #[IsGranted('ROLE_CAL_DOT_COM', statusCode: 403, exceptionCode: 10010)]
     public function __invoke(
         Request $request,
-        MessageBusInterface $messageBus,
-        WebHookMessageFactory $messageFactory,
+        //        MessageBusInterface $messageBus,
+        //        WebHookMessageFactory $messageFactory,
         Clock $clock
     ): Response {
         $content = $request->toArray();
@@ -39,17 +39,18 @@ class CalDotComController extends AbstractWebhookController
         $createdAt = isset($content['createdAt']) ? new DateTimeImmutable($content['createdAt']) : $clock->now();
         $event = TriggerEvent::tryFrom($content['triggerEvent']);
 
-        $webhook = $this->persistWebhook(
+        //        $webhook = $this->persistWebhook(
+        $this->persistWebhook(
             source: $source,
             createdAt: $createdAt,
             event: $event->value ?? $content['triggerEvent'],
             content: $content
         );
-        if ($event !== null) {
-            $messageBus->dispatch(
-                $messageFactory->from($webhook)
-            );
-        }
+        //        if ($event !== null) {
+        //            $messageBus->dispatch(
+        //                $messageFactory->from($webhook)
+        //            );
+        //        }
         return $this->json(['status' => 'ok']);
     }
 }

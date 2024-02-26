@@ -9,19 +9,22 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
-use App\Infrastructure\Doctrine\Repository\ImapConfigRepository;
+use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use SensitiveParameter;
 use Stringable;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
-#[ORM\Entity(repositoryClass: ImapConfigRepository::class)]
-class ImapConfig implements Stringable
+#[ORM\Entity(repositoryClass: ImapAccountRepository::class)]
+class ImapAccount implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'imap_config_id', type: "uuid", unique: true)]
+    #[ORM\Column(name: 'imap_account_id', type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface|string $id;
 
@@ -38,17 +41,26 @@ class ImapConfig implements Stringable
     private string $password;
 
     /**
-     * @var array<int, string>
+     * @var Collection<int, ImapFolder> $folders
      */
-    #[ORM\Column(type: 'json')]
-    private array $folders = [];
+    #[ORM\OneToMany(
+        targetEntity: ImapFolder::class,
+        mappedBy: 'imapAccount',
+        cascade: ['persist']
+    )]
+    private Collection $folders;
+
+    public function __construct()
+    {
+        $this->folders = new ArrayCollection();
+    }
 
     public function getId(): UuidInterface|string
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): ImapConfig
+    public function setId(UuidInterface|string $id): ImapAccount
     {
         $this->id = $id;
         return $this;
@@ -59,7 +71,7 @@ class ImapConfig implements Stringable
         return $this->name;
     }
 
-    public function setName(string $name): ImapConfig
+    public function setName(string $name): ImapAccount
     {
         $this->name = $name;
         return $this;
@@ -70,7 +82,7 @@ class ImapConfig implements Stringable
         return $this->uri;
     }
 
-    public function setUri(string $uri): ImapConfig
+    public function setUri(string $uri): ImapAccount
     {
         $this->uri = $uri;
         return $this;
@@ -81,7 +93,7 @@ class ImapConfig implements Stringable
         return $this->login;
     }
 
-    public function setLogin(string $login): ImapConfig
+    public function setLogin(string $login): ImapAccount
     {
         $this->login = $login;
         return $this;
@@ -92,28 +104,18 @@ class ImapConfig implements Stringable
         return $this->password;
     }
 
-    public function setPassword(string $password): ImapConfig
+    public function setPassword(#[SensitiveParameter] string $password): ImapAccount
     {
         $this->password = $password;
         return $this;
     }
 
     /**
-     * @return array<int, string>
+     * @return Collection<int, ImapFolder>
      */
-    public function getFolders(): array
+    public function getFolders(): Collection
     {
         return $this->folders;
-    }
-
-    /**
-     * @param array<int, string> $folders
-     * @return $this
-     */
-    public function setFolders(array $folders): ImapConfig
-    {
-        $this->folders = $folders;
-        return $this;
     }
 
     public function __toString()

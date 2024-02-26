@@ -74,10 +74,10 @@ class Contact implements Stringable
     private Collection $emailAddresses;
 
     /**
-     * @var Collection<int, Mail> $mails
+     * @var Collection<int, ImapMessage> $mails
      */
     #[ORM\OneToMany(
-        targetEntity: Mail::class,
+        targetEntity: ImapMessage::class,
         mappedBy: 'contact',
         orphanRemoval: false
     )]
@@ -240,14 +240,14 @@ class Contact implements Stringable
     }
 
     /**
-     * @return Collection<int, Mail>
+     * @return Collection<int, ImapMessage>
      */
     public function getMails(): Collection
     {
         return $this->mails;
     }
 
-    public function addMail(Mail $mail): static
+    public function addMail(ImapMessage $mail): static
     {
         if (!$this->mails->contains($mail)) {
             $this->mails->add($mail);
@@ -257,7 +257,7 @@ class Contact implements Stringable
         return $this;
     }
 
-    public function removeMail(Mail $mail): static
+    public function removeMail(ImapMessage $mail): static
     {
         if ($this->mails->removeElement($mail)) {
             // set the owning side to null (unless already changed)

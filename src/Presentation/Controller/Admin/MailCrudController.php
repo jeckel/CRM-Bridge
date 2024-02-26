@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Infrastructure\Doctrine\Entity\Mail;
+use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -16,7 +16,7 @@ class MailCrudController extends AbstractCrudController
     #[Override]
     public static function getEntityFqcn(): string
     {
-        return Mail::class;
+        return ImapMessage::class;
     }
 
     #[Override]
@@ -36,20 +36,20 @@ class MailCrudController extends AbstractCrudController
         $createContact = Action::new('create_contact', 'mail.action.create_contact')
             ->linkToRoute(
                 routeName: 'create_contact_from_mail_author',
-                routeParameters: static fn(Mail $mail): array => ['mailId' => $mail->getId()]
+                routeParameters: static fn(ImapMessage $mail): array => ['mailId' => $mail->getId()]
             )
             ->setIcon('fas fa-user-plus')
             ->setCssClass('btn btn-success')
-            ->displayIf(static fn(Mail $mail): bool => $mail->getContact() === null)
+            ->displayIf(static fn(ImapMessage $mail): bool => $mail->getContact() === null)
         ;
         $linkToContact = Action::new('attach_contact', 'mail.action.attach_contact')
             ->linkToRoute(
                 routeName: 'attach_contact_from_mail_author',
-                routeParameters: static fn(Mail $mail): array => ['mailId' => $mail->getId()]
+                routeParameters: static fn(ImapMessage $mail): array => ['mailId' => $mail->getId()]
             )
             ->setIcon('fas fa-user-plus')
             ->setCssClass('btn btn-success')
-            ->displayIf(static fn(Mail $mail): bool => $mail->getContact() === null)
+            ->displayIf(static fn(ImapMessage $mail): bool => $mail->getContact() === null)
         ;
         return $actions
             ->add(Crud::PAGE_DETAIL, $createContact)
