@@ -14,15 +14,15 @@ use App\Component\DirectCommunicationHub\Domain\Port\IncomingMailRepository;
 use App\Component\Shared\Helper\ContextManager;
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Mail;
+use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
-use App\Infrastructure\Doctrine\Repository\MailRepository;
+use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use Override;
 
 readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
 {
     public function __construct(
-        private MailRepository $repository,
+        private ImapMessageRepository $repository,
         private ContactRepository $contactRepository,
         private MailContextManager $mailContext
     ) {}
@@ -32,9 +32,9 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
     {
         $mail = $this->repository->findOneBy([
             'id' => $incomingMail->mailId->id()
-        ]) ?? (new Mail())
+        ]) ?? (new ImapMessage())
             ->setId($incomingMail->mailId->id())
-            ->setImapConfig($this->mailContext->getImapConfigReference());
+            ->setImapAccount($this->mailContext->getImapConfigReference());
         $mail->setMessageId($incomingMail->messageId)
             ->setDate($incomingMail->date)
             ->setSubject($incomingMail->subject)
@@ -59,7 +59,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
         ]);
         foreach ($mails as $mail) {
             yield new IncomingMail(
-                MailId::from($mail->getId()),
+                MailId::from((string) $mail->getId()),
                 $mail->getMessageId(),
                 $mail->getFolder(),
                 $mail->getDate(),

@@ -13,7 +13,7 @@ use App\Component\ContactManagment\Application\Command\AddEmailAddress;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact;
-use App\Infrastructure\Doctrine\Repository\MailRepository;
+use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use App\Presentation\Controller\Admin\MailCrudController;
 use App\Presentation\Form\SelectContactFormType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -29,7 +29,7 @@ class AttachContactFromMailAuthor extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly AdminUrlGenerator $urlGenerator,
-        private readonly MailRepository $mailRepository
+        private readonly ImapMessageRepository $mailRepository
     ) {}
 
     #[Route(

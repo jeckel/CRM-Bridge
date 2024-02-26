@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Imap;
 
-use App\Infrastructure\Doctrine\Entity\ImapConfig;
+use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use PhpImap\IncomingMail;
 use PhpImap\Mailbox;
 
@@ -23,7 +23,7 @@ class ImapMailbox
         private readonly string $password,
     ) {}
 
-    public static function fromImapConfig(ImapConfig $imapConfig): ImapMailbox
+    public static function fromImapAccount(ImapAccount $imapConfig): ImapMailbox
     {
         return new ImapMailbox(
             sprintf('{%s:993/imap/ssl}INBOX', $imapConfig->getUri()),
@@ -45,11 +45,15 @@ class ImapMailbox
     }
 
     /**
-     * @return list<array{fullpath: string, attributes: mixed, delimiter: mixed, shortpath: false|string}>
+     * @return list<ImapFolder>
      */
     public function listFolders(): array
     {
-        return $this->getMailbox()->getMailboxes('*');
+        return array_map(
+            /** @phpstan-ignore-next-line  */
+            static fn(array $folder): ImapFolder => new ImapFolder(... $folder),
+            $this->getMailbox()->getMailboxes('*')
+        );
     }
 
     /**

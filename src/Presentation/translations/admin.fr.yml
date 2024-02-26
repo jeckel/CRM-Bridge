@@ -110,6 +110,7 @@ menu:
   services: Services
   setup_options: Options
   super_admin: Super Admin
+  webmail: WebMail
   workers: Workers
 
 services:

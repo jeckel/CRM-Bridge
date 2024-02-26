@@ -12,7 +12,7 @@ namespace App\Presentation\Controller\Admin\Action;
 use App\Component\ContactManagment\Application\Command\UpsertContact;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Repository\MailRepository;
+use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use App\Presentation\Controller\Admin\MailCrudController;
 use App\Presentation\Form\ContactFormType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -28,7 +28,7 @@ class CreateContactFromMailAuthor extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly AdminUrlGenerator $urlGenerator,
-        private readonly MailRepository $mailRepository
+        private readonly ImapMessageRepository $mailRepository
     ) {}
 
     #[Route(

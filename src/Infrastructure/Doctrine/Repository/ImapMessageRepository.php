@@ -2,27 +2,27 @@
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\Mail;
+use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Mail>
+ * @extends ServiceEntityRepository<ImapMessage>
  *
- * @method Mail|null find($id, $lockMode = null, $lockVersion = null)
- * @method Mail|null findOneBy(array $criteria, array $orderBy = null)
- * @method Mail[]    findAll()
- * @method Mail[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ImapMessage|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ImapMessage|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ImapMessage[]    findAll()
+ * @method ImapMessage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MailRepository extends ServiceEntityRepository
+class ImapMessageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Mail::class);
+        parent::__construct($registry, ImapMessage::class);
     }
 
-    public function persist(Mail $mail): void
+    public function persist(ImapMessage $mail): void
     {
         $this->getEntityManager()->persist($mail);
         $this->getEntityManager()->flush();
@@ -52,11 +52,11 @@ class MailRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function getById(string $mailId): Mail
+    public function getById(string $mailId): ImapMessage
     {
         $mail = $this->find($mailId);
         if (null === $mail) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(Mail::class, [$mailId]);
+            throw EntityNotFoundException::fromClassNameAndIdentifier(ImapMessage::class, [$mailId]);
         }
         return $mail;
     }
