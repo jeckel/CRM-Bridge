@@ -1,0 +1,28 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-3"
+         hx-get="{{ path('dashboard_worker_status') }}"
+         hx-trigger="revealed"
+    >
+        <a href="#">
+            <div id="count-worker-card" class="card text-white m-3 text-center shadow-lg">
+                <div class="card-header"><i class="fas fa-cogs fa-5x text-white"></i></div>
+                <div class="card-body">
+                    <h4 class="card-title text-white">
+                        <span id="count-worker"></span>
+                    </h4>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}
