@@ -12,9 +12,8 @@
         <div
             class="col-md-2"
             hx-get="{{ path('webmail_folders') }}"
-            hx-trigger="load delay:1s"
-        >Directories
-        </div>
-        <div class="col-md-10" id="mailList">Mails</div>
+            hx-trigger="revealed"
+        ></div>
+        <div class="col-md-10" id="mailList"></div>
     </div>
 {% endblock %}

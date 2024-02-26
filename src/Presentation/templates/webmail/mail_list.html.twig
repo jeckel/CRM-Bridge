@@ -1,20 +1,31 @@
-<div>{{ imapConfigId }}</div>
-<div>{{ folder }}</div>
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th>Date</th>
-        <th>Subject</th>
-        <th>From</th>
-    </tr>
-    </thead>
-</table>
+{#<div>{{ imapConfigId }}</div>#}
+{#<div>{{ folder }}</div>#}
 
-{% for mailId in mailIds %}
-<div
-    hx-get="{{ path('webmail_mail_row', {imapConfigId, folder, mailId}) }}"
-    hx-trigger="revealed"
-    class="row">
-    <div class="col-1">{{ mailId }}</div>
+<div class="row">
+    <div class="col-2">Date</div>
+    <div class="col-3">From</div>
+    <div class="col-6">Subject</div>
+</div>
+
+{% for mail in mails %}
+<div class="row"
+     hx-get="{{ path('webmail_mail', { mailId: mail.id }) }}"
+     hx-target="#mailList"
+>
+    <div class="col-2"><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></div>
+    <div class="col-3">
+        {% if mail.authorId %}
+            <a href="{{ ea_url()
+                .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
+                .setAction('detail')
+                .setEntityId(mail.authorId)
+            }}" title="{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;">
+                <span class="fas fa-id-card"></span> {{ mail.authorName }}
+            </a>
+        {% else %}
+            <span>{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;</span>
+        {% endif %}</div>
+    <div class="col-6">{{ mail.subject }}</div>
 </div>
 {% endfor %}
+

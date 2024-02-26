@@ -15,6 +15,7 @@ framework:
             failed: 'doctrine://default?queue_name=failed'
 
         routing:
+            App\Component\DirectCommunicationHub\Application\MessageHandler\SyncImapFolderMessage: async
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
 #            Symfony\Component\Notifier\Message\ChatMessage: async
 #            Symfony\Component\Notifier\Message\SmsMessage: async

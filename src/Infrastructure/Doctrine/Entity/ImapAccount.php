@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use SensitiveParameter;
@@ -39,10 +41,19 @@ class ImapAccount implements Stringable
     private string $password;
 
     /**
-     * @var array<int, string>
+     * @var Collection<int, ImapFolder> $folders
      */
-    #[ORM\Column(type: 'json')]
-    private array $folders = [];
+    #[ORM\OneToMany(
+        targetEntity: ImapFolder::class,
+        mappedBy: 'imapAccount',
+        cascade: ['persist']
+    )]
+    private Collection $folders;
+
+    public function __construct()
+    {
+        $this->folders = new ArrayCollection();
+    }
 
     public function getId(): UuidInterface|string
     {
@@ -100,21 +111,11 @@ class ImapAccount implements Stringable
     }
 
     /**
-     * @return array<int, string>
+     * @return Collection<int, ImapFolder>
      */
-    public function getFolders(): array
+    public function getFolders(): Collection
     {
         return $this->folders;
-    }
-
-    /**
-     * @param array<int, string> $folders
-     * @return $this
-     */
-    public function setFolders(array $folders): ImapAccount
-    {
-        $this->folders = $folders;
-        return $this;
     }
 
     public function __toString()

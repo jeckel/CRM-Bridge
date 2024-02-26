@@ -9,7 +9,7 @@
             aria-expanded="true"
             aria-controls="collapseOne"
         >
-            {{ imapAccount.imap.name }}
+            {{ imapAccount.name }}
         </button>
     </h2>
     <div
@@ -20,9 +20,9 @@
             <table class="table table-hover">
         {% for folder in imapAccount.folders %}
             <tr><td
-                hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.imap.id, folderPath: folder.shortpath }) }}"
+                hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.id, folderPath: folder.name|url_encode }) }}"
                 hx-target="#mailList"
-                >{{ folder.shortpath }}</td></tr>
+                >{{ folder.name }}</td></tr>
         {% endfor %}
         </table>
         </div>

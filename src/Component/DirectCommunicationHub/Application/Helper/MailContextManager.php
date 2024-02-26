@@ -11,7 +11,7 @@ namespace App\Component\DirectCommunicationHub\Application\Helper;
 
 use App\Component\Shared\Error\LogicError;
 use App\Component\Shared\Identity\ImapConfigId;
-use App\Infrastructure\Doctrine\Entity\ImapConfig;
+use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 
@@ -44,10 +44,10 @@ class MailContextManager
     /**
      * @throws ORMException
      */
-    public function getImapConfigReference(): ImapConfig
+    public function getImapConfigReference(): ImapAccount
     {
-        /** @var ImapConfig $imapConfigId */
-        $imapConfigId = $this->entityManager->getReference(ImapConfig::class, $this->getImapConfigId()->id());
+        /** @var ImapAccount $imapConfigId */
+        $imapConfigId = $this->entityManager->getReference(ImapAccount::class, $this->getImapConfigId()->id());
         return $imapConfigId;
     }
 }
