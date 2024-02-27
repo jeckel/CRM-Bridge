@@ -1,33 +1,19 @@
 {% trans_default_domain 'admin' %}
 {% set workerState = true %}
+{% set runningWorker = 0 %}
+{% set totalWorker = workers | length %}
 {% for worker in workers %}
-    {% if worker.state != 20 %}
-        {% set workerState = false %}
+    {% if worker.state == 20 %}
+        {% set runningWorker = runningWorker + 1 %}
     {% endif %}
 {% endfor %}
     <a href="{{ ea_url().setRoute('worker_list') }}">
-        <div id="count-worker-card" class="card text-white m-3 text-center shadow-lg {{ workerState ? "bg-success": "bg-danger" }}">
+        <div id="count-worker-card" class="card text-white m-3 text-center shadow-lg {{ (runningWorker == totalWorker) ? "bg-success": "bg-danger" }}">
             <div class="card-header"><i class="fas fa-cogs fa-5x text-white"></i></div>
             <div class="card-body">
                 <h4 class="card-title text-white">
-                    <span id="count-worker"></span> Workers
+                    <span id="count-worker"></span> Workers {{ runningWorker }} / {{ totalWorker }}
                 </h4>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>State</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for worker in workers %}
-                        <tr>
-                            <td><a href="{{ ea_url().setRoute('worker_details', {name: worker.name, group: worker.group}) }}">{{ worker.group }}:{{ worker.name }}</a></td>
-                            <td>{{ worker.getState.name }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
             </div>
         </div>
     </a>
