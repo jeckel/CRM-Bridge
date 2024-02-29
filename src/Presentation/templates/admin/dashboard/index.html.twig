@@ -1,0 +1,24 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
+
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-2 col-sd-4"
+        hx-get="{{ path('dashboard_parts_worker_status') }}"
+        hx-trigger="revealed"
+    >
+    </div>
+
+    <div class="col-md-2 col-sd-4"
+        hx-get="{{ path('dashboard_parts_messengers') }}"
+        hx-trigger="revealed"
+    >
+    </div>
+</div>
+{% endblock %}

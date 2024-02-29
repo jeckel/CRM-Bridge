@@ -24,3 +24,5 @@ menu:
     super_admin: Super Admin
     webmail: WebMail
     workers: Workers
+dashboard:
+  title: 'Dashboard'

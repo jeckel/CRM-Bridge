@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Controller\Dashboard;
+namespace App\Presentation\Controller\Admin\Dashboard;
 
 use Supervisor\Supervisor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class WorkerStatusAction extends AbstractController
 {
     #[Route(
-        path: '/dashboard/parts/workers',
+        path: '/admin/dashboard/parts/workers',
         name: 'dashboard_parts_worker_status',
         methods: ['GET']
     )]
@@ -25,7 +25,7 @@ class WorkerStatusAction extends AbstractController
         Supervisor $supervisor
     ): Response {
         return $this->render(
-            'dashboard/worker_status.html.twig',
+            'admin/dashboard/worker_status.html.twig',
             ['workers' => $supervisor->getAllProcesses()]
         );
     }
