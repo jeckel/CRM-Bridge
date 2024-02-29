@@ -14,7 +14,7 @@
                 <div class="col">
                     <div class="card-title">{{ mail.subject }}</div>
                     <div class="card-subtitle">
-                        {% if mail.contact %}#}
+                        {% if mail.contact %}
                             <a href="{{ ea_url()
                                 .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
                                 .setAction('detail')
@@ -39,9 +39,15 @@
                     <a href="{{ ea_url().setRoute('attach_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'mail.action.attach_contact'|trans }}</a>
                     {% endif %}
                     {% if mail.treated %}
-                        <a href="#" class="dropdown-item">{{ 'mail.action.mark_as_untreated'|trans }}</a>
+                        <a hx-put="{{ path('webmail_mark_as_untreated', { mailId: mail.id }) }}"
+                            hx-target="#mailList"
+                            href="{{ path('webmail_mark_as_untreated', { mailId: mail.id }) }}"
+                            class="dropdown-item">{{ 'mail.action.mark_as_untreated'|trans }}</a>
                     {% else %}
-                        <a href="#" class="dropdown-item">{{ 'mail.action.mark_as_treated'|trans }}</a>
+                        <a hx-put="{{ path('webmail_mark_as_treated', { mailId: mail.id }) }}"
+                            hx-target="#mailList"
+                            href="{{ path('webmail_mark_as_treated', { mailId: mail.id }) }}"
+                            class="dropdown-item">{{ 'mail.action.mark_as_treated'|trans }}</a>
                     {% endif %}
                 </div>
             </div>

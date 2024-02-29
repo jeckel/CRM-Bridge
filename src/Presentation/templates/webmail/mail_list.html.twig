@@ -24,8 +24,8 @@
             hx-get="{{ path('webmail_mail', { mailId: mail.id }) }}"
             hx-target="#mailList"
         >
-            <td {{ cssRow }}><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
-            <td {{ cssRow }}>
+            <td {{ cssRow|raw }}><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
+            <td {{ cssRow|raw }}>
                 {% if mail.authorId %}
                     <a href="{{ ea_url()
                         .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
@@ -38,7 +38,7 @@
                     <span>{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;</span>
                 {% endif %}
             </td>
-            <td {{ cssRow }}>{{ mail.subject }}</td>
+            <td {{ cssRow|raw }}>{{ mail.subject }}</td>
         </tr>
         {% endfor %}
         </tbody>
