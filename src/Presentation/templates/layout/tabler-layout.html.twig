@@ -1,9 +1,15 @@
 {% extends '@Tabler/layout-vertical.html.twig' %}
-{% trans_default_domain 'admin' %}
+{#{% trans_default_domain 'admin' %}#}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+{% endblock %}
 
 {% block body_class %}layout-fluid{% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     {% block importmap %}{{ importmap('app') }}{% endblock %}
 {% endblock %}
 

@@ -19,7 +19,7 @@ class MailDetailController extends AbstractController
     #[Route(
         path: '/webmail/{mailId}',
         name: 'webmail_mail',
-        methods: ['GET']
+        methods: ['GET', 'PUT']
     )]
     public function __invoke(string $mailId, ImapMessageRepository $repository): Response
     {

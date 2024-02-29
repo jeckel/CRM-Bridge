@@ -12,6 +12,7 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 #[ORM\Entity(repositoryClass: ImapMessageRepository::class)]
 #[ORM\UniqueConstraint(name: "account_message_ref", columns: ['imap_account_id', 'message_id'])]
@@ -23,7 +24,7 @@ class ImapMessage implements Stringable
     #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface|string $id;
 
-    #[ORM\Column(type: 'integer', nullable: false, options: ['unsigned' => true])]
+    #[ORM\Column(type: TYPES::INTEGER, nullable: false, options: ['unsigned' => true])]
     private int $uid;
 
     #[ORM\Column(length: 255, nullable: false)]
@@ -72,6 +73,12 @@ class ImapMessage implements Stringable
         nullable: false
     )]
     private ?ImapAccount $imapAccount = null;
+
+    #[ORM\Column(type: TYPES::BOOLEAN, nullable: false)]
+    private bool $isTreated = false;
+
+    #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $treatedAt = null;
 
     public function getId(): UuidInterface|string
     {
@@ -232,6 +239,28 @@ class ImapMessage implements Stringable
     public function setImapAccount(?ImapAccount $imapAccount): ImapMessage
     {
         $this->imapAccount = $imapAccount;
+        return $this;
+    }
+
+    public function isTreated(): bool
+    {
+        return $this->isTreated;
+    }
+
+    public function setIsTreated(bool $isTreated): ImapMessage
+    {
+        $this->isTreated = $isTreated;
+        return $this;
+    }
+
+    public function getTreatedAt(): ?DateTimeImmutable
+    {
+        return $this->treatedAt;
+    }
+
+    public function setTreatedAt(?DateTimeImmutable $treatedAt): ImapMessage
+    {
+        $this->treatedAt = $treatedAt;
         return $this;
     }
 
