@@ -19,3 +19,6 @@ indent_style = tab
 
 [**.{yml,yaml}]
 indent_size = 4
+
+[src/Presentation/translations/*.yml]
+indent_size = 2

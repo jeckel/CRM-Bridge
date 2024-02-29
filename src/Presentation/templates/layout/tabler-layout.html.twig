@@ -1,0 +1,12 @@
+{% extends '@Tabler/layout-vertical.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block body_class %}layout-fluid{% endblock %}
+
+{% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
+
+{% block page_pretitle %}{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block page_actions %}{% endblock %}

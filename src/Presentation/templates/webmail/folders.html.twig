@@ -1,31 +1,19 @@
-<div class="accordion" id="imapAccounts">
+<div class="card">
 {% for imapAccount in imapAccounts %}
-    <h2 class="accordion-header">
-        <button
-            class="accordion-button"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-        >
-            {{ imapAccount.name }}
-        </button>
-    </h2>
-    <div
-        id="collapseOne"
-        class="accordion-collapse collapse show"
-        data-bs-parent="#imapAccounts">
-        <div class="accordion-body">
-            <table class="table table-hover">
-        {% for folder in imapAccount.folders %}
-            <tr><td
-                hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.id, folderPath: folder.name|url_encode }) }}"
-                hx-target="#mailList"
-                >{{ folder.name }}</td></tr>
-        {% endfor %}
-        </table>
-        </div>
-    </div>
+    <table class="table table-vcenter card-table table-striped table-hover table-sm">
+    <thead>
+        <tr><th>{{ imapAccount.name }}</th></tr>
+    </thead>
+    <tbody>
+    {% for folder in imapAccount.folders %}
+        <tr><td
+                style="cursor: pointer"
+            hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.id, folderPath: folder.name|url_encode }) }}"
+            hx-target="#mailList"
+            >{{ folder.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endfor %}
 </div>
