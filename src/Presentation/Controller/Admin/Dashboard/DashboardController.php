@@ -7,13 +7,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractDashboardController
 {
     use DashboardMenuTrait;
 
     #[Route('/admin', name: 'admin')]
+    #[Route(
+        path: "/",
+        name: "home",
+        methods: ['GET']
+    )]
     public function index(): Response
     {
         return $this->render('dashboard/index.html.twig');
