@@ -74,9 +74,6 @@ contact:
 #    setup: IMAP Configuration
 
 mail:
-  action:
-    create_contact: Créer un contact
-    attach_contact: Lier à un contact
   alert:
     create_contact: Ajout de l'auteur au carnet d'adresses en cours
     attach_contact: Adresse mail associée au contact

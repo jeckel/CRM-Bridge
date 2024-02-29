@@ -37,7 +37,7 @@ class MailListController extends AbstractController
 
         // @todo : move into the repository
         $query = $entityManager->createQueryBuilder();
-        $mails = $query->select('m.id, m.subject, m.fromName, m.fromAddress, m.date, c.id as authorId, c.displayName as authorName')
+        $mails = $query->select('m.id, m.subject, m.fromName, m.fromAddress, m.date, m.isTreated, c.id as authorId, c.displayName as authorName')
             ->from(ImapMessage::class, 'm')
             ->leftJoin(Contact::class, 'c', 'WITH', 'c.id = m.contact')
             ->where('m.imapAccount = :imapAccount')
