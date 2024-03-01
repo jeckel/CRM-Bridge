@@ -25,15 +25,11 @@ class MenuBuilderSubscriber implements EventSubscriberInterface
 
     public function onSetupMenu(MenuEvent $event): void
     {
-        $admin = new MenuItemModel('admin', 'menu.admin', 'admin', [], 'fa fa-wrench');
-        //        $admin->addChild(
-        //            new MenuItemModel('AdminDashboard', 'menu.dashboard', 'admin', [], 'fas fa-rss-square')
-        //        );
-        //        $admin->addChild(
-        //            new MenuItemModel('Workers', 'menu.workers', 'worker_list', [], 'fa fa-helmet-safety')
-        //        );
-
-        $event->addItem(new MenuItemModel('WebMail', 'menu.webmail', 'webmail_index', [], 'fa fa-inbox'));
+        $admin = new MenuItemModel('admin', 'menu.admin', 'admin', [], 'ti ti-settings');
+        $admin->addChild(
+            new MenuItemModel('Workers', 'menu.workers', 'worker_list', [], 'ti ti-propeller')
+        );
+        $event->addItem(new MenuItemModel('WebMail', 'menu.webmail', 'webmail_index', [], 'ti ti-inbox'));
         $event->addItem($admin);
 
         /** @var string $route */

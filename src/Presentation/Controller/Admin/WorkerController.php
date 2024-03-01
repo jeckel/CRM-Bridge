@@ -9,17 +9,17 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Admin;
 
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Supervisor\Supervisor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class WorkerController extends AbstractController
 {
     public function __construct(
-        private readonly Supervisor $supervisor,
-        private readonly AdminUrlGenerator $adminUrlGenerator
+        private readonly Supervisor $supervisor
     ) {}
 
     #[Route(
@@ -30,7 +30,7 @@ class WorkerController extends AbstractController
     public function index(): Response
     {
         return $this->render(
-            'admin/worker/list.html.twig',
+            'worker/list.html.twig',
             ['workers' => $this->supervisor->getAllProcesses()]
         );
     }
@@ -44,7 +44,7 @@ class WorkerController extends AbstractController
     {
         $processName = "$group:$name";
         return $this->render(
-            'admin/worker/process.html.twig',
+            'worker/process.html.twig',
             [
                 'worker' => $this->supervisor->getProcess($processName),
                 'stdoutLog' => $this->supervisor->tailProcessStdoutLog($processName, 0, 10000),
@@ -58,10 +58,15 @@ class WorkerController extends AbstractController
         name: 'worker_start',
         methods: ['GET']
     )]
-    public function start(string $name, string $group): Response
+    public function start(string $name, string $group, Request $request): Response
     {
         $this->supervisor->startProcess("$group:$name");
-        return $this->redirectToDetails($name, $group);
+        $this->addFlash('success', new TranslatableMessage(
+            'worker.flash_message.worker_started',
+            ['%worker%' => "$group:$name"],
+            'admin'
+        ));
+        return $this->redirectToReferer($request);
     }
 
     #[Route(
@@ -69,10 +74,32 @@ class WorkerController extends AbstractController
         name: 'worker_stop',
         methods: ['GET']
     )]
-    public function __invoke(string $name, string $group): Response
+    public function stop(string $name, string $group, Request $request): Response
     {
         $this->supervisor->stopProcess("$group:$name");
-        return $this->redirectToDetails($name, $group);
+        $this->addFlash('success', new TranslatableMessage(
+            'worker.flash_message.worker_stopped',
+            ['%worker%' => "$group:$name"],
+            'admin'
+        ));
+        return $this->redirectToReferer($request);
+    }
+
+    #[Route(
+        path: '/admin/worker/{group}/{name}/restart',
+        name: 'worker_restart',
+        methods: ['GET']
+    )]
+    public function restart(string $name, string $group, Request $request): Response
+    {
+        $this->supervisor->stopProcess("$group:$name");
+        $this->supervisor->startProcess("$group:$name");
+        $this->addFlash('success', new TranslatableMessage(
+            'worker.flash_message.worker_restarted',
+            ['%worker%' => "$group:$name"],
+            'admin'
+        ));
+        return $this->redirectToReferer($request);
     }
 
     #[Route(
@@ -86,13 +113,20 @@ class WorkerController extends AbstractController
         return $this->redirectToDetails($name, $group);
     }
 
+    private function redirectToReferer(Request $request): Response
+    {
+        /** @var string $url */
+        $url = $request->server->get('HTTP_REFERER');
+        /** @var string $path */
+        $path = parse_url($url, PHP_URL_PATH);
+        return $this->redirect($path);
+    }
+
     private function redirectToDetails(string $name, string $group): Response
     {
-        return $this->redirect(
-            $this->adminUrlGenerator->setRoute(
-                'worker_details',
-                ['name' => $name, 'group' => $group]
-            )->generateUrl()
+        return $this->redirectToRoute(
+            'worker_details',
+            ['name' => $name, 'group' => $group]
         );
     }
 }
