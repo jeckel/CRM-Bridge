@@ -1,3 +1,10 @@
+imap:
+  action:
+    add: Ajouter un compte IMAP
+    list: Comptes IMAP
+  title:
+    list: WebMail - Comptes IMAP
+
 mail:
   action:
     attach_contact: Lier à un contact existant

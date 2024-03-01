@@ -1,5 +1,6 @@
 action:
   actions: Actions
+  cancel_and_return_to_list: Annuler et revenir à la liste
   details: Détails
   list: Liste
   restart: Redémarrer

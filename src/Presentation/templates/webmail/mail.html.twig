@@ -49,6 +49,7 @@
                             href="{{ path('webmail_mark_as_treated', { mailId: mail.id }) }}"
                             class="dropdown-item">{{ 'mail.action.mark_as_treated'|trans }}</a>
                     {% endif %}
+                    <a href="{{ path('webmail_mail_debug', { mailId: mail.id }) }}" class="dropdown-item">Dump</a>
                 </div>
             </div>
         </div>
@@ -63,6 +64,9 @@
                     <li class="nav-item">
                         <a href="#tabs-html" class="nav-link" data-bs-toggle="tab">Html</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#tabs-headers" class="nav-link" data-bs-toggle="tab">Headers</a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body">
@@ -76,6 +80,9 @@
                             <div class="text-secondary">{{ 'mail.alert.html_disable.message'|trans }}</div>
                         </div>
 {#                        {{ mail.textHtml | raw }}#}
+                    </div>
+                    <div class="tab-pane active show" id="tabs-headers">
+                        {{ mail.headerRaw |nl2br }}
                     </div>
                 </div>
             </div>
