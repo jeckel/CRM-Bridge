@@ -11,11 +11,11 @@ tabler:
         # for cache busting, can be dynamically changed woth the ContextHelper
         asset_version: "beta19"
         # condensed = one nav-bar, false = two nav-bars
-        navbar_condensed: true
+        navbar_condensed: false
         # true = dark mode, false = light mode (on header)
-        header_dark: false
+        header_dark: true
         # true = dark mode, false = light mode (on menu)
-        navbar_dark: false
+        navbar_dark: true
         # overlap = https://preview.tabler.io/layout-navbar-overlap.html
         navbar_overlap: false
         # true = boxed layout, false = full-screen
@@ -23,7 +23,7 @@ tabler:
         # false = left to right, true = right to left
         rtl_mode: false
         # true = only avatar, false = show username and title as well
-        user_menu_condensed: true
+        user_menu_condensed: false
         # url to your company logo (if not with a protocol, the asset() helper will be used to create the url
         logo_url: ~
 
