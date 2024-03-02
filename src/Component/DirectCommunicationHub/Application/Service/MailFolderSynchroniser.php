@@ -28,9 +28,9 @@ readonly class MailFolderSynchroniser
         $mailbox = ImapMailbox::fromImapAccount($account);
 
         $searchCriteria = 'ALL';
-        if (null !== $folder->getLastSyncUid()) {
-            $searchCriteria = sprintf('SEARCH UID %d:*', $folder->getLastSyncUid());
-        }
+//        if (null !== $folder->getLastSyncUid()) {
+//            $searchCriteria = sprintf('SEARCH UID %d:*', $folder->getLastSyncUid());
+//        }
         $mailIds = $mailbox->searchFolder($folder->getName(), $searchCriteria);
         sort($mailIds);
 

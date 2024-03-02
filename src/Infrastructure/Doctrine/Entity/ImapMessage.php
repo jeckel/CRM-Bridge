@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use RuntimeException;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
 
@@ -50,6 +51,16 @@ class ImapMessage implements Stringable
 
     #[ORM\Column(type: Types::TEXT)]
     private string $headerRaw = '';
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isSpam = false;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $spamScore = 0;
+
+    /** @var array<string, string> */
+    #[ORM\Column(type: Types::JSON)]
+    private array $spamHeaders = [];
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $textPlain = null;
@@ -236,6 +247,15 @@ class ImapMessage implements Stringable
         return $this->imapAccount;
     }
 
+    public function getImapAccountOrFail(): ImapAccount
+    {
+        if (null === $this->imapAccount) {
+            throw new RuntimeException('ImapAccount not set');
+        }
+
+        return $this->imapAccount;
+    }
+
     public function setImapAccount(?ImapAccount $imapAccount): ImapMessage
     {
         $this->imapAccount = $imapAccount;
@@ -261,6 +281,45 @@ class ImapMessage implements Stringable
     public function setTreatedAt(?DateTimeImmutable $treatedAt): ImapMessage
     {
         $this->treatedAt = $treatedAt;
+        return $this;
+    }
+
+    public function isSpam(): bool
+    {
+        return $this->isSpam;
+    }
+
+    public function setIsSpam(bool $isSpam): ImapMessage
+    {
+        $this->isSpam = $isSpam;
+        return $this;
+    }
+
+    public function getSpamScore(): int
+    {
+        return $this->spamScore;
+    }
+
+    public function setSpamScore(int $spamScore): ImapMessage
+    {
+        $this->spamScore = $spamScore;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSpamHeaders(): array
+    {
+        return $this->spamHeaders;
+    }
+
+    /**
+     * @param string[] $spamHeaders
+     */
+    public function setSpamHeaders(array $spamHeaders): ImapMessage
+    {
+        $this->spamHeaders = $spamHeaders;
         return $this;
     }
 
