@@ -47,6 +47,7 @@ class MailDetailController extends AbstractController
                 'original' => $fullMail,
                 'parsed' => $parsedHeaders,
                 'spam' => $parsedHeaders->getHeader('X-Ovh-Spam-Status')?->getValue()
-            ]]);
+            ]]
+        );
     }
 }
