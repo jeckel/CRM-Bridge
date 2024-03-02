@@ -26,6 +26,9 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 use Symfony\Contracts\Cache\ItemInterface;
 
+use ZBateson\MailMimeParser\IMessage;
+use ZBateson\MailMimeParser\Message;
+
 use function App\new_uuid;
 
 /**
@@ -45,7 +48,7 @@ class MailProxy implements MailInterface
         private readonly int $uid
     ) {}
 
-    private function getImapMail(): IncomingMail
+    public function getImapMail(): IncomingMail
     {
         if (null === $this->imapMail) {
             $key = sprintf('%s-%s-%d', $this->account->getId(), $this->folder, $this->uid);
@@ -74,7 +77,7 @@ class MailProxy implements MailInterface
         return $mail;
     }
 
-    private function getEntity(): ImapMessage
+    public function getEntity(): ImapMessage
     {
         if (null === $this->entity) {
             $this->entity = $this->repository->findOneBy(
@@ -87,6 +90,7 @@ class MailProxy implements MailInterface
         }
         if (null === $this->entity) {
             $mail = $this->getImapMail();
+            $parsedHeaders = Message::from($mail->headersRaw ?? '', true);
             $this->entity = (new ImapMessage())
                 ->setId(new_uuid())
                 ->setImapAccount($this->account)
@@ -101,6 +105,9 @@ class MailProxy implements MailInterface
                 ->setHeaderRaw($mail->headersRaw ?? '')
                 ->setTextPlain($mail->textPlain)
                 ->setTextHtml($mail->textHtml)
+                ->setIsSpam($this->extractSpamStatusFromHeaders($parsedHeaders))
+                ->setSpamScore($this->extractSpamScoreFromHeaders($parsedHeaders))
+                ->setSpamHeaders($this->extractSpamHeadersFromHeaders($parsedHeaders))
             ;
             $this->repository->persist($this->entity);
             $this->eventDispatcher->dispatch(new NewIncomingEmail(
@@ -110,6 +117,39 @@ class MailProxy implements MailInterface
             ));
         }
         return $this->entity;
+    }
+
+    private function extractSpamStatusFromHeaders(IMessage $parsedHeaders): bool
+    {
+        $spamStatus = $parsedHeaders->getHeader('X-Ovh-Spam-Status');
+        if (null === $spamStatus) {
+            return false;
+        }
+        return $spamStatus->getValue() === 'SPAM';
+    }
+
+    private function extractSpamScoreFromHeaders(IMessage $parsedHeaders): int
+    {
+        $header = $parsedHeaders->getHeader('X-VR-SPAMSCORE');
+        return (int) $header?->getValue();
+    }
+
+    /**
+     * @param IMessage $parsedHeaders
+     * @return array<string, string>
+     */
+    private function extractSpamHeadersFromHeaders(IMessage $parsedHeaders): array
+    {
+        $headerKeys = ['X-VR-SPAMSTATE', 'X-VR-SPAMSCORE', 'X-VR-SPAMCAUSE', 'X-Ovh-Spam-Status', 'X-Ovh-Spam-Reason', 'X-Ovh-Message-Type', 'X-Spam-Tag'];
+        $spamHeaders = [];
+        foreach ($headerKeys as $headerKey) {
+            $header = $parsedHeaders->getHeader($headerKey);
+            if (null === $header) {
+                continue;
+            }
+            $spamHeaders[$headerKey] = $header->getValue() ?? '';
+        }
+        return $spamHeaders;
     }
 
     public function sync(): void

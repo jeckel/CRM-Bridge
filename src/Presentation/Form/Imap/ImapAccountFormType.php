@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SetupFormType extends AbstractType
+class ImapAccountFormType extends AbstractType
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -26,21 +26,28 @@ class SetupFormType extends AbstractType
     {
         $builder
             ->add(
-                child: ConfigurationKey::IMAP_HOST->value,
+                child: 'name',
+                type: TextType::class,
+                options: [
+                    'label' => 'imap.field.label'
+                ]
+            )
+            ->add(
+                child: 'uri',
                 type: TextType::class,
                 options: [
                     'label' => 'imap.field.host'
                 ]
             )
             ->add(
-                child: ConfigurationKey::IMAP_LOGIN->value,
+                child: 'login',
                 type: TextType::class,
                 options: [
                     'label' => 'imap.field.login'
                 ]
             )
             ->add(
-                child: ConfigurationKey::IMAP_PASSWORD->value,
+                child: 'password',
                 type: PasswordType::class,
                 options: [
                     'label' => 'imap.field.password'

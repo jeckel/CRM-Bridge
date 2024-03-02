@@ -10,9 +10,6 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\WebMail;
 
 use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
-use App\Presentation\Controller\Admin\ImapConfigCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,14 +21,10 @@ class IndexController extends AbstractController
         name: "webmail_index",
         methods: ['GET']
     )]
-    public function index(ImapAccountRepository $imapAccountRepo, AdminUrlGenerator $urlGenerator): Response
+    public function index(ImapAccountRepository $imapAccountRepo): Response
     {
         if ($imapAccountRepo->count() === 0) {
-            return $this->redirect(
-                $urlGenerator->setAction(Action::NEW)
-                    ->setController(ImapConfigCrudController::class)
-                    ->generateUrl()
-            );
+            return $this->redirectToRoute('webmail_imap_create_account');
         }
         return $this->render(
             'webmail/index.html.twig',

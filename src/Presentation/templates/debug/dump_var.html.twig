@@ -1,0 +1,8 @@
+{% extends '/layout/tabler-layout.html.twig' %}
+{#{% trans_default_domain 'admin' %}#}
+
+{% block page_title %}Debug{% endblock %}
+
+{% block page_content %}
+    {{ dump(var) }}
+{% endblock %}

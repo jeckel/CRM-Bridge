@@ -1,5 +1,7 @@
 twig:
     default_path: '%kernel.project_dir%/src/Presentation/templates'
+    form_themes:
+        - '@Tabler/layout/form-theme.html.twig'
 
 when@test:
     twig:
