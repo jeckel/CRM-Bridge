@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Imap;
 
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
+use App\Infrastructure\Imap\Mail\ImapMailDto;
+use App\Infrastructure\Imap\Mail\ImapMailHeaderDto;
 use PhpImap\IncomingMail;
 use PhpImap\Mailbox;
 
@@ -69,13 +71,20 @@ class ImapMailbox
         return $mailbox->searchMailbox($criteria);
     }
 
-    public function getMail(int $id, string $folder): IncomingMail
+    public function getMail(int $id, string $folder): ImapMailDto
     {
         $mailBox = new Mailbox(
             str_replace('INBOX', $folder, $this->host),
             $this->login,
             $this->password
         );
-        return $mailBox->getMail($id);
+
+        $mail = $mailBox->getMail($id);
+        return new ImapMailDto(
+            /** @phpstan-ignore-next-line */
+            headers: new ImapMailHeaderDto(...get_object_vars($mail)),
+            textHtml: $mail->textHtml,
+            textPlain: $mail->textPlain
+        );
     }
 }

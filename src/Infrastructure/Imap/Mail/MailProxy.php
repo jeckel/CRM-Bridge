@@ -37,7 +37,7 @@ use function App\new_uuid;
 class MailProxy implements MailInterface
 {
     protected ?ImapMessage $entity = null;
-    protected ?IncomingMail $imapMail = null;
+    protected ?ImapMailDto $imapMail = null;
 
     public function __construct(
         private readonly ImapMessageRepository $repository,
@@ -48,33 +48,23 @@ class MailProxy implements MailInterface
         private readonly int $uid
     ) {}
 
-    public function getImapMail(): IncomingMail
+    public function getImapMail(): ImapMailDto
     {
         if (null === $this->imapMail) {
             $key = sprintf('%s-%s-%d', $this->account->getId(), $this->folder, $this->uid);
             $this->imapMail = $this->imapMailCache->get(
                 $key,
-                fn(ItemInterface $item): IncomingMail => $this->retrieveIncomingMail($item)
+                fn(ItemInterface $item): ImapMailDto => $this->retrieveIncomingMail($item)
             );
         }
         return $this->imapMail;
     }
 
-    private function retrieveIncomingMail(?ItemInterface $item = null): IncomingMail
+    private function retrieveIncomingMail(?ItemInterface $item = null): ImapMailDto
     {
         $item?->expiresAfter(300);
         $mailbox = ImapMailbox::fromImapAccount($this->account);
-        $mail = $mailbox->getMail($this->uid, $this->folder);
-
-        // Hack to remove dependency to IMAP/Connection which is not serializable in Cache
-        // Force loading of text and html content before removing dataInfo
-        $mail->textHtml;    // @phpstan-ignore-line
-        $mail->textPlain;   // @phpstan-ignore-line
-        $reflection = new ReflectionClass($mail);
-        $property = $reflection->getProperty('dataInfo');
-        $property->setAccessible(true);
-        $property->setValue($mail, [[], []]);
-        return $mail;
+        return $mailbox->getMail($this->uid, $this->folder);
     }
 
     public function getEntity(): ImapMessage
@@ -169,7 +159,7 @@ class MailProxy implements MailInterface
         return $this->getEntity()->getFromName();
     }
 
-    #[\Override]
+    #[Override]
     public function date(): DateTimeImmutable
     {
         return $this->getEntity()->getDate();
