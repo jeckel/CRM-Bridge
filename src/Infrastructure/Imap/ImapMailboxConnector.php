@@ -15,7 +15,7 @@ use App\Infrastructure\Imap\Mail\ImapMailHeaderDto;
 use PhpImap\IncomingMail;
 use PhpImap\Mailbox;
 
-class ImapMailbox
+class ImapMailboxConnector
 {
     private Mailbox $mailbox;
 
@@ -25,16 +25,16 @@ class ImapMailbox
         private readonly string $password,
     ) {}
 
-    public static function fromImapAccount(ImapAccount $imapConfig): ImapMailbox
+    public static function fromImapAccount(ImapAccount $imapConfig): ImapMailboxConnector
     {
-        return new ImapMailbox(
+        return new ImapMailboxConnector(
             sprintf('{%s:993/imap/ssl}INBOX', $imapConfig->getUri()),
             $imapConfig->getLogin(),
             $imapConfig->getPassword()
         );
     }
 
-    private function getMailbox(): Mailbox
+    public function getMailbox(): Mailbox
     {
         if (! isset($this->mailbox)) {
             $this->mailbox = new Mailbox(
@@ -47,14 +47,18 @@ class ImapMailbox
     }
 
     /**
-     * @return list<ImapFolder>
+     * @return list<ImapMailboxDto>
+     * @throws \Exception
      */
     public function listFolders(): array
     {
         return array_map(
             /** @phpstan-ignore-next-line  */
-            static fn(array $folder): ImapFolder => new ImapFolder(... $folder),
-            $this->getMailbox()->getMailboxes('*')
+            function (string $folder): ImapMailboxDto {
+                $this->getMailbox()->switchMailbox($folder);
+                return new ImapMailboxDto($folder, ...get_object_vars($this->getMailbox()->statusMailbox()));
+            },
+            $this->getMailbox()->getListingFolders()
         );
     }
 

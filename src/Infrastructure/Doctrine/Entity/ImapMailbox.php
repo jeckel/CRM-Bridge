@@ -16,7 +16,7 @@ use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity(repositoryClass: ImapFolderRepository::class)]
 #[ORM\UniqueConstraint(name: "folder_unique_ref", columns: ['imap_account_id', 'slug'])]
-class ImapFolder
+class ImapMailbox
 {
     #[ORM\Id]
     #[ORM\Column(name: 'imap_folder_id', type: "uuid", unique: true)]
@@ -26,11 +26,29 @@ class ImapFolder
     #[ORM\Column(length: 180, nullable: false)]
     private string $name;
 
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $imapPath;
+
     #[ORM\Column(length: 180, nullable: false)]
     private string $slug;
 
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $lastSyncUid = null;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $flags = 0;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $messages = 0;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $recent = 0;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $unseen = 0;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $uidNext = 0;
 
     #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private ?DateTimeImmutable $lastSyncDate = null;
@@ -41,7 +59,7 @@ class ImapFolder
         referencedColumnName: 'imap_folder_id',
         nullable: true
     )]
-    private ?ImapFolder $parent = null;
+    private ?ImapMailbox $parent = null;
 
     #[ORM\ManyToOne(
         cascade: ['persist'],
@@ -60,7 +78,7 @@ class ImapFolder
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): ImapFolder
+    public function setId(UuidInterface|string $id): ImapMailbox
     {
         $this->id = $id;
         return $this;
@@ -71,7 +89,7 @@ class ImapFolder
         return $this->name;
     }
 
-    public function setName(string $name): ImapFolder
+    public function setName(string $name): ImapMailbox
     {
         $this->name = $name;
         return $this;
@@ -82,9 +100,20 @@ class ImapFolder
         return $this->slug;
     }
 
-    public function setSlug(string $slug): ImapFolder
+    public function setSlug(string $slug): ImapMailbox
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    public function getImapPath(): string
+    {
+        return $this->imapPath;
+    }
+
+    public function setImapPath(string $imapPath): self
+    {
+        $this->imapPath = $imapPath;
         return $this;
     }
 
@@ -93,7 +122,7 @@ class ImapFolder
         return $this->lastSyncUid;
     }
 
-    public function setLastSyncUid(?int $lastSyncUid): ImapFolder
+    public function setLastSyncUid(?int $lastSyncUid): ImapMailbox
     {
         $this->lastSyncUid = $lastSyncUid;
         return $this;
@@ -104,18 +133,73 @@ class ImapFolder
         return $this->lastSyncDate;
     }
 
-    public function setLastSyncDate(?DateTimeImmutable $lastSyncDate): ImapFolder
+    public function setLastSyncDate(?DateTimeImmutable $lastSyncDate): ImapMailbox
     {
         $this->lastSyncDate = $lastSyncDate;
         return $this;
     }
 
-    public function getParent(): ?ImapFolder
+    public function getFlags(): int
+    {
+        return $this->flags;
+    }
+
+    public function setFlags(int $flags): self
+    {
+        $this->flags = $flags;
+        return $this;
+    }
+
+    public function getMessages(): int
+    {
+        return $this->messages;
+    }
+
+    public function setMessages(int $messages): self
+    {
+        $this->messages = $messages;
+        return $this;
+    }
+
+    public function getRecent(): int
+    {
+        return $this->recent;
+    }
+
+    public function setRecent(int $recent): self
+    {
+        $this->recent = $recent;
+        return $this;
+    }
+
+    public function getUnseen(): int
+    {
+        return $this->unseen;
+    }
+
+    public function setUnseen(int $unseen): self
+    {
+        $this->unseen = $unseen;
+        return $this;
+    }
+
+    public function getUidNext(): int
+    {
+        return $this->uidNext;
+    }
+
+    public function setUidNext(int $uidNext): self
+    {
+        $this->uidNext = $uidNext;
+        return $this;
+    }
+
+    public function getParent(): ?ImapMailbox
     {
         return $this->parent;
     }
 
-    public function setParent(?ImapFolder $parent): ImapFolder
+    public function setParent(?ImapMailbox $parent): ImapMailbox
     {
         $this->parent = $parent;
         return $this;
@@ -126,7 +210,7 @@ class ImapFolder
         return $this->imapAccount;
     }
 
-    public function setImapAccount(ImapAccount $imapAccount): ImapFolder
+    public function setImapAccount(ImapAccount $imapAccount): ImapMailbox
     {
         $this->imapAccount = $imapAccount;
         return $this;

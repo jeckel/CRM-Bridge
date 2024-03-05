@@ -41,18 +41,18 @@ class ImapAccount implements Stringable
     private string $password;
 
     /**
-     * @var Collection<int, ImapFolder> $folders
+     * @var Collection<int, ImapMailbox> $mailboxes
      */
     #[ORM\OneToMany(
-        targetEntity: ImapFolder::class,
+        targetEntity: ImapMailbox::class,
         mappedBy: 'imapAccount',
         cascade: ['persist']
     )]
-    private Collection $folders;
+    private Collection $mailboxes;
 
     public function __construct()
     {
-        $this->folders = new ArrayCollection();
+        $this->mailboxes = new ArrayCollection();
     }
 
     public function getId(): UuidInterface|string
@@ -111,11 +111,11 @@ class ImapAccount implements Stringable
     }
 
     /**
-     * @return Collection<int, ImapFolder>
+     * @return Collection<int, ImapMailbox>
      */
-    public function getFolders(): Collection
+    public function getMailboxes(): Collection
     {
-        return $this->folders;
+        return $this->mailboxes;
     }
 
     public function __toString()

@@ -12,7 +12,7 @@ namespace App\Presentation\Controller\WebMail;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
-use App\Infrastructure\Imap\ImapMailbox;
+use App\Infrastructure\Imap\ImapMailboxConnector;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +32,7 @@ class MailListController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $imapAccount = $repository->getById($imapConfigId);
-        $mailbox = ImapMailbox::fromImapAccount($imapAccount);
+        $mailbox = ImapMailboxConnector::fromImapAccount($imapAccount);
         $mailIds = $mailbox->searchFolder($folderPath);
 
         // @todo : move into the repository

@@ -9,21 +9,21 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\ImapFolder;
+use App\Infrastructure\Doctrine\Entity\ImapMailbox;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends AbstractEntityRepository<ImapFolder>
+ * @extends AbstractEntityRepository<ImapMailbox>
  *
- * @method ImapFolder|null find($id, $lockMode = null, $lockVersion = null)
- * @method ImapFolder|null findOneBy(array $criteria, array $orderBy = null)
- * @method ImapFolder[]    findAll()
- * @method ImapFolder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ImapMailbox|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ImapMailbox|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ImapMailbox[]    findAll()
+ * @method ImapMailbox[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ImapFolderRepository extends AbstractEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ImapFolder::class);
+        parent::__construct($registry, ImapMailbox::class);
     }
 }

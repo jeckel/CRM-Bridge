@@ -15,7 +15,7 @@ use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
-use App\Infrastructure\Imap\ImapMailbox;
+use App\Infrastructure\Imap\ImapMailboxConnector;
 use DateTimeImmutable;
 use LogicException;
 use Override;
@@ -63,7 +63,7 @@ class MailProxy implements MailInterface
     private function retrieveIncomingMail(?ItemInterface $item = null): ImapMailDto
     {
         $item?->expiresAfter(300);
-        $mailbox = ImapMailbox::fromImapAccount($this->account);
+        $mailbox = ImapMailboxConnector::fromImapAccount($this->account);
         return $mailbox->getMail($this->uid, $this->folder);
     }
 

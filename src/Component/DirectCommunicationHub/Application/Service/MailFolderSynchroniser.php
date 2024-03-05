@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace App\Component\DirectCommunicationHub\Application\Service;
 
-use App\Infrastructure\Doctrine\Entity\ImapFolder;
+use App\Infrastructure\Doctrine\Entity\ImapMailbox;
 use App\Infrastructure\Doctrine\Repository\ImapFolderRepository;
-use App\Infrastructure\Imap\ImapMailbox;
+use App\Infrastructure\Imap\ImapMailboxConnector;
 use App\Infrastructure\Imap\Mail\MailProvider;
 use JeckelLab\Contract\Infrastructure\System\Clock;
 
@@ -22,7 +22,7 @@ readonly class MailFolderSynchroniser
         private Clock $clock
     ) {}
 
-    public function syncFolderEntity(ImapFolder $folder): void
+    public function syncFolderEntity(ImapMailbox $folder): void
     {
         $account = $folder->getImapAccount();
         $mailbox = ImapMailbox::fromImapAccount($account);
