@@ -56,7 +56,7 @@ class ImapAccountFormType extends AbstractType
             ->add(
                 child:'save',
                 type: SubmitType::class,
-                options: ['label' => 'action.save']
+                options: ['label' => 'action.save', 'translation_domain' => 'admin']
             );
     }
 
@@ -66,7 +66,7 @@ class ImapAccountFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_domain' => 'admin'
+            'translation_domain' => 'webmail'
         ]);
     }
 }
