@@ -19,7 +19,7 @@ use ZBateson\MailMimeParser\Message;
 class MailDetailController extends AbstractController
 {
     #[Route(
-        path: '/webmail/{mailId}',
+        path: '/webmail/mail/{mailId}',
         name: 'webmail_mail',
         methods: ['GET', 'PUT']
     )]
@@ -30,14 +30,14 @@ class MailDetailController extends AbstractController
     }
 
     #[Route(
-        path: '/webmail/{mailId}/debug',
+        path: '/webmail/mail/{mailId}/debug',
         name: 'webmail_mail_debug',
         methods: ['GET', 'PUT']
     )]
     public function debug(string $mailId, ImapMessageRepository $repository, MailProvider $provider): Response
     {
         $entityMail = $repository->getById($mailId);
-        $fullMail = $provider->getMail($entityMail->getImapAccountOrFail(), $entityMail->getFolder(), $entityMail->getUid());
+        $fullMail = $provider->getMail($entityMail->getImapAccountOrFail(), $entityMail->getImapPath(), $entityMail->getImapUid());
         $fullMail->getImapMail();
         $parsedHeaders = Message::from($fullMail->getEntity()->getHeaderRaw(), true);
 

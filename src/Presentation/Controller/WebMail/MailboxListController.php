@@ -14,17 +14,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class FolderListController extends AbstractController
+class MailboxListController extends AbstractController
 {
     #[Route(
-        path: '/webmail/folders',
-        name: 'webmail_folders',
-        methods: ['GET']
+        path: '/webmail/mailboxes',
+        name: 'webmail_mailboxes',
+        methods: ['GET'],
+        priority: 2
     )]
     public function folders(ImapAccountRepository $imapAccountRepo): Response
     {
         return $this->render(
-            'webmail/folders.html.twig',
+            'webmail/mailboxes.html.twig',
             ['imapAccounts' => $imapAccountRepo->findAll()]
         );
     }

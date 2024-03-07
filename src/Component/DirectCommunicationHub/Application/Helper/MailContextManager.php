@@ -10,20 +10,20 @@ declare(strict_types=1);
 namespace App\Component\DirectCommunicationHub\Application\Helper;
 
 use App\Component\Shared\Error\LogicError;
-use App\Component\Shared\Identity\ImapConfigId;
+use App\Component\Shared\Identity\ImapAccountId;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 
 class MailContextManager
 {
-    private ?ImapConfigId $imapConfigId = null;
+    private ?ImapAccountId $imapConfigId = null;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager
     ) {}
 
-    public function getImapConfigId(): ImapConfigId
+    public function getImapConfigId(): ImapAccountId
     {
         if (null === $this->imapConfigId) {
             throw new LogicError('Imap config not defined yet');
@@ -31,7 +31,7 @@ class MailContextManager
         return $this->imapConfigId;
     }
 
-    public function setImapConfigId(?ImapConfigId $imapConfigId): void
+    public function setImapConfigId(?ImapAccountId $imapConfigId): void
     {
         $this->imapConfigId = $imapConfigId;
     }

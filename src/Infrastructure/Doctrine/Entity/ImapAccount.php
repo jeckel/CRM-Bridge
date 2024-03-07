@@ -9,10 +9,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\ImapAccountId;
 use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use SensitiveParameter;
 use Stringable;
@@ -24,43 +28,54 @@ use Stringable;
 class ImapAccount implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'imap_account_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'imap_account_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $name;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $uri;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $login;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $password;
 
     /**
-     * @var Collection<int, ImapFolder> $folders
+     * @var Collection<int, ImapMailbox> $mailboxes
      */
     #[ORM\OneToMany(
-        targetEntity: ImapFolder::class,
+        targetEntity: ImapMailbox::class,
         mappedBy: 'imapAccount',
         cascade: ['persist']
     )]
-    private Collection $folders;
+    private Collection $mailboxes;
+
+    private ImapAccountId $imapAccountId;
 
     public function __construct()
     {
-        $this->folders = new ArrayCollection();
+        $this->mailboxes = new ArrayCollection();
     }
 
-    public function getId(): UuidInterface|string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): ImapAccount
+    public function getIdentity(): ImapAccountId
+    {
+        if (! isset($this->imapAccountId)) {
+            $this->imapAccountId = ImapAccountId::from($this->id->toString());
+        }
+        return $this->imapAccountId;
+    }
+
+    public function setId(UuidInterface $id): ImapAccount
     {
         $this->id = $id;
         return $this;
@@ -111,15 +126,16 @@ class ImapAccount implements Stringable
     }
 
     /**
-     * @return Collection<int, ImapFolder>
+     * @return Collection<int, ImapMailbox>
      */
-    public function getFolders(): Collection
+    public function getMailboxes(): Collection
     {
-        return $this->folders;
+        return $this->mailboxes;
     }
 
     public function __toString()
     {
         return $this->name;
     }
+
 }

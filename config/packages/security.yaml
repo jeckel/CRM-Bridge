@@ -30,20 +30,20 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-              login_path: app_login
-              check_path: app_login
+                login_path: app_login
+                check_path: app_login
             logout:
-              path: app_logout
+                path: app_logout
     role_hierarchy:
-      ROLE_ADMIN: [ROLE_USER]
-      ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_USER]
+        ROLE_ADMIN: [ROLE_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_USER]
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-      - { path: ^/login, roles: PUBLIC_ACCESS }
-      - { path: ^/webhook, roles: PUBLIC_ACCESS }
-      - { path: ^/, roles: ROLE_USER } # // force login
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/webhook, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER } # // force login
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 

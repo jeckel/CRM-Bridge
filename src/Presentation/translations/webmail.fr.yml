@@ -2,6 +2,11 @@ imap:
   action:
     add: Ajouter un compte IMAP
     list: Comptes IMAP
+  field:
+    label: Libellé
+    host: Host
+    login: Login
+    password: Mot de passe
   title:
     list: WebMail - Comptes IMAP
 
