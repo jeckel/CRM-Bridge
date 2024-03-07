@@ -27,7 +27,7 @@ readonly class ImapMailHeaderDto
         public ?string $imapPath,
         public ?string $mailboxFolder,
         public ?string $date,
-        public ?string $headersRaw,
+        public string $headersRaw,
         public ?object $headers,
         public ?string $mimeVersion,
         public ?string $xVirusScanned,

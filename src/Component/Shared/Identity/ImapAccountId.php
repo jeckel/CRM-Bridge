@@ -10,4 +10,4 @@ namespace App\Component\Shared\Identity;
 
 use JeckelLab\IdentityContract\AbstractUuidIdentity;
 
-final readonly class ImapConfigId extends AbstractUuidIdentity {}
+final readonly class ImapAccountId extends AbstractUuidIdentity {}

@@ -64,7 +64,11 @@ class MailProxy implements MailInterface
     {
         $item?->expiresAfter(300);
         $mailbox = ImapMailboxConnector::fromImapAccount($this->account);
-        return $mailbox->getMail($this->uid, $this->folder);
+        $mail = $mailbox->getMail($this->uid, $this->folder);
+        if (null === $mail) {
+            throw new LogicException('Mail not found');
+        }
+        return $mail;
     }
 
     public function getEntity(): ImapMessage
@@ -82,7 +86,6 @@ class MailProxy implements MailInterface
             $mail = $this->getImapMail();
             $parsedHeaders = Message::from($mail->headersRaw ?? '', true);
             $this->entity = (new ImapMessage())
-                ->setId(new_uuid())
                 ->setImapAccount($this->account)
                 ->setFolder($this->folder)
                 ->setUid($this->uid)
@@ -91,15 +94,19 @@ class MailProxy implements MailInterface
                 ->setSubject($mail->subject ?? throw new LogicException('Subject can not be null'))
                 ->setFromName($mail->fromName ?? $mail->fromAddress ?? throw new LogicException('Both fromName and fromAddress can not be null'))
                 ->setFromAddress($mail->fromAddress ?? throw new LogicException('fromAddress can not be null'))
-                ->setToString($mail->toString ?? throw new LogicException('toString can not be null'))
+                ->setToString($this->extractEmailTarget($mail, $parsedHeaders))
                 ->setHeaderRaw($mail->headersRaw ?? '')
                 ->setTextPlain($mail->textPlain)
-                ->setTextHtml($mail->textHtml)
+//                ->setTextHtml(imap_utf8($mail->textHtml))
                 ->setIsSpam($this->extractSpamStatusFromHeaders($parsedHeaders))
                 ->setSpamScore($this->extractSpamScoreFromHeaders($parsedHeaders))
                 ->setSpamHeaders($this->extractSpamHeadersFromHeaders($parsedHeaders))
             ;
-            $this->repository->persist($this->entity);
+            try {
+                $this->repository->persist($this->entity);
+            } catch (\Exception $e) {
+                dd($this->entity, $e);
+            }
             $this->eventDispatcher->dispatch(new NewIncomingEmail(
                 mailId: MailId::from((string) $this->entity->getId()),
                 email: new Email($this->entity->getFromAddress()),
@@ -107,6 +114,18 @@ class MailProxy implements MailInterface
             ));
         }
         return $this->entity;
+    }
+
+    private function extractEmailTarget(ImapMailDto $mail, IMessage $parsedHeaders): string
+    {
+        if (null !== $mail->toString) {
+            return $mail->toString;
+        }
+        $deliveredTo = $parsedHeaders->getHeader('Delivered-To');
+        if (null !== $deliveredTo) {
+            return (string) $deliveredTo->getValue();
+        }
+        throw new LogicException('Enable to extract email target from headers');
     }
 
     private function extractSpamStatusFromHeaders(IMessage $parsedHeaders): bool

@@ -2,55 +2,70 @@
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\ValueObject\IncomingEmailType;
 use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 #[ORM\Entity(repositoryClass: ImapMessageRepository::class)]
-#[ORM\UniqueConstraint(name: "account_message_ref", columns: ['imap_account_id', 'message_id'])]
-#[ORM\UniqueConstraint(name: "folder_message_ref", columns: ['imap_account_id', 'folder', 'uid'])]
+#[ORM\UniqueConstraint(name: "account_message_ref", columns: ['imap_account_id', 'message_unique_id'])]
 class ImapMessage implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'mail_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'mail_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
     #[ORM\Column(type: TYPES::INTEGER, nullable: false, options: ['unsigned' => true])]
     private int $uid;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $folder;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $messageId = '';
+
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
+    private string $messageUniqueId = '';
 
     #[ORM\Column]
     private DateTimeImmutable $date;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $subject = '';
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $fromName = '';
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $fromAddress = '';
 
-    #[ORM\Column(type: Types::TEXT)]
-    private string $toString = '';
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private string $deliveredTo = '';
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $toString = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private string $headerRaw = '';
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $hasAttachment = false;
+
+    #[ORM\Column(type: Types::STRING, length: 32, nullable: false, enumType: IncomingEmailType::class)]
+    private IncomingEmailType $emailType = IncomingEmailType::UNDEFINED;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isSpam = false;
@@ -91,12 +106,12 @@ class ImapMessage implements Stringable
     #[ORM\Column(type: TYPES::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $treatedAt = null;
 
-    public function getId(): UuidInterface|string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): ImapMessage
+    public function setId(UuidInterface $id): ImapMessage
     {
         $this->id = $id;
         return $this;
@@ -133,6 +148,17 @@ class ImapMessage implements Stringable
     {
         $this->messageId = $messageId;
 
+        return $this;
+    }
+
+    public function getMessageUniqueId(): string
+    {
+        return $this->messageUniqueId;
+    }
+
+    public function setMessageUniqueId(string $messageUniqueId): ImapMessage
+    {
+        $this->messageUniqueId = $messageUniqueId;
         return $this;
     }
 
@@ -184,12 +210,23 @@ class ImapMessage implements Stringable
         return $this;
     }
 
-    public function getToString(): string
+    public function getDeliveredTo(): string
+    {
+        return $this->deliveredTo;
+    }
+
+    public function setDeliveredTo(string $deliveredTo): ImapMessage
+    {
+        $this->deliveredTo = $deliveredTo;
+        return $this;
+    }
+
+    public function getToString(): ?string
     {
         return $this->toString;
     }
 
-    public function setToString(string $toString): static
+    public function setToString(?string $toString): static
     {
         $this->toString = $toString;
 
@@ -281,6 +318,28 @@ class ImapMessage implements Stringable
     public function setTreatedAt(?DateTimeImmutable $treatedAt): ImapMessage
     {
         $this->treatedAt = $treatedAt;
+        return $this;
+    }
+
+    public function isHasAttachment(): bool
+    {
+        return $this->hasAttachment;
+    }
+
+    public function setHasAttachment(bool $hasAttachment): ImapMessage
+    {
+        $this->hasAttachment = $hasAttachment;
+        return $this;
+    }
+
+    public function getEmailType(): IncomingEmailType
+    {
+        return $this->emailType;
+    }
+
+    public function setEmailType(IncomingEmailType $emailType): ImapMessage
+    {
+        $this->emailType = $emailType;
         return $this;
     }
 

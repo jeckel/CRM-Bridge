@@ -10,8 +10,11 @@ declare(strict_types=1);
 namespace App\Infrastructure\Imap;
 
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
+use App\Infrastructure\Imap\Exception\MailboxNotFoundException;
 use App\Infrastructure\Imap\Mail\ImapMailDto;
 use App\Infrastructure\Imap\Mail\ImapMailHeaderDto;
+use Exception;
+use LogicException;
 use PhpImap\IncomingMail;
 use PhpImap\Mailbox;
 
@@ -23,14 +26,28 @@ class ImapMailboxConnector
         private readonly string $host,
         private readonly string $login,
         private readonly string $password,
+        private string $currentMailbox,
     ) {}
 
-    public static function fromImapAccount(ImapAccount $imapConfig): ImapMailboxConnector
+    public function __destruct()
     {
+        if (isset($this->mailbox)) {
+            $this->mailbox->disconnect();
+        }
+    }
+
+    public static function fromImapAccount(
+        ImapAccount $imapConfig,
+        ?string $imapPath = null
+    ): ImapMailboxConnector {
+        if (null === $imapPath) {
+            $imapPath = sprintf('{%s:993/imap/ssl}INBOX', $imapConfig->getUri());
+        }
         return new ImapMailboxConnector(
-            sprintf('{%s:993/imap/ssl}INBOX', $imapConfig->getUri()),
+            $imapPath,
             $imapConfig->getLogin(),
-            $imapConfig->getPassword()
+            $imapConfig->getPassword(),
+            $imapPath,
         );
     }
 
@@ -38,57 +55,126 @@ class ImapMailboxConnector
     {
         if (! isset($this->mailbox)) {
             $this->mailbox = new Mailbox(
-                $this->host,
-                $this->login,
-                $this->password
+                imapPath: $this->host,
+                login: $this->login,
+                password: $this->password,
+                serverEncoding: 'UTF-8'
             );
+            $this->mailbox->setPathDelimiter('/');
+            // Ignore attachments for now
+            $this->mailbox->setAttachmentsIgnore(true);
         }
         return $this->mailbox;
     }
 
     /**
-     * @return list<ImapMailboxDto>
-     * @throws \Exception
+     * @return list<string>
+     * @throws Exception
      */
     public function listFolders(): array
     {
-        return array_map(
-            /** @phpstan-ignore-next-line  */
-            function (string $folder): ImapMailboxDto {
-                $this->getMailbox()->switchMailbox($folder);
-                return new ImapMailboxDto($folder, ...get_object_vars($this->getMailbox()->statusMailbox()));
-            },
-            $this->getMailbox()->getListingFolders()
-        );
+        return $this->getMailbox()->getListingFolders();
+    }
+
+    public function switchMailbox(string $imapPath): self
+    {
+        if ($this->currentMailbox === $imapPath) {
+            return $this;
+        }
+        try {
+            $this->getMailbox()->switchMailbox($imapPath);
+            $this->currentMailbox = $imapPath;
+        } catch (\Throwable $e) {
+            throw new MailboxNotFoundException($imapPath, $e);
+        }
+        return $this;
+    }
+
+    /**
+     * @throws MailboxNotFoundException
+     */
+    public function statusMailbox(?string $imapPath = null): ImapMailboxDto
+    {
+        if (null !== $imapPath) {
+            $this->switchMailbox($imapPath);
+        }
+        /** @phpstan-ignore-next-line  */
+        return new ImapMailboxDto($this->currentMailbox, ...get_object_vars($this->getMailbox()->statusMailbox()));
     }
 
     /**
      * @return int[]
      */
-    public function searchFolder(string $folder, string $criteria = 'ALL'): array
+    public function searchFolder(string $imapPath, string $criteria = 'ALL'): array
     {
-        $mailbox = new Mailbox(
-            str_replace('INBOX', $folder, $this->host),
-            $this->login,
-            $this->password
-        );
-        return $mailbox->searchMailbox($criteria);
+        return $this->switchMailbox($imapPath)
+            ->getMailbox()
+            ->searchMailbox($criteria);
     }
 
-    public function getMail(int $id, string $folder): ImapMailDto
+    /**
+     * @throws Exception
+     */
+    public function getMailHeader(int $mailUid, ?string $imapPath = null): ?ImapMailHeaderDto
     {
-        $mailBox = new Mailbox(
-            str_replace('INBOX', $folder, $this->host),
-            $this->login,
-            $this->password
-        );
+        if (null !== $imapPath) {
+            $this->switchMailbox($imapPath);
+        }
+        try {
+            $headers = $this->getMailbox()->getMailHeader($mailUid);
+        } catch (\Exception $e) {
+            if ($e->getMessage() === 'Warning: imap_fetchheader(): UID does not exist') {
+                return null;
+            }
+            throw $e;
+        }
+        /** @phpstan-ignore-next-line  */
+        return new ImapMailHeaderDto(...get_object_vars($headers));
+    }
 
-        $mail = $mailBox->getMail($id);
+    /**
+     * @throws Exception
+     */
+    public function getMail(int $mailUid, ?string $imapPath = null): ?ImapMailDto
+    {
+        if (null !== $imapPath) {
+            $this->switchMailbox($imapPath);
+        }
+        try {
+            $mail = $this->getMailbox()->getMail($mailUid, markAsSeen: false);
+        } catch (\Exception $e) {
+            if ($e->getMessage() === 'Warning: imap_fetchheader(): UID does not exist') {
+                return null;
+            }
+            throw $e;
+        }
+        if (null === $mail->headersRaw) {
+            throw new LogicException('No headers found');
+        }
+        $mail->headersRaw = $this->fixEncoding($mail->headersRaw);
+        $mail->subject = $this->fixEncoding($mail->subject);
         return new ImapMailDto(
             /** @phpstan-ignore-next-line */
             headers: new ImapMailHeaderDto(...get_object_vars($mail)),
-            textHtml: $mail->textHtml,
-            textPlain: $mail->textPlain
+            imapPath: $this->currentMailbox,
+            textHtml: $this->fixEncoding($mail->textHtml),
+            textPlain: $this->fixEncoding($mail->textPlain),
+            uid: $mailUid,
+            messageUniqueId: $mail->messageId . '-' . md5($mail->headersRaw),
+            hasAttachments: $mail->hasAttachments()
         );
+    }
+
+    protected function fixEncoding(?string $text, string $expectedEncoding = 'UTF-8'): string
+    {
+        if (null === $text) {
+            return '';
+        }
+        $detectedEncoding = mb_detect_encoding($text);
+        if (false === $detectedEncoding) {
+            $detectedEncoding = null;
+        }
+        // Note: Converting from UTF-8 to UTF-8 will fix bad encodings in source text
+        return mb_convert_encoding($text, $expectedEncoding, $detectedEncoding);
     }
 }

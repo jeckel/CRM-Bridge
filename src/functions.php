@@ -11,6 +11,7 @@ namespace App;
 
 use BackedEnum;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 if (! function_exists('App\slug')) {
@@ -21,9 +22,9 @@ if (! function_exists('App\slug')) {
 }
 
 if (! function_exists('App\new_uuid')) {
-    function new_uuid(): string
+    function new_uuid(): UuidInterface
     {
-        return Uuid::uuid4()->toString();
+        return Uuid::uuid4();
     }
 }
 

@@ -9,49 +9,63 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
-use App\Infrastructure\Doctrine\Repository\ImapFolderRepository;
+use App\Component\Shared\Identity\ImapMailboxId;
+use App\Infrastructure\Doctrine\Repository\ImapMailboxRepository;
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 
-#[ORM\Entity(repositoryClass: ImapFolderRepository::class)]
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
+#[ORM\Entity(repositoryClass: ImapMailboxRepository::class)]
 #[ORM\UniqueConstraint(name: "folder_unique_ref", columns: ['imap_account_id', 'slug'])]
 class ImapMailbox
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'imap_folder_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'imap_folder_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $name;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $imapPath;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $slug;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private ?int $lastSyncUid = null;
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    private int $lastSyncUid = 0;
 
-    #[ORM\Column(type: "integer", nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $flags = 0;
 
-    #[ORM\Column(type: "integer", nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $messages = 0;
 
-    #[ORM\Column(type: "integer", nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $recent = 0;
 
-    #[ORM\Column(type: "integer", nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $unseen = 0;
 
-    #[ORM\Column(type: "integer", nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $uidNext = 0;
 
-    #[ORM\Column(type: "datetime_immutable", nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $uidValidity = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $lastSyncDate = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
+    private bool $enabled = true;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(
@@ -63,7 +77,7 @@ class ImapMailbox
 
     #[ORM\ManyToOne(
         cascade: ['persist'],
-        inversedBy: 'folders'
+        inversedBy: 'mailboxes'
     )]
     #[ORM\JoinColumn(
         name: 'imap_account_id',
@@ -73,12 +87,22 @@ class ImapMailbox
     )]
     private ImapAccount $imapAccount;
 
-    public function getId(): UuidInterface|string
+    private ImapMailboxId $imapMailBoxId;
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): ImapMailbox
+    public function getIdentity(): ImapMailboxId
+    {
+        if (! isset($this->imapMailBoxId)) {
+            $this->imapMailBoxId = ImapMailboxId::from($this->id->toString());
+        }
+        return $this->imapMailBoxId;
+    }
+
+    public function setId(UuidInterface $id): ImapMailbox
     {
         $this->id = $id;
         return $this;
@@ -117,12 +141,12 @@ class ImapMailbox
         return $this;
     }
 
-    public function getLastSyncUid(): ?int
+    public function getLastSyncUid(): int
     {
         return $this->lastSyncUid;
     }
 
-    public function setLastSyncUid(?int $lastSyncUid): ImapMailbox
+    public function setLastSyncUid(int $lastSyncUid): ImapMailbox
     {
         $this->lastSyncUid = $lastSyncUid;
         return $this;
@@ -191,6 +215,28 @@ class ImapMailbox
     public function setUidNext(int $uidNext): self
     {
         $this->uidNext = $uidNext;
+        return $this;
+    }
+
+    public function getUidValidity(): ?int
+    {
+        return $this->uidValidity;
+    }
+
+    public function setUidValidity(int $uidValidity): ImapMailbox
+    {
+        $this->uidValidity = $uidValidity;
+        return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): ImapMailbox
+    {
+        $this->enabled = $enabled;
         return $this;
     }
 

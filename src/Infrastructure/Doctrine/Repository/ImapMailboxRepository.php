@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ImapMailbox[]    findAll()
  * @method ImapMailbox[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ImapFolderRepository extends AbstractEntityRepository
+class ImapMailboxRepository extends AbstractEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
