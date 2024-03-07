@@ -20,9 +20,4 @@ final readonly class ImapMailboxDto
         public int $uidnext = 0,
         public int $uidvalidity = 0
     ) {}
-
-    public function shortPath(): string
-    {
-        return substr($this->imapPath, strpos($this->imapPath, '}') + 1);
-    }
 }

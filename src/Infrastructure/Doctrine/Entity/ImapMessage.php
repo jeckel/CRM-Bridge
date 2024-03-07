@@ -9,14 +9,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Rfc4122\UuidV4;
 use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use Stringable;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 #[ORM\Entity(repositoryClass: ImapMessageRepository::class)]
 #[ORM\UniqueConstraint(name: "account_message_ref", columns: ['imap_account_id', 'message_unique_id'])]
@@ -111,8 +112,11 @@ class ImapMessage implements Stringable
         return $this->id;
     }
 
-    public function setId(UuidInterface $id): ImapMessage
+    public function setId(string|Stringable|UuidInterface $id): ImapMessage
     {
+        if (!$id instanceof UuidInterface) {
+            $id = UuidV4::fromString($id);
+        }
         $this->id = $id;
         return $this;
     }
