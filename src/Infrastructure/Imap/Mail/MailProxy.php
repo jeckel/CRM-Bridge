@@ -87,8 +87,8 @@ class MailProxy implements MailInterface
             $parsedHeaders = Message::from($mail->headersRaw ?? '', true);
             $this->entity = (new ImapMessage())
                 ->setImapAccount($this->account)
-                ->setFolder($this->folder)
-                ->setUid($this->uid)
+                ->setImapPath($this->folder)
+                ->setImapUid($this->uid)
                 ->setMessageId($mail->messageId ?? '')
                 ->setDate(new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')))
                 ->setSubject($mail->subject ?? throw new LogicException('Subject can not be null'))

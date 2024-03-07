@@ -5,10 +5,10 @@
         <tr><th>{{ imapAccount.name }}</th></tr>
     </thead>
     <tbody>
-    {% for mailbox in imapAccount.mailboxes %}
+    {% for mailbox in imapAccount.mailboxes|sort((a, b) => a.name <=> b.name) %}
         <tr><td
                 style="cursor: pointer"
-            hx-get="{{ path('webmail_list', { imapConfigId: imapAccount.id, folderPath: mailbox.name|url_encode }) }}"
+            hx-get="{{ path('webmail_list', { mailboxId: mailbox.id }) }}"
             hx-target="#mailList"
             >{{ mailbox.name }}</td>
         </tr>

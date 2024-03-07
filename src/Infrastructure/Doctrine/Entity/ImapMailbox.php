@@ -16,7 +16,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Rfc4122\UuidV4;
 use Ramsey\Uuid\UuidInterface;
+use Stringable;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -26,10 +28,10 @@ use Ramsey\Uuid\UuidInterface;
 class ImapMailbox
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'imap_folder_id', type: UuidType::NAME, unique: true)]
+    #[ORM\Column(name: 'imap_mailbox_id', type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface $id;
+    private UuidInterface|string $id;
 
     #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $name;
@@ -69,8 +71,8 @@ class ImapMailbox
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(
-        name: 'imap_parent_folder_id',
-        referencedColumnName: 'imap_folder_id',
+        name: 'imap_parent_mailbox_id',
+        referencedColumnName: 'imap_mailbox_id',
         nullable: true
     )]
     private ?ImapMailbox $parent = null;
@@ -91,19 +93,25 @@ class ImapMailbox
 
     public function getId(): UuidInterface
     {
+        if (is_string($this->id)) {
+            $this->id = UuidV4::fromString($this->id);
+        }
         return $this->id;
     }
 
     public function getIdentity(): ImapMailboxId
     {
         if (! isset($this->imapMailBoxId)) {
-            $this->imapMailBoxId = ImapMailboxId::from($this->id->toString());
+            $this->imapMailBoxId = ImapMailboxId::from((string) $this->id);
         }
         return $this->imapMailBoxId;
     }
 
-    public function setId(UuidInterface $id): ImapMailbox
+    public function setId(string|Stringable|UuidInterface $id): self
     {
+        if (!$id instanceof UuidInterface) {
+            $id = UuidV4::fromString((string) $id);
+        }
         $this->id = $id;
         return $this;
     }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Component\DirectCommunicationHub\Application\Service;
 
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
+use App\Infrastructure\Doctrine\Entity\ImapMailbox;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use App\Infrastructure\Imap\Mail\ImapMailDto;
@@ -24,18 +25,20 @@ readonly class UpsertEmail
         private ImapMessageRepository $repository
     ) {}
 
-    public function upsert(ImapMailDto $mail, ImapAccount $account): ?ImapMessage
+    public function upsert(ImapMailDto $mail, ImapAccount $account, ImapMailbox $mailbox): ?ImapMessage
     {
         $imapMessage = $this->repository->findOneBy(['imapAccount' => $account, 'messageUniqueId' => $mail->messageUniqueId]);
         if (null !== $imapMessage) {
+            // @todo : Update existing message (mailbox changed?)
             return $imapMessage;
         }
 
         $parsedHeaders = Message::from($mail->headersRaw ?? '', true);
         $imapMessage = (new ImapMessage())
             ->setImapAccount($account)
-            ->setFolder($mail->imapPath)
-            ->setUid($mail->uid)
+            ->setImapPath($mail->imapPath)
+            ->setImapMailbox($mailbox)
+            ->setImapUid($mail->uid)
             ->setMessageId($mail->messageId ?? '')
             ->setMessageUniqueId($mail->messageUniqueId)
             ->setDate(new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')))

@@ -10,11 +10,11 @@
 {% block page_content %}
 <div class="row">
     <div
-        class="col-md-2"
-        hx-get="{{ path('webmail_folders') }}"
+        class="col-md-3"
+        hx-get="{{ url('webmail_mailboxes') }}"
         hx-trigger="revealed"
-    ></div>
-    <div class="col-md-10" id="mailList"></div>
+    >loading</div>
+    <div class="col-md-9" id="mailList"></div>
 </div>
 {% endblock %}
 

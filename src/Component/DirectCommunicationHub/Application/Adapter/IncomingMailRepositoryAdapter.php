@@ -41,7 +41,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             ->setFromName($incomingMail->fromName)
             ->setFromAddress((string) $incomingMail->fromAddress)
             ->setToString($incomingMail->toString)
-            ->setFolder($incomingMail->folder)
+            ->setImapPath($incomingMail->folder)
             ->setTextPlain($incomingMail->textPlain ?? '')
             ->setTextHtml($incomingMail->textHtml ?? '');
         if (null !== ($authorId = $incomingMail->authorId())) {
@@ -61,7 +61,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             yield new IncomingMail(
                 MailId::from((string) $mail->getId()),
                 $mail->getMessageId(),
-                $mail->getFolder(),
+                $mail->getImapPath(),
                 $mail->getDate(),
                 $mail->getSubject(),
                 $mail->getFromName(),

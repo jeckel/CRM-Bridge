@@ -53,7 +53,7 @@ readonly class MailboxSynchroniser
                 // Just skip draft emails
                 continue;
             }
-            $this->upsertEmail->upsert($imapMail, $account);
+            $this->upsertEmail->upsert($imapMail, $account, $mailbox);
             $mailbox->setLastSyncUid($uid);
         }
         $mailbox->setLastSyncDate($this->clock->now());
