@@ -26,6 +26,10 @@
         >
             <td {{ cssRow|raw }}><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
             <td {{ cssRow|raw }}>
+                <div class="col-auto">
+{#                    <twig:Avatar :email="mail.fromAddress" :displayName="mail.fromName" />#}
+                </div>
+                <div class="col">
                 {% if mail.authorId %}
                     <a href="{{ ea_url()
                         .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
@@ -37,6 +41,7 @@
                 {% else %}
                     <span>{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;</span>
                 {% endif %}
+                </div>
             </td>
             <td {{ cssRow|raw }}>{{ mail.subject }}</td>
         </tr>

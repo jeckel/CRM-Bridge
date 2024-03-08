@@ -34,7 +34,7 @@ class Avatar
         return substr($initials, 0, 2);
     }
 
-    public function getGravatar(): ?string
+    public function getAvatar(): ?string
     {
         if (null === $this->email) {
             return null;
@@ -58,8 +58,14 @@ class Avatar
             return null;
         }
         $item->expiresAfter(3600 * 24);
+        return $this->retrieveGravatarUrl($this->email) ??
+            $this->retrieveBimiUrl($this->email);
+    }
+
+    private function retrieveGravatarUrl(string $email): ?string
+    {
         $url = "https://www.gravatar.com/avatar/" .
-            md5(strtolower(trim($this->email))) .
+            md5(strtolower(trim($email))) .
             "?d=" . urlencode($this->default) .
             "&s=" . $this->size
         ;
@@ -67,5 +73,35 @@ class Avatar
             return null;
         }
         return $url;
+    }
+
+    private function retrieveBimiUrl(string $email): ?string
+    {
+        // @todo Extract only root domain, not sub-domain
+        $domain = substr(strrchr($email, "@"), 1);
+
+        // Perform DNS query for BIMI record
+        $records = dns_get_record("default._bimi.$domain", DNS_TXT);
+
+        // Check if BIMI record exists
+        if (empty($records)) {
+            return null;
+        }
+
+        // Extract URL from BIMI record
+        foreach ($records as $record) {
+            if (isset($record['entries'])) {
+                foreach ($record['entries'] as $entry) {
+                    if (strpos($entry, 'v=BIMI1') !== false) {
+                        preg_match('/l=([^;\s]+)/', $entry, $matches);
+                        if (isset($matches[1])) {
+                            return $matches[1];
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
