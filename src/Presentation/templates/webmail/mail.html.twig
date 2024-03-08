@@ -9,7 +9,7 @@
         <div>
             <div class="row align-items-center">
                 <div class="col-auto">
-                    <span class="avatar" style="background-image: url(/static/avatars/003m.jpg)"></span>
+                    <twig:Avatar :email="mail.fromAddress" :displayName="mail.fromName" />
                 </div>
                 <div class="col">
                     <div class="card-title">{{ mail.subject }}</div>

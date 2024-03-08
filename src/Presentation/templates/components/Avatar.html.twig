@@ -1,0 +1,6 @@
+{% set gravatar = this.gravatar %}
+{% if gravatar != null %}
+    <span class="avatar" style="background-image: url({{ this.gravatar }})"></span>
+{% else %}
+    <span class="avatar">{{ this.initials }}</span>
+{% endif %}
