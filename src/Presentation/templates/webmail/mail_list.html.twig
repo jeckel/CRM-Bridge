@@ -11,9 +11,9 @@
     <table class="table table-vcenter card-table table-striped table-hover table-sm">
         <thead>
         <tr>
-            <th>{{ 'mail.field.date'|trans }}</th>
-            <th>{{ 'mail.field.from'|trans }}</th>
-            <th>{{ 'mail.field.subject'|trans }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'mail.field.date'|trans, 'm.date', {target: '#mailList'}) }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'mail.field.from'|trans, 'm.fromName', {target: '#mailList'}) }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'mail.field.subject'|trans, 'm.subject', {target: '#mailList'}) }}</th>
             <th>Infos</th>
         </tr>
         </thead>

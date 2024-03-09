@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Bootstrap v5 with Bootstrap Icons Sorting control implementation.
+ *
+ * Install Icon Set: https://icons.getbootstrap.com/#install
+ * Overview:         https://icons.getbootstrap.com/
+ */
+#}
+{% if sorted %}
+    {% if direction == 'desc' %}
+        {% set order = 'desc' %}
+    {% else %}
+        {% set order = 'asc' %}
+    {% endif %}
+{% else %}
+    {% set order = '' %}
+{% endif %}
+<button class="table-sort {{ order }}" hx-get="{{ options.href }}" hx-target="{{ options.target }}">{{ title }}</button>
