@@ -7,6 +7,7 @@
         <div class="card-title">{{ mailbox.name }}</div>
     </div>
     {% if mails|length > 0 %}
+{#        {{ knp_pagination_filter(mails, {'m.fromName': ''}) }}#}
     <div class="table-responsive">
     <table class="table table-vcenter card-table table-striped table-hover table-sm">
         <thead>
