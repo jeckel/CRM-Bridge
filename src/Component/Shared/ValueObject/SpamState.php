@@ -10,6 +10,7 @@ namespace App\Component\Shared\ValueObject;
 
 /**
  * @see https://services.renater.fr/antispam/refdocs/marquages
+ * @see https://thecontentauthority.com/blog/spam-vs-scam
  */
 enum SpamState: string
 {

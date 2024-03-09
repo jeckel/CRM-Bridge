@@ -12,7 +12,13 @@
                     <twig:Avatar :email="mail.fromAddress" />
                 </div>
                 <div class="col">
-                    <div class="card-title">{{ mail.subject }}</div>
+                    <div class="card-title">
+                        {{ mail.subject }}
+                        {% if mail.spamHeaders|length > 0 %}
+                            {% set spamStateValue = mail.spamHeaders['X-VR-SPAMSTATE'] %}
+                            <twig:SpamStateBadge :spamState="spamStateValue" />
+                        {% endif %}
+                    </div>
                     <div class="card-subtitle">
                         {% if mail.contact %}
                             <a href="{{ ea_url()

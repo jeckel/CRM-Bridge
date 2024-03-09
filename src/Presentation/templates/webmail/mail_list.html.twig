@@ -14,6 +14,7 @@
             <th>{{ 'mail.field.date'|trans }}</th>
             <th>{{ 'mail.field.from'|trans }}</th>
             <th>{{ 'mail.field.subject'|trans }}</th>
+            <th>Infos</th>
         </tr>
         </thead>
         <tbody>
@@ -47,6 +48,10 @@
                 </div>
             </td>
             <td {{ cssRow|raw }}>{{ mail.subject }}</td>
+            <td>{% if mail.spamHeaders|length > 0 %}
+                    {% set spamStateValue = mail.spamHeaders['X-VR-SPAMSTATE'] %}
+                    <twig:SpamStateBadge :spamState="spamStateValue" />
+                {% endif %}</td>
         </tr>
         {% endfor %}
         </tbody>
