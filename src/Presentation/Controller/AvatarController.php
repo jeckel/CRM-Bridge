@@ -12,6 +12,7 @@ use App\Presentation\Service\Avatar\ChainAvatarProvider;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AvatarController extends AbstractController
@@ -43,10 +44,17 @@ class AvatarController extends AbstractController
             throw new LogicException('Unable to read file');
         }
         // Set the appropriate MIME type in the response
-        $response = new Response();
-        $response->headers->set('Content-Type', $mimeType);
-
-        // Set the image content as the response body
-        return $response->setContent($content);
+        $response = new Response(
+            content: $content,
+            status: 200,
+            headers: [
+                'Content-Type' => $mimeType,
+                'Cache-Control' => 'public, max-age=604800'
+            ]
+        );
+        // Disable cache settings override when session exists
+        // @see https://symfony.com/doc/current/http_cache.html#http-caching-and-user-sessions
+        $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+        return $response;
     }
 }
