@@ -27,7 +27,7 @@
             <td {{ cssRow|raw }}><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
             <td {{ cssRow|raw }}>
                 <div class="col-auto">
-{#                    <twig:Avatar :email="mail.fromAddress" :displayName="mail.fromName" />#}
+                    <twig:Avatar :email="mail.fromAddress" />
                 </div>
                 <div class="col">
                 {% if mail.authorId %}

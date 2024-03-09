@@ -20,5 +20,7 @@ framework:
         pools:
             imap_mail.cache:
                 adapter: cache.adapter.filesystem
-            avatar.cache:
+            gravatar.cache:
+                adapter: cache.adapter.filesystem
+            bimi.cache:
                 adapter: cache.adapter.filesystem
