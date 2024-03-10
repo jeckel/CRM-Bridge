@@ -17,13 +17,15 @@ card_dav:
 #    new: Ajouter un compte CardDav
 #    sync_now: Synchroniser maintenant
   field:
-    address_book: Carnet d'adresse
-    address_books: Carnet d'adresses
+    address_book: Carnet d'adresses
+    address_books: Carnets d'adresses
+    default_address_book: Carnet d'adresses par défaut
     last_sync_token: Token synchronization CardDav
     login: CardDav Login
     name: Libellé
     uri: CardDav serveur
     password: CardDav Password
+    sync_address_books: Carnets d'adresses synchronisés
     sync_disabled: Désactivé
     sync_enabled: Activé
     sync_status: Synchronisation

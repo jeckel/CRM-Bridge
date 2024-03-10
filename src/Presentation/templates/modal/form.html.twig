@@ -1,7 +1,7 @@
 <div class="card" id="{{ form.vars.name }}">
     <div id="modalEmbedTitle" hx-swap-oob="true">{{ title|trans([], 'admin') }}</div>
     <div class="card-body">
-        <form name="{{ form.vars.name }}" hx-post="{{ form.vars.attr['hx-post'] }}" hx-target="#{{ form.vars.name }}" hx-swap="outerHTML">
+        <form name="{{ form.vars.name }}" method="post" hx-post="{{ form.vars.attr['hx-post'] }}" hx-target="#{{ form.vars.name }}" hx-swap="outerHTML">
         {{ form_end(form) }}
     </div>
 </div>

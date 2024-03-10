@@ -18,6 +18,7 @@
                 <tr>
                     <th>{{ 'card_dav.field.name'|trans }}</th>
                     <th>{{ 'card_dav.field.login'|trans }}</th>
+                    <th>{{ 'action.actions'|trans }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,9 @@
                     <tr>
                         <td>{{ account.name }}</td>
                         <td>{{ account.login }}</td>
+                        <td><a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modalEmbed"
+                            hx-get="{{ url('setup.card_dav.setup_address_books', {accountId: account.id }) }}" hx-target="#modalEmbedContent"
+                            >Config</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
