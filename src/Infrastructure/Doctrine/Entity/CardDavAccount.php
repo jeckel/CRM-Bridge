@@ -9,10 +9,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\CardDavAccountId;
 use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
@@ -20,12 +23,13 @@ use Stringable;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 #[ORM\Entity(repositoryClass: CardDavConfigRepository::class)]
-class CardDavConfig implements Stringable
+class CardDavAccount implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'card_dav_config_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'card_dav_account_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
     #[ORM\Column(length: 180, nullable: false)]
     private string $name;
@@ -43,24 +47,34 @@ class CardDavConfig implements Stringable
      * @var Collection<string, CardDavAddressBook> $addressBooks
      */
     #[ORM\OneToMany(
+        mappedBy: 'cardDavAccount',
         targetEntity: CardDavAddressBook::class,
-        mappedBy: 'cardDavConfig',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
     private Collection $addressBooks;
+
+    private CardDavAccountId $cardDavAccountId;
 
     public function __construct()
     {
         $this->addressBooks = new ArrayCollection();
     }
 
-    public function getId(): UuidInterface|string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): self
+    public function getIdentity(): CardDavAccountId
+    {
+        if (! isset($this->cardDavAccountId)) {
+            $this->cardDavAccountId = CardDavAccountId::from($this->id->toString());
+        }
+        return $this->cardDavAccountId;
+    }
+
+    public function setId(UuidInterface $id): self
     {
         $this->id = $id;
         return $this;
@@ -71,7 +85,7 @@ class CardDavConfig implements Stringable
         return $this->name;
     }
 
-    public function setName(string $name): CardDavConfig
+    public function setName(string $name): CardDavAccount
     {
         $this->name = $name;
         return $this;
@@ -122,7 +136,7 @@ class CardDavConfig implements Stringable
     {
         if (!$this->addressBooks->contains($addressBook)) {
             $this->addressBooks->add($addressBook);
-            $addressBook->setCardDavConfig($this);
+            $addressBook->setCardDavAccount($this);
         }
 
         return $this;
@@ -132,8 +146,8 @@ class CardDavConfig implements Stringable
     {
         if ($this->addressBooks->removeElement($addressBook)) {
             // set the owning side to null (unless already changed)
-            if ($addressBook->getCardDavConfig() === $this) {
-                $addressBook->setCardDavConfig(null);
+            if ($addressBook->getCardAccount() === $this) {
+                $addressBook->setCardDavAccount(null);
             }
         }
 

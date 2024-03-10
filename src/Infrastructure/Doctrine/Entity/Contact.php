@@ -9,10 +9,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\ContactId;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
@@ -23,40 +27,41 @@ use Stringable;
 class Contact implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'contact_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'contact_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $displayName = '';
 
-    #[ORM\Column(length: 180, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 180, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 30, nullable: true)]
     private ?string $phoneNumber;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 30, nullable: true)]
     private ?string $espoContactId = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $vCardUri = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $vCardEtag = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $vCardLastSyncAt = null;
 
     /**
      * @var Collection<int, ContactActivity> $activities
      */
     #[ORM\OneToMany(
-        targetEntity: ContactActivity::class,
         mappedBy: 'contact',
+        targetEntity: ContactActivity::class,
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -66,8 +71,8 @@ class Contact implements Stringable
      * @var Collection<string, ContactEmailAddress> $emailAddresses
      */
     #[ORM\OneToMany(
-        targetEntity: ContactEmailAddress::class,
         mappedBy: 'contact',
+        targetEntity: ContactEmailAddress::class,
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -77,8 +82,8 @@ class Contact implements Stringable
      * @var Collection<int, ImapMessage> $mails
      */
     #[ORM\OneToMany(
-        targetEntity: ImapMessage::class,
         mappedBy: 'contact',
+        targetEntity: ImapMessage::class,
         orphanRemoval: false
     )]
     private Collection $mails;
@@ -102,6 +107,7 @@ class Contact implements Stringable
         nullable: true
     )]
     private ?CardDavAddressBook $addressBook = null;
+    private ContactId $contactId;
 
     public function __construct()
     {
@@ -110,12 +116,20 @@ class Contact implements Stringable
         $this->emailAddresses = new ArrayCollection();
     }
 
-    public function getId(): UuidInterface|string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): Contact
+    public function getIdentity(): ContactId
+    {
+        if (! isset($this->contactId)) {
+            $this->contactId = ContactId::from($this->id->toString());
+        }
+        return $this->contactId;
+    }
+
+    public function setId(UuidInterface $id): self
     {
         $this->id = $id;
         return $this;

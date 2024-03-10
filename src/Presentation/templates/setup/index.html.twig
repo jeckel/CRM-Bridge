@@ -24,7 +24,6 @@
                         <tr>
                             <th>{{ 'imap.field.name'|trans }}</th>
                             <th>{{ 'imap.field.login'|trans }}</th>
-{#                            <th>{{ 'action.actions'|trans({}, 'admin') }}</th>#}
                         </tr>
                         </thead>
                         <tbody>
@@ -32,7 +31,6 @@
                             <tr>
                                 <td>{{ imapAccount.name }}</td>
                                 <td>{{ imapAccount.login }}</td>
-{#                                <td></td>#}
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -45,14 +43,30 @@
                 <div class="card-header">
                     <h3 class="card-title">{{ 'card_dav.title.list'|trans }}</h3>
                     <div class="card-actions">
-                        <a href="{{ url('setup.card_dav.create_account') }}" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
+                        <a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addCardDavAccount">
+                            <i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}
+                        </a>
                     </div>
                 </div>
                 {% if card_dav_accounts|length > 0 %}
-                <div class="card-table table-responsive">
-                        Comptes
-                        Vide
-                </div>
+                    <div class="card-table table-responsive">
+                        <table class="table table-vcenter card-table table-striped table-hover table-sm">
+                            <thead>
+                            <tr>
+                                <th>{{ 'card_dav.field.name'|trans }}</th>
+                                <th>{{ 'card_dav.field.login'|trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for account in card_dav_accounts %}
+                                <tr>
+                                    <td>{{ account.name }}</td>
+                                    <td>{{ account.login }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 {% else %}
                 <div class="alert alert-info m-4" role="alert">
                     <h4 class="alert-title">{{ 'list.empty.title'|trans }}</h4>
@@ -68,6 +82,14 @@
         {% block modal_size 'modal_sm' %}
         {% block modal_body %}
             <div hx-get="{{ url('setup.imap.create_account') }}" hx-trigger="revealed"></div>
+        {% endblock %}
+    {% endembed %}
+
+    {% embed '@Tabler/embeds/modal.html.twig' with {id: 'addCardDavAccount', header: true, footer: false} %}
+        {% block modal_title %}{{ 'card_dav.title.create_account'|trans([], 'admin') }}{% endblock %}
+        {% block modal_size 'modal_sm' %}
+        {% block modal_body %}
+            <div hx-get="{{ url('setup.card_dav.create_account') }}" hx-trigger="revealed"></div>
         {% endblock %}
     {% endembed %}
 

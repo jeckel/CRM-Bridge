@@ -29,6 +29,7 @@ card_dav:
     sync_status: Synchronisation
   title:
     list: Comptes CardDav
+    create_account: Ajout d'un nouveau compte CardDav
 
 
 company:

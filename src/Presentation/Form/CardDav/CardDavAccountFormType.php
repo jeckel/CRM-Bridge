@@ -26,24 +26,31 @@ class CardDavAccountFormType extends AbstractType
     {
         $builder
             ->add(
-                child: ConfigurationKey::CARDDAV_URI->value,
+                child: 'name',
                 type: TextType::class,
                 options: [
-                    'label' => 'card_dav.field.connection_uri'
+                    'label' => 'card_dav.field.name'
                 ]
             )
             ->add(
-                child: ConfigurationKey::CARDDAV_USERNAME->value,
+                child: 'uri',
                 type: TextType::class,
                 options: [
-                    'label' => 'card_dav.field.connection_username'
+                    'label' => 'card_dav.field.uri'
                 ]
             )
             ->add(
-                child: ConfigurationKey::CARDDAV_PASSWORD->value,
+                child: 'login',
+                type: TextType::class,
+                options: [
+                    'label' => 'card_dav.field.login'
+                ]
+            )
+            ->add(
+                child: 'password',
                 type: PasswordType::class,
                 options: [
-                    'label' => 'card_dav.field.connection_password'
+                    'label' => 'card_dav.field.password'
                 ]
             )
             ->add(

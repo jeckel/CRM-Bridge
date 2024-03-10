@@ -23,7 +23,7 @@ class IndexController extends AbstractController
     )]
     public function index(ImapAccountRepository $imapAccountRepo): Response
     {
-        if ($imapAccountRepo->count() === 0) {
+        if ($imapAccountRepo->count([]) === 0) {
             return $this->redirectToRoute('webmail_imap_create_account');
         }
         return $this->render(

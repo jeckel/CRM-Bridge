@@ -24,7 +24,7 @@ class MailSummaryController extends AbstractController
     )]
     public function __invoke(EntityManagerInterface $entityManager, ImapMessageRepository $repository): Response
     {
-        $count = $repository->count();
+        $count = $repository->count([]);
 
         $result = $entityManager->getConnection()
             ->prepare(
