@@ -1,0 +1,63 @@
+{% extends '/layout/tabler-layout.html.twig' %}
+{% trans_default_domain 'admin' %}
+
+{% block page_title %}{{ 'setup.title'|trans }}{% endblock %}
+
+{% block page_actions %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">IMAP Accounts</h3>
+                    <div class="card-actions">
+                        <a href="{{ url('setup.imap.create_account') }}" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
+                    </div>
+                </div>
+                <div class="card-table table-responsive">
+                    <table class="table table-vcenter card-table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th>{{ 'imap.field.name'|trans }}</th>
+                            <th>{{ 'imap.field.login'|trans }}</th>
+                            <th>{{ 'action.actions'|trans({}, 'admin') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for imapAccount in imap_accounts %}
+                            <tr>
+                                <td>{{ imapAccount.name }}</td>
+                                <td>{{ imapAccount.login }}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">CardDav Accounts</h3>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
+                    </div>
+                </div>
+                {% if card_dav_accounts|length > 0 %}
+                <div class="card-table table-responsive">
+                        Comptes
+                        Vide
+                </div>
+                {% else %}
+                <div class="alert alert-info m-4" role="alert">
+                    <h4 class="alert-title">{{ 'list.empty.title'|trans }}</h4>
+                    <div class="text-secondary">{{ 'list.empty.message'|trans }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

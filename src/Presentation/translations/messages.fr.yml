@@ -20,6 +20,7 @@ menu:
     incoming_webhooks: Webhook Logs
     mail: Mails
     services: Services
+    setup: Configuration
     setup_options: Options
     super_admin: Super Admin
     webmail: WebMail
