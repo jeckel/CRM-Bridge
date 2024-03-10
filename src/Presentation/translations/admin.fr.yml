@@ -131,7 +131,8 @@ services:
 setup:
   title: Configuration
   flash_message:
-    imap_account_added: Le compte IMAP %account% a été ajouté
+    card_dav_account_added: Le compte CardDav "%account%" a été ajouté
+    imap_account_added: Le compte IMAP "%account%" a été ajouté
 
 worker:
   action:

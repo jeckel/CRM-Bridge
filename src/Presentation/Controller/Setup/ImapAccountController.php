@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Setup;
 
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
+use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
 use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
 use App\Presentation\Form\Imap\ImapAccountFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,8 +21,20 @@ use Symfony\Component\Translation\TranslatableMessage;
 
 #[Route("/setup/imap", name: "setup.imap.")]
 #[IsGranted("ROLE_ADMIN")]
-class AddImapAccountAction extends AbstractController
+class ImapAccountController extends AbstractController
 {
+    #[Route('/', name: 'index')]
+    public function index(
+        ImapAccountRepository $repository
+    ): Response {
+        return $this->render(
+            'setup/embed/imap_index.html.twig',
+            [
+                'imap_accounts' => $repository->findAll()
+            ]
+        );
+    }
+
     #[Route(
         path: "/create_account",
         name: "create_account",
@@ -32,24 +45,29 @@ class AddImapAccountAction extends AbstractController
         $form = $this->createForm(
             ImapAccountFormType::class,
             new ImapAccount(),
-            [ 'action' => $this->generateUrl('setup.imap.create_account')]
+            [ 'hx-post' => $this->generateUrl('setup.imap.create_account')]
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var ImapAccount $account */
             $account = $form->getData();
             $repository->persist($account);
-            $this->addFlash('success', new TranslatableMessage(
-                'setup.flash_message.imap_account_added',
-                ['%account%' => $account->getName()],
-                'admin'
-            ));
-            return $this->redirectToRoute('setup.index');
+            return $this->render('modal/success.html.twig', [
+                'message' => new TranslatableMessage(
+                    'setup.flash_message.imap_account_added',
+                    ['%account%' => $account->getName()],
+                    'admin'
+                ),
+                'refresh' => [
+                    'route' => 'setup.imap.index',
+                    'target' => '#imapList'
+                ]
+            ]);
         }
         return $this->render(
-            'setup/imap_account_form.html.twig',
+            'modal/form.html.twig',
             [
-                'page_title' => 'mail.title.create_contact',
+                'title' => 'imap.title.create_account',
                 'form' => $form->createView()
             ]
         );

@@ -1,0 +1,12 @@
+<div
+    class="alert alert-success"
+    role="alert"
+{% if refresh %}
+    hx-get="{{ path(refresh.route) }}"
+    hx-trigger="revealed"
+    hx-target="{{ refresh.target }}"
+{% endif %}
+>
+    <h4 class="alert-title">Success!</h4>
+    <div class="text-secondary">{{ message|trans }}</div>
+</div>
