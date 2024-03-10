@@ -1,5 +1,6 @@
 action:
   actions: Actions
+  add: Ajouter
   cancel_and_return_to_list: Annuler et revenir à la liste
   details: Détails
   list: Liste
@@ -8,6 +9,27 @@ action:
   select: "Sélectionner"
   start: Démarrer
   stop: Arrêter
+
+card_dav:
+#  action:
+#    disable_sync: Désactiver la synchro
+#    enable_sync: Activer la synchro
+#    new: Ajouter un compte CardDav
+#    sync_now: Synchroniser maintenant
+  field:
+    address_book: Carnet d'adresse
+    address_books: Carnet d'adresses
+    last_sync_token: Token synchronization CardDav
+    login: CardDav Login
+    name: Libellé
+    uri: CardDav serveur
+    password: CardDav Password
+    sync_disabled: Désactivé
+    sync_enabled: Activé
+    sync_status: Synchronisation
+  title:
+    list: Comptes CardDav
+
 
 company:
   field:
@@ -20,38 +42,9 @@ company:
 config:
   action:
     actions: Actions
-  card_dav:
-    action:
-      disable_sync: Désactiver la synchro
-      enable_sync: Activer la synchro
-      new: Ajouter un compte CardDav
-      sync_now: Synchroniser maintenant
-    field:
-      address_book: Carnet d'adresse
-      address_books: Carnet d'adresses
-      last_sync_token: Token synchronization CardDav
-      login: CardDav Login
-      name: Libellé
-      uri: CardDav serveur
-      password: CardDav Password
-      sync_disabled: Désactivé
-      sync_enabled: Activé
-      sync_status: Synchronisation
+
   field:
     account: Organisation
-  imap:
-    action:
-      new: Ajouter un compte IMAP
-      select_folders: Sélectionner les dossiers à synchroniser
-      sync_mails: Synchroniser
-    alert:
-      sync_mails_requested: Synchronisation des mails en cours
-    field:
-      login: Login IMAP
-      name: Libellé
-      password: Mot de passe IMAP
-      synced_folders: Dossiers
-      uri: Serveur IMAP
 
 contact:
   field:
@@ -68,17 +61,23 @@ contact:
     mails: Mails
     summary: Sommaire
 
-#imap:
+imap:
 #  action:
-#    sync: Synchroniser
+#    new: Ajouter un compte IMAP
+#    select_folders: Sélectionner les dossiers à synchroniser
+#    sync_mails: Synchroniser
 #  alert:
-#    synchronization_request_success: Synchronisation des mails en cours
-#  field:
-#    host: Serveur
-#    login: Login
-#    password: Mot de passe
-#  title:
-#    setup: IMAP Configuration
+#    sync_mails_requested: Synchronisation des mails en cours
+  field:
+    login: Login IMAP
+    name: Libellé
+    password: Mot de passe IMAP
+#    synced_folders: Dossiers
+    uri: Serveur IMAP
+  title:
+    create_account: Ajouter un nouveau compte IMAP
+    list: Comptes IMAP
+
 
 mail:
   alert:
@@ -130,6 +129,8 @@ services:
 
 setup:
   title: Configuration
+  flash_message:
+    imap_account_added: Le compte IMAP %account% a été ajouté
 
 worker:
   action:

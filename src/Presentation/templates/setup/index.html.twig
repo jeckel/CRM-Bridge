@@ -11,9 +11,11 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">IMAP Accounts</h3>
+                    <h3 class="card-title">{{ 'imap.title.list'|trans }}</h3>
                     <div class="card-actions">
-                        <a href="{{ url('setup.imap.create_account') }}" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
+                        <a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addImapAccount">
+                            <i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}
+                        </a>
                     </div>
                 </div>
                 <div class="card-table table-responsive">
@@ -22,7 +24,7 @@
                         <tr>
                             <th>{{ 'imap.field.name'|trans }}</th>
                             <th>{{ 'imap.field.login'|trans }}</th>
-                            <th>{{ 'action.actions'|trans({}, 'admin') }}</th>
+{#                            <th>{{ 'action.actions'|trans({}, 'admin') }}</th>#}
                         </tr>
                         </thead>
                         <tbody>
@@ -30,7 +32,7 @@
                             <tr>
                                 <td>{{ imapAccount.name }}</td>
                                 <td>{{ imapAccount.login }}</td>
-                                <td></td>
+{#                                <td></td>#}
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -41,9 +43,9 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">CardDav Accounts</h3>
+                    <h3 class="card-title">{{ 'card_dav.title.list'|trans }}</h3>
                     <div class="card-actions">
-                        <a href="#" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
+                        <a href="{{ url('setup.card_dav.create_account') }}" class="btn btn-default"><i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}</a>
                     </div>
                 </div>
                 {% if card_dav_accounts|length > 0 %}
@@ -60,4 +62,14 @@
             </div>
         </div>
     </div>
+
+    {% embed '@Tabler/embeds/modal.html.twig' with {id: 'addImapAccount', header: true, footer: false} %}
+        {% block modal_title %}{{ 'imap.title.create_account'|trans([], 'admin') }}{% endblock %}
+        {% block modal_size 'modal_sm' %}
+        {% block modal_body %}
+            <div hx-get="{{ url('setup.imap.create_account') }}" hx-trigger="revealed"></div>
+        {% endblock %}
+    {% endembed %}
+
 {% endblock %}
+

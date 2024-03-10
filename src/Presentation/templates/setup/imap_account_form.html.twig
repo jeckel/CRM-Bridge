@@ -1,0 +1,16 @@
+{#{% extends '/layout/tabler-layout.html.twig' %}#}
+{#{% trans_default_domain 'webmail' %}#}
+
+{#{% block page_title %}WebMail - Create IMAP Account{% endblock %}#}
+
+{#{% block page_actions %}#}
+{#    <a href="{{ url('webmail_imap_list') }}" class="btn btn-default"><i class="ti ti-arrow-left"></i>&nbsp;{{ 'action.cancel_and_return_to_list'|trans({},'admin') }}</a>#}
+{#{% endblock %}#}
+
+{#{% block page_content %}#}
+    <div class="card">
+        <div class="card-body">
+            {{ form(form) }}
+        </div>
+    </div>
+{#{% endblock %}#}
