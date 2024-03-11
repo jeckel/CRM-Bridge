@@ -1,0 +1,37 @@
+<div class="table-responsive">
+    <table class="table table-vcenter card-table table-striped table-hover table-sm">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(contacts, 'contact.field.displayName'|trans, 'c.displayName', {target: '#contactList'}) }}</th>
+            <th>{{ 'contact.field.phoneNumber'|trans }}</th>
+            <th>{{ 'contact.field.emailAddress'|trans }}</th>
+            <th>{{ knp_pagination_sortable(contacts, 'contact.field.company'|trans, 'co.name', {target: '#contactList'}) }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+            <tr
+                class="cursor-pointer"
+            >
+                <td class="row align-items-center flex-fill">
+                    <div class="col-auto"><twig:Avatar :email="contact.emailAddress" /></div>
+                    <div class="col text-body">
+                        <div>{{ contact.displayName }}</div>
+                        <div class="text-secondary text-truncate w-100">{% if contact.emailAddress is not null %}&lt;{{ contact.emailAddress }}&gt;{% endif %}</div>
+                    </div>
+                </td>
+{#                <td>{{ contact.displayName }}</td>#}
+                <td>{{ contact.phoneNumber }}</td>
+                <td>{{ contact.emailAddress }}</td>
+                <td>{{ contact.companyName }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="card-footer d-flex align-items-center">
+    <p class="m-0 text-secondary">Showing <span>{{ (page - 1) * limit + 1 }}</span> to <span>{{ page * limit > total ? total : page * limit }}</span> of <span>{{ total }}</span> entries</p>
+    <ul class="pagination m-0 ms-auto">
+        {{ knp_pagination_render(contacts, null, [], {target: '#contactList', first: true, last: true}) }}
+    </ul>
+</div>

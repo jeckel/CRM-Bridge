@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
@@ -28,8 +27,7 @@ class Contact implements Stringable
 {
     #[ORM\Id]
     #[ORM\Column(name: 'contact_id', type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[ORM\GeneratedValue(strategy: "NONE")]
     private UuidInterface $id;
 
     #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]

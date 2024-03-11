@@ -1,0 +1,18 @@
+{% extends '/layout/tabler-layout.html.twig' %}
+{% trans_default_domain 'contact' %}
+
+{% block page_title %}Contacts{% endblock %}
+
+{% block page_actions %}
+{#    <a href="{{ url('setup.index') }}" class="btn btn-default"><i class="ti ti-inbox"></i>&nbsp;{{ 'imap.action.list'|trans }}</a>#}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row" id="contactList"
+         hx-get="{{ url('contact.contacts') }}"
+         hx-trigger="revealed"
+    >
+    </div>
+{% endblock %}
+
+

@@ -17,10 +17,10 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent]
 class Avatar
 {
-    public string $email;
+    public ?string $email;
 
     public function getEncodedEmail(): ?string
     {
-        return base64_encode($this->email);
+        return base64_encode($this->email??'foo@bar.com');
     }
 }

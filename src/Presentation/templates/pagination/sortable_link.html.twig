@@ -16,4 +16,8 @@
 {% else %}
     {% set order = '' %}
 {% endif %}
+{% if options.target is defined %}
 <button class="table-sort {{ order }}" hx-get="{{ options.href }}" hx-target="{{ options.target }}">{{ title }}</button>
+{% else %}
+    <a class="btn table-sort {{ order }}" href="{{ options.href }}">{{ title }}</a>
+{% endif %}
