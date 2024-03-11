@@ -18,6 +18,7 @@ dashboard:
 menu:
     admin: Admin
     contacts: Contacts
+    home: Dashboard
     setup: Configuration
     webmail: WebMail
     workers: Workers

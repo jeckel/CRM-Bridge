@@ -35,7 +35,7 @@ class MailSummaryController extends AbstractController
             )->executeQuery()
             ->fetchAllKeyValue();
         return $this->render(
-            'dashboard/mail_summary.html.twig',
+            'pages/dashboard/mail_summary.html.twig',
             [
                 'count' => $count,
                 'mail_history' => $result

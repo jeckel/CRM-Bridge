@@ -25,7 +25,7 @@ class WorkerStatusAction extends AbstractController
         Supervisor $supervisor
     ): Response {
         return $this->render(
-            'dashboard/worker_status.html.twig',
+            'pages/dashboard/worker_status.html.twig',
             ['workers' => $supervisor->getAllProcesses()]
         );
     }

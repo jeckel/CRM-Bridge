@@ -32,6 +32,7 @@ class MenuBuilderSubscriber implements EventSubscriberInterface
         $admin->addChild(
             new MenuItemModel('Setup', 'menu.setup', 'setup.index', [], 'ti ti-settings')
         );
+        $event->addItem(new MenuItemModel('Home', 'menu.home', 'home', [], 'ti ti-home'));
         $event->addItem(new MenuItemModel('WebMail', 'menu.webmail', 'webmail.index', [], 'ti ti-inbox'));
         $event->addItem(new MenuItemModel('Contacts', 'menu.contacts', 'contact.index', [], 'ti ti-id'));
         $event->addItem($admin);
