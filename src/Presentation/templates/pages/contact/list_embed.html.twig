@@ -13,6 +13,8 @@
         {% for contact in contacts %}
             <tr
                 class="cursor-pointer"
+                hx-get="{{ path('contact.contact.details', { contactId: contact.id }) }}"
+                hx-target="#contactList"
             >
                 <td>{{ contact.addressBook }}</td>
                 <td class="row align-items-center flex-fill">

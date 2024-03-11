@@ -24,6 +24,8 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 class IndexController extends AbstractController
 {
+    public function __construct(private readonly ContactRepository $contactRepository) {}
+
     #[Route(
         path: "/",
         name: "index",
@@ -40,14 +42,13 @@ class IndexController extends AbstractController
         methods: ['GET']
     )]
     public function list(
-        ContactRepository $repository,
         PaginatorInterface $paginator,
         Request $request
     ): Response {
         $page = $request->query->getInt('page', 1);
         $limit = 20;
         $contacts = $paginator->paginate(
-            $repository->createQueryBuilder('c')
+            $this->contactRepository->createQueryBuilder('c')
                 ->select(
                     'c.id',
                     'c.displayName',
@@ -68,5 +69,16 @@ class IndexController extends AbstractController
             'limit' => $limit,
             'total' => $contacts->getTotalItemCount()
         ]);
+    }
+
+    #[Route(
+        path: "/{contactId}/details",
+        name: "contact.details",
+        methods: ['GET']
+    )]
+    public function details(string $contactId): Response
+    {
+        $contact = $this->contactRepository->getById($contactId);
+        return $this->render('pages/contact/details_embed.html.twig', ['contact' => $contact]);
     }
 }
