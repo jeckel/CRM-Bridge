@@ -1,17 +1,16 @@
 {% extends '/layout/tabler-layout.html.twig' %}
-{% trans_default_domain 'webmail' %}
 
-{% block page_title %}WebMail{% endblock %}
+{% block page_title %}{{ 'webmail.title.index'|trans }}{% endblock %}
 
 {% block page_actions %}
-<a href="{{ url('setup.index') }}" class="btn btn-default"><i class="ti ti-inbox"></i>&nbsp;{{ 'imap.action.list'|trans }}</a>
+<a href="{{ url('setup.index') }}" class="btn btn-default"><i class="ti ti-inbox"></i>&nbsp;{{ 'webmail.action.imap'|trans }}</a>
 {% endblock %}
 
 {% block page_content %}
 <div class="row">
     <div
         class="col-md-3"
-        hx-get="{{ url('webmail_mailboxes') }}"
+        hx-get="{{ url('webmail.mailboxes') }}"
         hx-trigger="revealed"
     >loading</div>
     <div class="col-md-9" id="mailList"></div>

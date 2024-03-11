@@ -1,5 +1,3 @@
-{% trans_default_domain 'webmail' %}
-
 <div class="card">
         {% if not mail.isTreated %}
         <div class="ribbon bg-red ribbon-top ribbon-start">NEW</div>
@@ -41,21 +39,22 @@
                 <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                 <div class="dropdown-menu">
                     {% if not mail.contact %}
-                    <a href="{{ ea_url().setRoute('create_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'mail.action.create_contact'|trans }}</a>
-                    <a href="{{ ea_url().setRoute('attach_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'mail.action.attach_contact'|trans }}</a>
+                    <a href="{{ ea_url().setRoute('create_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'webmail.action.create_contact'|trans }}</a>
+                    <a href="{{ ea_url().setRoute('attach_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'webmail.action.attach_contact'|trans }}</a>
                     {% endif %}
+
                     {% if mail.treated %}
-                        <a hx-put="{{ path('webmail_mark_as_untreated', { mailId: mail.id }) }}"
+                        <a hx-put="{{ path('webmail.mail.mark_as_untreated', { mailId: mail.id }) }}"
                             hx-target="#mailList"
-                            href="{{ path('webmail_mark_as_untreated', { mailId: mail.id }) }}"
-                            class="dropdown-item">{{ 'mail.action.mark_as_untreated'|trans }}</a>
+                            href="#"
+                            class="dropdown-item">{{ 'webmail.action.mark_as_untreated'|trans }}</a>
                     {% else %}
-                        <a hx-put="{{ path('webmail_mark_as_treated', { mailId: mail.id }) }}"
+                        <a hx-put="{{ path('webmail.mail.mark_as_treated', { mailId: mail.id }) }}"
                             hx-target="#mailList"
-                            href="{{ path('webmail_mark_as_treated', { mailId: mail.id }) }}"
-                            class="dropdown-item">{{ 'mail.action.mark_as_treated'|trans }}</a>
+                            href="#"
+                            class="dropdown-item">{{ 'webmail.action.mark_as_treated'|trans }}</a>
                     {% endif %}
-                    <a href="{{ path('webmail_mail_debug', { mailId: mail.id }) }}" class="dropdown-item">Dump</a>
+                    <a href="{{ path('webmail.mail.debug', { mailId: mail.id }) }}" class="dropdown-item">{{ 'action.debug'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -65,13 +64,13 @@
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                     <li class="nav-item">
-                        <a href="#tabs-text" class="nav-link active" data-bs-toggle="tab">Text</a>
+                        <a href="#tabs-text" class="nav-link active" data-bs-toggle="tab">{{ 'webmail.tab.text'|trans }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#tabs-html" class="nav-link" data-bs-toggle="tab">Html</a>
+                        <a href="#tabs-html" class="nav-link" data-bs-toggle="tab">{{ 'webmail.tab.html'|trans }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#tabs-headers" class="nav-link" data-bs-toggle="tab">Headers</a>
+                        <a href="#tabs-headers" class="nav-link" data-bs-toggle="tab">{{ 'webmail.tab.headers'|trans }}</a>
                     </li>
                 </ul>
             </div>

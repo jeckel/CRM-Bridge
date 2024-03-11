@@ -2,6 +2,7 @@ action:
   actions: Actions
   add: Ajouter
   cancel_and_return_to_list: Annuler et revenir à la liste
+  debug: Debug
   details: Détails
   list: Liste
   restart: Redémarrer
@@ -37,6 +38,7 @@ setup:
   flash_message:
     card_dav_account_added: Le compte CardDav "%account%" a été configuré
     imap_account_added: Le compte IMAP "%account%" a été configuré
+    imap_account_required: Vous devez d'abord avoir au moins un compte IMAP de configuré
   imap:
     field:
       host: Serveur IMAP
@@ -47,7 +49,23 @@ setup:
       index: Configurations des comptes IMAP
       create_account: Ajouter un nouveau compte IMAP
 
-
+webmail:
+  action:
+    imap: Comptes IMAP
+    attach_contact: Lier à un contact existant
+    create_contact: Créer un nouveau contact
+    mark_as_treated: Marquer comme traité
+    mark_as_untreated: Marquer comme non traité
+  field:
+    date: Date d'envoie
+    from: Auteur
+    subject: Objet
+  tab:
+    text: Texte
+    html: HTML
+    headers: Entêtes
+  title:
+    index: Mails
 
 worker:
   action:

@@ -1,7 +1,3 @@
-{#<div>{{ imapConfigId }}</div>#}
-{#<div>{{ folder }}</div>#}
-{% trans_default_domain 'webmail' %}
-
 <div class="card">
     <div class="card-header">
         <div class="card-title">{{ mailbox.name }}</div>
@@ -12,9 +8,9 @@
     <table class="table table-vcenter card-table table-striped table-hover table-sm">
         <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(mails, 'mail.field.date'|trans, 'm.date', {target: '#mailList'}) }}</th>
-            <th>{{ knp_pagination_sortable(mails, 'mail.field.from'|trans, 'm.fromName', {target: '#mailList'}) }}</th>
-            <th>{{ knp_pagination_sortable(mails, 'mail.field.subject'|trans, 'm.subject', {target: '#mailList'}) }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'webmail.field.date'|trans, 'm.date', {target: '#mailList'}) }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'webmail.field.from'|trans, 'm.fromName', {target: '#mailList'}) }}</th>
+            <th>{{ knp_pagination_sortable(mails, 'webmail.field.subject'|trans, 'm.subject', {target: '#mailList'}) }}</th>
             <th>Infos</th>
         </tr>
         </thead>
@@ -23,7 +19,7 @@
             {% set cssRow = mail.isTreated ? 'class="text-secondary"' : '' %}
         <tr
             class="cursor-pointer"
-            hx-get="{{ path('webmail_mail', { mailId: mail.id }) }}"
+            hx-get="{{ path('webmail.mail.details', { mailId: mail.id }) }}"
             hx-target="#mailList"
         >
             <td {{ cssRow|raw }}><time datetime="{{ mail.date|date('c') }}" title="{{ mail.date|date('r') }}">{{ mail.date|date('d/m/y H:i:s') }}</time></td>
