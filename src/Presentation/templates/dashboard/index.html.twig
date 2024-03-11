@@ -6,12 +6,12 @@
 <h4>User dashboard</h4>
 <div class="row">
     <div class="col-md-2 col-sd-4"
-        hx-get="{{ path('dashboard_part_mail_summary') }}"
+        hx-get="{{ path('dashboard.embed.mail_summary') }}"
         hx-trigger="revealed"
     >
     </div>
     <div class="col-md-2 col-sd-4"
-        hx-get="{{ path('dashboard_parts_worker_status') }}"
+        hx-get="{{ path('dashboard.embed.worker_status') }}"
         hx-trigger="revealed"
     >
     </div>

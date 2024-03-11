@@ -1,3 +1,15 @@
+action:
+  actions: Actions
+  add: Ajouter
+  cancel_and_return_to_list: Annuler et revenir à la liste
+  details: Détails
+  list: Liste
+  restart: Redémarrer
+  save: Enregistrer
+  select: "Sélectionner"
+  start: Démarrer
+  stop: Arrêter
+
 config:
   card_dav:
     title:
@@ -25,5 +37,29 @@ menu:
 #    super_admin: Super Admin
     webmail: WebMail
     workers: Workers
+
 dashboard:
+  running_workers: Workers
   title: 'Dashboard'
+
+worker:
+  action:
+    clear_logs: Vider les logs
+  field:
+    description: Description
+    name: Worker
+    pid: Pid
+    spawn_error: Erreur de lancement
+    start_date: Lancé à
+    state: état
+    stop_date: Arrêté à
+  flash_message:
+    worker_restarted: Le worker %worker% a été redémarré.
+    worker_started: Le worker %worker% a été démarré.
+    worker_stopped: Le worker %worker% a été arrêté.
+  state:
+    Exited: En erreur
+    Running: Running
+    Stopped: Arrêté
+  title:
+    running_workers: Workers en cours

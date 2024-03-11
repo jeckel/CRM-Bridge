@@ -18,8 +18,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class MailSummaryController extends AbstractController
 {
     #[Route(
-        path: "/dashboard/part/mail-summary/",
-        name: "dashboard_part_mail_summary",
+        path: "/dashboard/embed/mail-summary/",
+        name: "dashboard.embed.mail_summary",
         methods: ['GET']
     )]
     public function __invoke(EntityManagerInterface $entityManager, ImapMessageRepository $repository): Response

@@ -1,0 +1,7 @@
+{% if state == 20 %}
+    <span class="badge badge-outline text-green">{{ ('worker.state.'~stateName) | trans }}</span>
+{% elseif state == 100 %}
+    <span class="badge badge-outline text-red">{{ ('worker.state.'~stateName) | trans }}</span>
+{% else %}
+    <span class="badge badge-outline text-blue">{{ ('worker.state.'~stateName) | trans }}</span>
+{% endif %}

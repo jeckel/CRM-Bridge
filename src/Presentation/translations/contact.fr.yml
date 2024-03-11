@@ -1,14 +1,14 @@
-contact:
-  field:
-    company: Société
-    contact: Contact
-    display_name: Nom d'affichage
-    first_name: Prénom
-    last_name: Nom
-    phone: Téléphone
-    primary_email: Email principal
-    secondary_emails: Autre emails
-  tab:
-    activities: Activités
-    mails: Mails
-    summary: Sommaire
+#contact:
+#  field:
+#    company: Société
+#    contact: Contact
+#    display_name: Nom d'affichage
+#    first_name: Prénom
+#    last_name: Nom
+#    phone: Téléphone
+#    primary_email: Email principal
+#    secondary_emails: Autre emails
+#  tab:
+#    activities: Activités
+#    mails: Mails
+#    summary: Sommaire

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Controller\Admin;
+namespace App\Presentation\Controller\Setup;
 
 use Supervisor\Supervisor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,35 +16,39 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Translation\TranslatableMessage;
 
+#[Route(
+    path: '/setup/workers',
+    name: 'setup.worker.',
+)]
 class WorkerController extends AbstractController
 {
     public function __construct(
         private readonly Supervisor $supervisor
     ) {}
 
+
     #[Route(
-        path: '/admin/workers',
-        name: 'worker_list',
-        methods: ['GET']
+        path: '/',
+        name: 'index',
     )]
     public function index(): Response
     {
         return $this->render(
-            'worker/list.html.twig',
+            'setup/worker/index.html.twig',
             ['workers' => $this->supervisor->getAllProcesses()]
         );
     }
 
     #[Route(
-        path: '/admin/worker/{group}/{name}',
-        name: 'worker_details',
+        path: '/{group}/{name}',
+        name: 'details',
         methods: ['GET']
     )]
     public function details(string $name, string $group): Response
     {
         $processName = "$group:$name";
         return $this->render(
-            'worker/process.html.twig',
+            'setup/worker/details.html.twig',
             [
                 'worker' => $this->supervisor->getProcess($processName),
                 'stdoutLog' => $this->supervisor->tailProcessStdoutLog($processName, 0, 10000),
@@ -54,8 +58,8 @@ class WorkerController extends AbstractController
     }
 
     #[Route(
-        path: '/admin/worker/{group}/{name}/start',
-        name: 'worker_start',
+        path: '/{group}/{name}/start',
+        name: 'start',
         methods: ['GET']
     )]
     public function start(string $name, string $group, Request $request): Response
@@ -70,8 +74,8 @@ class WorkerController extends AbstractController
     }
 
     #[Route(
-        path: '/admin/worker/{group}/{name}/stop',
-        name: 'worker_stop',
+        path: '/{group}/{name}/stop',
+        name: 'stop',
         methods: ['GET']
     )]
     public function stop(string $name, string $group, Request $request): Response
@@ -86,8 +90,8 @@ class WorkerController extends AbstractController
     }
 
     #[Route(
-        path: '/admin/worker/{group}/{name}/restart',
-        name: 'worker_restart',
+        path: '/{group}/{name}/restart',
+        name: 'restart',
         methods: ['GET']
     )]
     public function restart(string $name, string $group, Request $request): Response
@@ -103,8 +107,8 @@ class WorkerController extends AbstractController
     }
 
     #[Route(
-        path: '/admin/worker/{group}/{name}/clear_logs',
-        name: 'worker_clear_logs',
+        path: '/{group}/{name}/clear_logs',
+        name: 'clear_logs',
         methods: ['GET']
     )]
     public function clearLogs(string $name, string $group): Response
@@ -125,7 +129,7 @@ class WorkerController extends AbstractController
     private function redirectToDetails(string $name, string $group): Response
     {
         return $this->redirectToRoute(
-            'worker_details',
+            'setup.worker.details',
             ['name' => $name, 'group' => $group]
         );
     }

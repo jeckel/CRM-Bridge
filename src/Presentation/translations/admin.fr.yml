@@ -1,146 +1,146 @@
-action:
-  actions: Actions
-  add: Ajouter
-  cancel_and_return_to_list: Annuler et revenir à la liste
-  details: Détails
-  list: Liste
-  restart: Redémarrer
-  save: Enregistrer
-  select: "Sélectionner"
-  start: Démarrer
-  stop: Arrêter
-
-card_dav:
+#action:
+#  actions: Actions
+#  add: Ajouter
+#  cancel_and_return_to_list: Annuler et revenir à la liste
+#  details: Détails
+#  list: Liste
+#  restart: Redémarrer
+#  save: Enregistrer
+#  select: "Sélectionner"
+#  start: Démarrer
+#  stop: Arrêter
+#
+#card_dav:
+##  action:
+##    disable_sync: Désactiver la synchro
+##    enable_sync: Activer la synchro
+##    new: Ajouter un compte CardDav
+##    sync_now: Synchroniser maintenant
+#  field:
+#    address_book: Carnet d'adresses
+#    address_books: Carnets d'adresses
+#    default_address_book: Carnet d'adresses par défaut
+#    last_sync_token: Token synchronization CardDav
+#    login: CardDav Login
+#    name: Libellé
+#    uri: CardDav serveur
+#    password: CardDav Password
+#    sync_address_books: Carnets d'adresses synchronisés
+#    sync_disabled: Désactivé
+#    sync_enabled: Activé
+#    sync_status: Synchronisation
+#  title:
+#    list: Comptes CardDav
+#    create_account: Ajout d'un nouveau compte CardDav
+#
+#
+#company:
+#  field:
+#    name: Société
+#    slug: Slug
+#  tab:
+#    contacts: Contacts
+#    summary: Sommaire
+#
+#config:
 #  action:
-#    disable_sync: Désactiver la synchro
-#    enable_sync: Activer la synchro
-#    new: Ajouter un compte CardDav
-#    sync_now: Synchroniser maintenant
-  field:
-    address_book: Carnet d'adresses
-    address_books: Carnets d'adresses
-    default_address_book: Carnet d'adresses par défaut
-    last_sync_token: Token synchronization CardDav
-    login: CardDav Login
-    name: Libellé
-    uri: CardDav serveur
-    password: CardDav Password
-    sync_address_books: Carnets d'adresses synchronisés
-    sync_disabled: Désactivé
-    sync_enabled: Activé
-    sync_status: Synchronisation
-  title:
-    list: Comptes CardDav
-    create_account: Ajout d'un nouveau compte CardDav
-
-
-company:
-  field:
-    name: Société
-    slug: Slug
-  tab:
-    contacts: Contacts
-    summary: Sommaire
-
-config:
-  action:
-    actions: Actions
-
-  field:
-    account: Organisation
-
-
-
-imap:
-#  action:
-#    new: Ajouter un compte IMAP
-#    select_folders: Sélectionner les dossiers à synchroniser
-#    sync_mails: Synchroniser
+#    actions: Actions
+#
+#  field:
+#    account: Organisation
+#
+#
+#
+#imap:
+##  action:
+##    new: Ajouter un compte IMAP
+##    select_folders: Sélectionner les dossiers à synchroniser
+##    sync_mails: Synchroniser
+##  alert:
+##    sync_mails_requested: Synchronisation des mails en cours
+#  field:
+#    login: Login IMAP
+#    name: Libellé
+#    password: Mot de passe IMAP
+##    synced_folders: Dossiers
+#    uri: Serveur IMAP
+#  title:
+#    create_account: Ajouter un nouveau compte IMAP
+#    list: Comptes IMAP
+#
+#
+#mail:
 #  alert:
-#    sync_mails_requested: Synchronisation des mails en cours
-  field:
-    login: Login IMAP
-    name: Libellé
-    password: Mot de passe IMAP
-#    synced_folders: Dossiers
-    uri: Serveur IMAP
-  title:
-    create_account: Ajouter un nouveau compte IMAP
-    list: Comptes IMAP
-
-
-mail:
-  alert:
-    create_contact: Ajout de l'auteur au carnet d'adresses en cours
-    attach_contact: Adresse mail associée au contact
-  field:
-    date: Reçu le
-    folder: Dossier
-    from: De
-    imap: Compte
-    message: Message
-    subject: Objet
-    toString: A
-  label:
-    singular: Mail
-    plural: Mails
-  title:
-    attach_contact: Lier à un contact existant
-    create_contact: Créer un nouveau contact
-    list: Mails entrant
-
-menu:
-  admin: Admin
-  accounts: Organisations
-  card_dav: Card Dav
-  companies: Sociétés
-  config: Configuration
-  contacts: Contacts
-  dashboard: Dashboard
-  imap: IMAP
-  incoming_webhooks: Webhook Logs
-  mail: Mails
-  services: Services
-  setup_options: Options
-  super_admin: Super Admin
-  webmail: WebMail
-  workers: Workers
-
-services:
-  available_services:
-    CAL_DOT_COM: Cal.com
-  field:
-    access_token: Bearer
-    enabled: Activé
-    service_type: Service
-  label:
-    singular: Service
-    plural: Services
-
-setup:
-  title: Configuration
-  flash_message:
-    card_dav_account_added: Le compte CardDav "%account%" a été ajouté
-    imap_account_added: Le compte IMAP "%account%" a été ajouté
-
-worker:
-  action:
-    clear_logs: Vider les logs
-  field:
-    description: Description
-    name: Worker
-    pid: Pid
-    spawn_error: Erreur de lancement
-    start_date: Lancé à
-    state: état
-    stop_date: Arrêté à
-  flash_message:
-    worker_restarted: Le worker %worker% a été redémarré.
-    worker_started: Le worker %worker% a été démarré.
-    worker_stopped: Le worker %worker% a été arrêté.
-  state:
-    Exited: En erreur
-    Running: Running
-    Stopped: Arrêté
-  title:
-    running_workers: Workers en cours
+#    create_contact: Ajout de l'auteur au carnet d'adresses en cours
+#    attach_contact: Adresse mail associée au contact
+#  field:
+#    date: Reçu le
+#    folder: Dossier
+#    from: De
+#    imap: Compte
+#    message: Message
+#    subject: Objet
+#    toString: A
+#  label:
+#    singular: Mail
+#    plural: Mails
+#  title:
+#    attach_contact: Lier à un contact existant
+#    create_contact: Créer un nouveau contact
+#    list: Mails entrant
+#
+#menu:
+#  admin: Admin
+#  accounts: Organisations
+#  card_dav: Card Dav
+#  companies: Sociétés
+#  config: Configuration
+#  contacts: Contacts
+#  dashboard: Dashboard
+#  imap: IMAP
+#  incoming_webhooks: Webhook Logs
+#  mail: Mails
+#  services: Services
+#  setup_options: Options
+#  super_admin: Super Admin
+#  webmail: WebMail
+#  workers: Workers
+#
+#services:
+#  available_services:
+#    CAL_DOT_COM: Cal.com
+#  field:
+#    access_token: Bearer
+#    enabled: Activé
+#    service_type: Service
+#  label:
+#    singular: Service
+#    plural: Services
+#
+#setup:
+#  title: Configuration
+#  flash_message:
+#    card_dav_account_added: Le compte CardDav "%account%" a été ajouté
+#    imap_account_added: Le compte IMAP "%account%" a été ajouté
+#
+#worker:
+#  action:
+#    clear_logs: Vider les logs
+#  field:
+#    description: Description
+#    name: Worker
+#    pid: Pid
+#    spawn_error: Erreur de lancement
+#    start_date: Lancé à
+#    state: état
+#    stop_date: Arrêté à
+#  flash_message:
+#    worker_restarted: Le worker %worker% a été redémarré.
+#    worker_started: Le worker %worker% a été démarré.
+#    worker_stopped: Le worker %worker% a été arrêté.
+#  state:
+#    Exited: En erreur
+#    Running: Running
+#    Stopped: Arrêté
+#  title:
+#    running_workers: Workers en cours
