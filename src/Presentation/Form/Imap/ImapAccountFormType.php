@@ -33,34 +33,34 @@ class ImapAccountFormType extends AbstractType
                 child: 'name',
                 type: TextType::class,
                 options: [
-                    'label' => 'imap.field.label'
+                    'label' => 'setup.imap.field.label'
                 ]
             )
             ->add(
                 child: 'uri',
                 type: TextType::class,
                 options: [
-                    'label' => 'imap.field.host'
+                    'label' => 'setup.imap.field.host'
                 ]
             )
             ->add(
                 child: 'login',
                 type: TextType::class,
                 options: [
-                    'label' => 'imap.field.login'
+                    'label' => 'setup.imap.field.login'
                 ]
             )
             ->add(
                 child: 'password',
                 type: PasswordType::class,
                 options: [
-                    'label' => 'imap.field.password'
+                    'label' => 'setup.imap.field.password'
                 ]
             )
             ->add(
                 child:'save',
                 type: SubmitType::class,
-                options: ['label' => 'action.save', 'translation_domain' => 'admin']
+                options: ['label' => 'action.save']
             );
     }
 
@@ -72,7 +72,6 @@ class ImapAccountFormType extends AbstractType
     {
         $resolver->setDefaults([
             'hx-post' => null,
-            'translation_domain' => 'webmail'
         ]);
     }
 

@@ -21,6 +21,6 @@ class Avatar
 
     public function getEncodedEmail(): ?string
     {
-        return base64_encode($this->email??'foo@bar.com');
+        return base64_encode($this->email ?? 'foo@bar.com');
     }
 }

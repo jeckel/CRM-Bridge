@@ -36,7 +36,7 @@ use function App\new_uuid;
 readonly class ContactMapper
 {
     public function __construct(
-//        private ContactActivityRepository $activityRepository,
+        //        private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
         private EntityManagerInterface $entityManager,
         private SluggerInterface $slugger
@@ -106,17 +106,17 @@ readonly class ContactMapper
 
         $this->mapEmailAddressesToDoctrineEntity($contact, $entity);
 
-//        if ($contact->activities->hasChanged()) {
-//            foreach ($contact->activities as $activity) {
-//                $entity->addActivity(
-//                    ($this->activityRepository->find((string) $activity->id) ?? new DoctrineContactActivity())
-//                        ->setId((string) $activity->id)
-//                        ->setDate($activity->date)
-//                        ->setSubject($activity->subject)
-//                        ->setDescription($activity->description)
-//                );
-//            }
-//        }
+        //        if ($contact->activities->hasChanged()) {
+        //            foreach ($contact->activities as $activity) {
+        //                $entity->addActivity(
+        //                    ($this->activityRepository->find((string) $activity->id) ?? new DoctrineContactActivity())
+        //                        ->setId((string) $activity->id)
+        //                        ->setDate($activity->date)
+        //                        ->setSubject($activity->subject)
+        //                        ->setDescription($activity->description)
+        //                );
+        //            }
+        //        }
         return $entity;
     }
 

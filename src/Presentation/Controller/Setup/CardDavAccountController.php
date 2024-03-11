@@ -15,7 +15,6 @@ use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
 use App\Presentation\Form\CardDav\CardDavAccountFormType;
 use App\Presentation\Form\CardDav\DefaultAddressBookFormType;
-use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +38,7 @@ class CardDavAccountController extends AbstractController
     public function index(): Response
     {
         return $this->render(
-            'setup/embed/card_dav_index.html.twig',
+            'pages/setup/card_dav/index_embed   .html.twig',
             [
                 'card_dav_accounts' => $this->cardDavConfigRepository->findAll()
             ]
@@ -74,7 +73,7 @@ class CardDavAccountController extends AbstractController
         return $this->render(
             'modal/form.html.twig',
             [
-                'title' => 'card_dav.title.create_account',
+                'title' => 'setup.card_dav.title.create_account',
                 'form' => $form->createView()
             ]
         );
@@ -108,7 +107,7 @@ class CardDavAccountController extends AbstractController
                 'message' => new TranslatableMessage(
                     'setup.flash_message.card_dav_account_added',
                     ['%account%' => $account->getName()],
-                    'admin'
+                    'messages'
                 ),
                 'refresh' => [
                     'route' => 'setup.card_dav.index',
@@ -119,7 +118,7 @@ class CardDavAccountController extends AbstractController
         return $this->render(
             'modal/form.html.twig',
             [
-                'title' => 'select address books',
+                'title' => 'setup.card_dav.title.setup_address_books',
                 'form' => $form->createView()
             ]
         );
@@ -135,7 +134,6 @@ class CardDavAccountController extends AbstractController
                 continue;
             }
             $entity = (new CardDavAddressBook())
-//                ->setId(new_uuid())
                 ->setName($addressBook->getName())
                 ->setUri($addressBook->getUri())
                 ->setCardDavAccount($account);

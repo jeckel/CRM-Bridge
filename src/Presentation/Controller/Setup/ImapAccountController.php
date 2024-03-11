@@ -28,7 +28,7 @@ class ImapAccountController extends AbstractController
         ImapAccountRepository $repository
     ): Response {
         return $this->render(
-            'setup/embed/imap_index.html.twig',
+            'pages/setup/imap/index_embed.html.twig',
             [
                 'imap_accounts' => $repository->findAll()
             ]
@@ -56,7 +56,7 @@ class ImapAccountController extends AbstractController
                 'message' => new TranslatableMessage(
                     'setup.flash_message.imap_account_added',
                     ['%account%' => $account->getName()],
-                    'admin'
+                    'messages'
                 ),
                 'refresh' => [
                     'route' => 'setup.imap.index',
@@ -67,7 +67,7 @@ class ImapAccountController extends AbstractController
         return $this->render(
             'modal/form.html.twig',
             [
-                'title' => 'imap.title.create_account',
+                'title' => 'setup.imap.title.create_account',
                 'form' => $form->createView()
             ]
         );

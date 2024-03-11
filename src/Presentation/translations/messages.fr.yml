@@ -10,37 +10,44 @@ action:
   start: Démarrer
   stop: Arrêter
 
-config:
-  card_dav:
-    title:
-      index: Synchronisation des contacts CardDav
-      new: Ajouter un nouveau compte CardDav
-  imap:
-    title:
-      index: Configurations des comptes IMAP
-      new: Ajouter un nouveau compte IMAP
-
-menu:
-    admin: Admin
-#    accounts: Organisations
-#    card_dav: Card Dav
-#    companies: Sociétés
-#    config: Configuration
-    contacts: Contacts
-#    dashboard: Dashboard
-#    imap: IMAP
-#    incoming_webhooks: Webhook Logs
-#    mail: Mails
-#    services: Services
-    setup: Configuration
-#    setup_options: Options
-#    super_admin: Super Admin
-    webmail: WebMail
-    workers: Workers
-
 dashboard:
   running_workers: Workers
   title: 'Dashboard'
+
+menu:
+    admin: Admin
+    contacts: Contacts
+    setup: Configuration
+    webmail: WebMail
+    workers: Workers
+
+setup:
+  index:
+    title: Configuration
+  card_dav:
+    field:
+      label: Libellé
+      login: CardDav Login
+      host: CardDav serveur
+      password: CardDav Password
+    title:
+      index: Synchronisation des contacts CardDav
+      create_account: Ajouter un nouveau compte CardDav
+      setup_address_books: Configurer les carnets d'adresses
+  flash_message:
+    card_dav_account_added: Le compte CardDav "%account%" a été configuré
+    imap_account_added: Le compte IMAP "%account%" a été configuré
+  imap:
+    field:
+      host: Serveur IMAP
+      label: Libellé
+      login: Login IMAP
+      password: Mot de passe IMAP
+    title:
+      index: Configurations des comptes IMAP
+      create_account: Ajouter un nouveau compte IMAP
+
+
 
 worker:
   action:

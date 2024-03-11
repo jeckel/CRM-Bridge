@@ -21,7 +21,7 @@ class IndexController extends AbstractController
     public function index(
     ): Response {
         return $this->render(
-            'setup/index.html.twig',
+            'pages/setup/index.html.twig',
         );
     }
 }

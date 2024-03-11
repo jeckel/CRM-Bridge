@@ -1,8 +1,6 @@
-{% trans_default_domain 'admin' %}
-
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">{{ 'card_dav.title.list'|trans }}</h3>
+        <h3 class="card-title">{{ 'setup.card_dav.title.index'|trans }}</h3>
         <div class="card-actions">
             <a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modalEmbed"
                 hx-get="{{ url('setup.card_dav.create_account') }}" hx-target="#modalEmbedContent"
@@ -16,8 +14,8 @@
             <table class="table table-vcenter card-table table-striped table-hover table-sm">
                 <thead>
                 <tr>
-                    <th>{{ 'card_dav.field.name'|trans }}</th>
-                    <th>{{ 'card_dav.field.login'|trans }}</th>
+                    <th>{{ 'setup.card_dav.field.label'|trans }}</th>
+                    <th>{{ 'setup.card_dav.field.login'|trans }}</th>
                     <th>{{ 'action.actions'|trans }}</th>
                 </tr>
                 </thead>

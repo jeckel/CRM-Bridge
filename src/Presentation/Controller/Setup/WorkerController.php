@@ -34,7 +34,7 @@ class WorkerController extends AbstractController
     public function index(): Response
     {
         return $this->render(
-            'setup/worker/index.html.twig',
+            'pages/setup/worker/index.html.twig',
             ['workers' => $this->supervisor->getAllProcesses()]
         );
     }
@@ -48,7 +48,7 @@ class WorkerController extends AbstractController
     {
         $processName = "$group:$name";
         return $this->render(
-            'setup/worker/details.html.twig',
+            'pages/setup/worker/details.html.twig',
             [
                 'worker' => $this->supervisor->getProcess($processName),
                 'stdoutLog' => $this->supervisor->tailProcessStdoutLog($processName, 0, 10000),

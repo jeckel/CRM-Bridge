@@ -33,28 +33,28 @@ class CardDavAccountFormType extends AbstractType
                 child: 'name',
                 type: TextType::class,
                 options: [
-                    'label' => 'card_dav.field.name'
+                    'label' => 'setup.card_dav.field.label'
                 ]
             )
             ->add(
                 child: 'uri',
                 type: TextType::class,
                 options: [
-                    'label' => 'card_dav.field.uri'
+                    'label' => 'setup.card_dav.field.host'
                 ]
             )
             ->add(
                 child: 'login',
                 type: TextType::class,
                 options: [
-                    'label' => 'card_dav.field.login'
+                    'label' => 'setup.card_dav.field.login'
                 ]
             )
             ->add(
                 child: 'password',
                 type: PasswordType::class,
                 options: [
-                    'label' => 'card_dav.field.password'
+                    'label' => 'setup.card_dav.field.password'
                 ]
             )
             ->add(
@@ -71,7 +71,6 @@ class CardDavAccountFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_domain' => 'admin',
             'hx-post' => null,
         ]);
     }
