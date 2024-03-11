@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Contact;
 
 use App\Infrastructure\Doctrine\Entity\Company;
-use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -31,7 +30,7 @@ class IndexController extends AbstractController
     )]
     public function index(): Response
     {
-        return $this->render('contact/index.html.twig');
+        return $this->render('pages/contact/index.html.twig');
     }
 
     #[Route(
@@ -54,7 +53,7 @@ class IndexController extends AbstractController
             $page,
             $limit
         );
-        return $this->render('contact/embed/list.html.twig', [
+        return $this->render('pages/contact/list_embed.html.twig', [
             'contacts' => $contacts,
             'page' => $page,
             'limit' => $limit,
