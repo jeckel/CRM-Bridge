@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Contact;
 
+use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
@@ -47,7 +48,15 @@ class IndexController extends AbstractController
         $limit = 20;
         $contacts = $paginator->paginate(
             $repository->createQueryBuilder('c')
-                ->select('c.id', 'c.displayName', 'c.phoneNumber', 'co.name as companyName', 'e.emailAddress')
+                ->select(
+                    'c.id',
+                    'c.displayName',
+                    'c.phoneNumber',
+                    'co.name as companyName',
+                    'e.emailAddress',
+                    'a.name as addressBook'
+                )
+                ->innerJoin(CardDavAddressBook::class, 'a', 'WITH', 'c.addressBook = a.id')
                 ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
                 ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact'),
             $page,

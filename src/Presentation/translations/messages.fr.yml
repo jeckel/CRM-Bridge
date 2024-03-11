@@ -11,6 +11,14 @@ action:
   start: Démarrer
   stop: Arrêter
 
+contact:
+  field:
+    address_book: Carnet d'adresses
+    company: Organisation
+    display_name: Nom
+    email_address: E-Mail
+    phone_number: Tel
+
 dashboard:
   running_workers: Workers
   title: 'Dashboard'

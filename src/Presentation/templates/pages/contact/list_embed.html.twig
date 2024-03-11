@@ -2,9 +2,10 @@
     <table class="table table-vcenter card-table table-striped table-hover table-sm">
         <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(contacts, 'contact.field.displayName'|trans, 'c.displayName', {target: '#contactList'}) }}</th>
-            <th>{{ 'contact.field.phoneNumber'|trans }}</th>
-            <th>{{ 'contact.field.emailAddress'|trans }}</th>
+            <th>{{ 'contact.field.address_book'|trans }}</th>
+            <th>{{ knp_pagination_sortable(contacts, 'contact.field.display_name'|trans, 'c.displayName', {target: '#contactList'}) }}</th>
+            <th>{{ 'contact.field.phone_number'|trans }}</th>
+            <th>{{ 'contact.field.email_address'|trans }}</th>
             <th>{{ knp_pagination_sortable(contacts, 'contact.field.company'|trans, 'co.name', {target: '#contactList'}) }}</th>
         </tr>
         </thead>
@@ -13,6 +14,7 @@
             <tr
                 class="cursor-pointer"
             >
+                <td>{{ contact.addressBook }}</td>
                 <td class="row align-items-center flex-fill">
                     <div class="col-auto"><twig:Avatar :email="contact.emailAddress" /></div>
                     <div class="col text-body">
@@ -20,7 +22,6 @@
                         <div class="text-secondary text-truncate w-100">{% if contact.emailAddress is not null %}&lt;{{ contact.emailAddress }}&gt;{% endif %}</div>
                     </div>
                 </td>
-{#                <td>{{ contact.displayName }}</td>#}
                 <td>{{ contact.phoneNumber }}</td>
                 <td>{{ contact.emailAddress }}</td>
                 <td>{{ contact.companyName }}</td>
