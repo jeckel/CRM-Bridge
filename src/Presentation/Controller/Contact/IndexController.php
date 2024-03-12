@@ -46,7 +46,7 @@ class IndexController extends AbstractController
         Request $request
     ): Response {
         $page = $request->query->getInt('page', 1);
-        $limit = 20;
+        $limit = 25;
         $contacts = $paginator->paginate(
             $this->contactRepository->createQueryBuilder('c')
                 ->select(
@@ -61,7 +61,11 @@ class IndexController extends AbstractController
                 ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
                 ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact'),
             $page,
-            $limit
+            $limit,
+            [
+                'defaultSortFieldName' => ['c.displayName'],
+                'defaultSortDirection' => 'asc',
+            ]
         );
         return $this->render('pages/contact/list_embed.html.twig', [
             'contacts' => $contacts,
@@ -79,6 +83,6 @@ class IndexController extends AbstractController
     public function details(string $contactId): Response
     {
         $contact = $this->contactRepository->getById($contactId);
-        return $this->render('pages/contact/details_embed.html.twig', ['contact' => $contact]);
+        return $this->render('pages/contact/details.html.twig', ['contact' => $contact]);
     }
 }

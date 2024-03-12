@@ -18,6 +18,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 class Avatar
 {
     public ?string $email;
+    public ?string $size = null;
 
     public function getEncodedEmail(): ?string
     {

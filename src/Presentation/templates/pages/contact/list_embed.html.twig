@@ -1,3 +1,6 @@
+{% extends '/layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
 <div class="table-responsive">
     <table class="table table-vcenter card-table table-striped table-hover table-sm">
         <thead>
@@ -11,18 +14,13 @@
         </thead>
         <tbody>
         {% for contact in contacts %}
-            <tr
-                class="cursor-pointer"
-                hx-get="{{ path('contact.contact.details', { contactId: contact.id }) }}"
-                hx-target="#contactList"
-            >
+            <tr>
                 <td>{{ contact.addressBook }}</td>
-                <td class="row align-items-center flex-fill">
-                    <div class="col-auto"><twig:Avatar :email="contact.emailAddress" /></div>
-                    <div class="col text-body">
-                        <div>{{ contact.displayName }}</div>
-                        <div class="text-secondary text-truncate w-100">{% if contact.emailAddress is not null %}&lt;{{ contact.emailAddress }}&gt;{% endif %}</div>
-                    </div>
+                <td>
+                    <a href="{{ path('contact.contact.details', { contactId: contact.id }) }}">
+                        <twig:Avatar :email="contact.emailAddress" size="xs"/>
+                        <span>{{ contact.displayName }}</span>
+                    </a>
                 </td>
                 <td>{{ contact.phoneNumber }}</td>
                 <td>{{ contact.emailAddress }}</td>
@@ -38,3 +36,4 @@
         {{ knp_pagination_render(contacts, null, [], {target: '#contactList', first: true, last: true}) }}
     </ul>
 </div>
+{% endblock %}

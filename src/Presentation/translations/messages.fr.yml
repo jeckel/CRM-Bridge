@@ -18,6 +18,10 @@ contact:
     display_name: Nom
     email_address: E-Mail
     phone_number: Tel
+  tab:
+    activity: Activité
+    mails: Mails
+    summary: Résumé
 
 dashboard:
   running_workers: Workers
