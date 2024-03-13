@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Controller\Admin;
 
-use App\Infrastructure\Doctrine\Entity\CardDavConfig;
+use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Presentation\Async\Message\SyncAddressBook;
 use Doctrine\ORM\EntityNotFoundException;
@@ -29,7 +29,7 @@ class CardDavConfigCrudController extends AbstractCrudController
     #[Override]
     public static function getEntityFqcn(): string
     {
-        return CardDavConfig::class;
+        return CardDavAccount::class;
     }
 
     #[Override]

@@ -10,13 +10,14 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\ValueObject\EmailType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 class ContactEmailAddress
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'email_address', type: "string", unique: true)]
+    #[ORM\Column(name: 'email_address', type: Types::STRING, unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
     private string $emailAddress;
 

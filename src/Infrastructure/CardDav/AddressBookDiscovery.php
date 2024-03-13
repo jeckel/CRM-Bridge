@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\CardDav;
 
 use App\Infrastructure\Configuration\ConfigurationKey;
-use App\Infrastructure\Doctrine\Entity\CardDavConfig;
+use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;
 use MStilkerich\CardDavClient\Config;
@@ -26,7 +26,7 @@ readonly class AddressBookDiscovery
      * @return array<int,AddressbookCollection>
      * @throws \Exception
      */
-    public function discoverAddressBooks(CardDavConfig $config): array
+    public function discoverAddressBooks(CardDavAccount $config): array
     {
         Config::init($this->logger, $this->logger);
         $account = new Account(

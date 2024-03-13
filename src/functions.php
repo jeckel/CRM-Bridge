@@ -41,3 +41,23 @@ if (! function_exists('App\enum_to_choices')) {
         );
     }
 }
+
+if (! function_exists('App\getImageMimeType')) {
+    /**
+     * @SuppressWarnings(PHPMD)
+     */
+    function getImageMimeType(string $imageUrl): ?string
+    {
+        // Get image info
+        if (! is_readable($imageUrl)) {
+            return null;
+        }
+        $imageInfo = getimagesize($imageUrl);
+
+        // Check if getimagesize() was successful
+        if ($imageInfo !== false) {
+            return $imageInfo['mime'];
+        }
+        return null;
+    }
+}

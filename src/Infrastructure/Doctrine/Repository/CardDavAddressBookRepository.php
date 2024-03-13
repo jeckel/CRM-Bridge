@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
+use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,5 +26,14 @@ class CardDavAddressBookRepository extends AbstractEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CardDavAddressBook::class);
+    }
+
+    /**
+     * @param CardDavAccount $account
+     * @return CardDavAddressBook[]
+     */
+    public function findByAccount(CardDavAccount $account): array
+    {
+        return $this->findBy(['cardDavAccount' => $account]);
     }
 }
