@@ -13,7 +13,9 @@
         hx-get="{{ url('webmail.mailboxes') }}"
         hx-trigger="revealed"
     >loading</div>
-    <div class="col-md-9" id="mailList"></div>
+    <div class="col-md-9">
+        <div id="mailList"></div>
+    </div>
 </div>
 {% endblock %}
 

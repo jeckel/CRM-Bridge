@@ -17,7 +17,11 @@ contact:
     company: Organisation
     display_name: Nom
     email_address: E-Mail
+    first_name: Prénom
+    last_name: Nom
     phone_number: Tel
+    primary_email: E-Mail principal
+    secondary_emails: E-Mails secondaires
   tab:
     activity: Activité
     mails: Mails
@@ -40,11 +44,11 @@ setup:
     title: Configuration
   card_dav:
     field:
+      address_books: Carnets d'adresses
+      host: CardDav serveur
       label: Libellé
       login: CardDav Login
-      host: CardDav serveur
       password: CardDav Password
-      address_books: Carnets d'adresses
     title:
       index: Synchronisation des contacts CardDav
       create_account: Ajouter un nouveau compte CardDav
@@ -70,6 +74,10 @@ webmail:
     create_contact: Créer un nouveau contact
     mark_as_treated: Marquer comme traité
     mark_as_untreated: Marquer comme non traité
+  alert:
+    html_disable:
+      title: HTML inactif
+      message: La vue HTML est désactivé actuellement pour des raisons de sécurité.
   field:
     date: Date d'envoie
     from: Auteur

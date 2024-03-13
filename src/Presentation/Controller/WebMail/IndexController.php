@@ -94,7 +94,41 @@ class IndexController extends AbstractController
         return $this->render(
             'pages/webmail/list_mails_embed.html.twig',
             [
-                'mailbox' => $mailbox,
+                'title' => $mailbox->getName(),
+                'mails' => $mails,
+                'page' => $page,
+                'limit' => $limit,
+                'total' => $mails->getTotalItemCount()
+            ]
+        );
+    }
+
+    #[Route(
+        path: '/contact/{contactId}/mails',
+        name: 'contact.mails'
+    )]
+    public function contactMails(
+        string $contactId,
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+        $page = $request->query->getInt('page', 1);
+        $limit = 20;
+        $mails = $paginator->paginate(
+            $entityManager->createQueryBuilder()
+                ->select('m.id, m.subject, m.fromName, m.fromAddress, m.date, m.isTreated, m.spamHeaders, c.id as authorId, c.displayName as authorName')
+                ->from(ImapMessage::class, 'm')
+                ->innerJoin(Contact::class, 'c', 'WITH', 'c.id = m.contact')
+                ->where('c.id = :contactId')
+                ->setParameter(':contactId', $contactId)
+                ->orderBy('m.date', 'DESC'),
+            $page,
+            $limit
+        );
+        return $this->render(
+            'pages/webmail/list_mails_embed.html.twig',
+            [
                 'mails' => $mails,
                 'page' => $page,
                 'limit' => $limit,
@@ -108,7 +142,7 @@ class IndexController extends AbstractController
         name: 'mail.details',
         methods: ['GET']
     )]
-    public function __invoke(string $mailId, ImapMessageRepository $repository): Response
+    public function details(string $mailId, ImapMessageRepository $repository): Response
     {
         $mail = $repository->getById($mailId);
         return $this->render('pages/webmail/mail_embed.html.twig', ['mail' => $mail]);

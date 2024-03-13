@@ -10,6 +10,7 @@
                 style="cursor: pointer"
             hx-get="{{ path('webmail.list_mails', { mailboxId: mailbox.id }) }}"
             hx-target="#mailList"
+            hx-swap="outerHTML"
             >{{ mailbox.name }}</td>
         </tr>
     {% endfor %}

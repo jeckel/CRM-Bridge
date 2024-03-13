@@ -1,7 +1,9 @@
-<div class="card">
+<div class="card" id="mailList">
+    {% if title is defined %}
     <div class="card-header">
-        <div class="card-title">{{ mailbox.name }}</div>
+        <div class="card-title">{{ title }}</div>
     </div>
+    {% endif %}
     {% if mails|length > 0 %}
 {#        {{ knp_pagination_filter(mails, {'m.fromName': ''}) }}#}
     <div class="table-responsive">
@@ -29,11 +31,7 @@
                     <div class="col-auto"><twig:Avatar :email="mail.fromAddress" /></div>
                     <div class="col text-body">
                     {% if mail.authorId %}
-                        <div><a href="{{ ea_url()
-                            .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
-                            .setAction('detail')
-                            .setEntityId(mail.authorId)
-                        }}" title="{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;">
+                        <div><a href="{{ url('contact.contact.details', {contactId: mail.authorId }) }}" title="{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;">
                                 <span class="ti ti-id"></span>{{ mail.authorName }}
                         </a>
                         </div>

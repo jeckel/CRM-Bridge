@@ -1,12 +1,3 @@
-{#
-/**
- * @file
- * Bootstrap v5 with Bootstrap Icons Sorting control implementation.
- *
- * Install Icon Set: https://icons.getbootstrap.com/#install
- * Overview:         https://icons.getbootstrap.com/
- */
-#}
 {% if sorted %}
     {% if direction == 'desc' %}
         {% set order = 'desc' %}
@@ -17,7 +8,12 @@
     {% set order = '' %}
 {% endif %}
 {% if options.target is defined %}
-<button class="table-sort {{ order }}" hx-get="{{ options.href }}" hx-target="{{ options.target }}">{{ title }}</button>
+    <button
+        class="table-sort {{ order }}"
+        hx-get="{{ options.href }}"
+        hx-target="{{ options.target }}"
+        hx-swap="outerHTML"
+    >{{ title }}</button>
 {% else %}
     <a class="btn table-sort {{ order }}" href="{{ options.href }}">{{ title }}</a>
 {% endif %}

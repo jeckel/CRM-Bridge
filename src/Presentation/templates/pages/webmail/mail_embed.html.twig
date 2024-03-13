@@ -19,11 +19,7 @@
                     </div>
                     <div class="card-subtitle">
                         {% if mail.contact %}
-                            <a href="{{ ea_url()
-                                .setController('App\\Presentation\\Controller\\Admin\\ContactCrudController')
-                                .setAction('detail')
-                                .setEntityId(mail.contact.id)
-                            }}" title="{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;">
+                            <a href="{{ url('contact.contact.details', {contactId: mail.contact.id }) }}" title="{{ mail.fromName }} &lt;{{ mail.fromAddress }}&gt;">
                                 <span class="fas fa-id-card"></span> {{ mail.contact.displayName }}
                             </a>
                         {% else %}
@@ -81,8 +77,8 @@
                     </div>
                     <div class="tab-pane" id="tabs-html">
                         <div class="alert alert-warning m-4" role="alert">
-                            <h4 class="alert-title">{{ 'mail.alert.html_disable.title'|trans }}</h4>
-                            <div class="text-secondary">{{ 'mail.alert.html_disable.message'|trans }}</div>
+                            <h4 class="alert-title">{{ 'webmail.alert.html_disable.title'|trans }}</h4>
+                            <div class="text-secondary">{{ 'webmail.alert.html_disable.message'|trans }}</div>
                         </div>
 {#                        {{ mail.textHtml | raw }}#}
                     </div>

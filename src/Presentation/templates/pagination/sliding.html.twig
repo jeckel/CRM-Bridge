@@ -7,6 +7,7 @@
                     class="page-link"
                     hx-get="{{ path(route, query|merge({(pageParameterName): first})) }}"
                     hx-target="{{ target }}"
+                    hx-swap="outerHTML"
                     href="#">
                     <span class="ti ti-chevron-left-pipe"></span>
                     first
@@ -33,6 +34,7 @@
                     href="#"
                     hx-get="{{ path(route, query|merge({(pageParameterName): previous})) }}"
                     hx-target="{{ target }}"
+                    hx-swap="outerHTML"
                 >
                     <span class="ti ti-chevron-left"></span>
                     prev
@@ -59,6 +61,7 @@
                     href="#"
                     hx-get="{{ path(route, query|merge({(pageParameterName): page})) }}"
                     hx-target="{{ target }}"
+                    hx-swap="outerHTML"
                 >{{ page }}</a></li>
         {% else %}
             <span class="page-item active"><a class="page-link" href="#">{{ page }}</a></span>
@@ -72,6 +75,7 @@
                 href="#"
                 hx-get="{{ path(route, query|merge({(pageParameterName): next})) }}"
                 hx-target="{{ target }}"
+                hx-swap="outerHTML"
             >
                 next
                 <span class="ti ti-chevron-right"></span>
@@ -98,6 +102,7 @@
                     class="page-link"
                     hx-get="{{ path(route, query|merge({(pageParameterName): last})) }}"
                     hx-target="{{ target }}"
+                    hx-swap="outerHTML"
                     href="#">
                     last
                     <span class="ti ti-chevron-right-pipe"></span>

@@ -12,6 +12,7 @@ use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,35 +32,14 @@ class IndexController extends AbstractController
         name: "index",
         methods: ['GET']
     )]
-    public function index(): Response
-    {
-        return $this->render('pages/contact/index.html.twig');
-    }
-
-    #[Route(
-        path: "/contacts",
-        name: "contacts",
-        methods: ['GET']
-    )]
-    public function list(
+    public function index(
         PaginatorInterface $paginator,
         Request $request
     ): Response {
         $page = $request->query->getInt('page', 1);
         $limit = 25;
         $contacts = $paginator->paginate(
-            $this->contactRepository->createQueryBuilder('c')
-                ->select(
-                    'c.id',
-                    'c.displayName',
-                    'c.phoneNumber',
-                    'co.name as companyName',
-                    'e.emailAddress',
-                    'a.name as addressBook'
-                )
-                ->innerJoin(CardDavAddressBook::class, 'a', 'WITH', 'c.addressBook = a.id')
-                ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
-                ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact'),
+            $this->contactRepository->createQueryList(),
             $page,
             $limit,
             [
@@ -67,7 +47,7 @@ class IndexController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
-        return $this->render('pages/contact/list_embed.html.twig', [
+        return $this->render('pages/contact/index.html.twig', [
             'contacts' => $contacts,
             'page' => $page,
             'limit' => $limit,
