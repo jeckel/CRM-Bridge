@@ -9,7 +9,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
+use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,5 +42,21 @@ class ContactRepository extends AbstractEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
         return $contact;
+    }
+
+    public function createQueryList(): QueryBuilder
+    {
+        return $this->createQueryBuilder('c')
+            ->select(
+                'c.id',
+                'c.displayName',
+                'c.phoneNumber',
+                'co.name as companyName',
+                'e.emailAddress',
+                'a.name as addressBook'
+            )
+            ->innerJoin(CardDavAddressBook::class, 'a', 'WITH', 'c.addressBook = a.id')
+            ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
+            ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact');
     }
 }

@@ -9,22 +9,22 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\CardDavConfig;
+use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends AbstractEntityRepository<CardDavConfig>
+ * @extends AbstractEntityRepository<CardDavAccount>
  *
- * @method CardDavConfig|null find($id, $lockMode = null, $lockVersion = null)
- * @method CardDavConfig|null findOneBy(array $criteria, array $orderBy = null)
- * @method CardDavConfig[]    findAll()
- * @method CardDavConfig[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CardDavAccount|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CardDavAccount|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CardDavAccount[]    findAll()
+ * @method CardDavAccount[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CardDavConfigRepository extends AbstractEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CardDavConfig::class);
+        parent::__construct($registry, CardDavAccount::class);
     }
 }

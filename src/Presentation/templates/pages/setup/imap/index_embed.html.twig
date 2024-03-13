@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ 'setup.imap.title.index'|trans }}</h3>
+        <div class="card-actions">
+            <a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modalEmbed"
+                hx-get="{{ url('setup.imap.create_account') }}" hx-target="#modalEmbedContent">
+                <i class="ti ti-square-plus"></i>&nbsp;{{ 'action.add'|trans }}
+            </a>
+        </div>
+    </div>
+    <div class="card-table table-responsive">
+        <table class="table table-vcenter card-table table-striped table-hover table-sm">
+            <thead>
+            <tr>
+                <th>{{ 'setup.imap.field.label'|trans }}</th>
+                <th>{{ 'setup.imap.field.login'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for imapAccount in imap_accounts %}
+                <tr>
+                    <td>{{ imapAccount.name }}</td>
+                    <td>{{ imapAccount.login }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

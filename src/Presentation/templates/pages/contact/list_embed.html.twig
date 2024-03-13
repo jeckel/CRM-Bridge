@@ -1,0 +1,39 @@
+{% extends '/layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
+<div class="table-responsive">
+    <table class="table table-vcenter card-table table-striped table-hover table-sm">
+        <thead>
+        <tr>
+            <th>{{ 'contact.field.address_book'|trans }}</th>
+            <th>{{ knp_pagination_sortable(contacts, 'contact.field.display_name'|trans, 'c.displayName', {target: '#contactList'}) }}</th>
+            <th>{{ 'contact.field.phone_number'|trans }}</th>
+            <th>{{ 'contact.field.email_address'|trans }}</th>
+            <th>{{ knp_pagination_sortable(contacts, 'contact.field.company'|trans, 'co.name', {target: '#contactList'}) }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.addressBook }}</td>
+                <td>
+                    <a href="{{ path('contact.contact.details', { contactId: contact.id }) }}">
+                        <twig:Avatar :email="contact.emailAddress" size="xs"/>
+                        <span>{{ contact.displayName }}</span>
+                    </a>
+                </td>
+                <td>{{ contact.phoneNumber }}</td>
+                <td>{{ contact.emailAddress }}</td>
+                <td>{{ contact.companyName }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="card-footer d-flex align-items-center">
+    <p class="m-0 text-secondary">Showing <span>{{ (page - 1) * limit + 1 }}</span> to <span>{{ page * limit > total ? total : page * limit }}</span> of <span>{{ total }}</span> entries</p>
+    <ul class="pagination m-0 ms-auto">
+        {{ knp_pagination_render(contacts, null, [], {target: '#contactList', first: true, last: true}) }}
+    </ul>
+</div>
+{% endblock %}

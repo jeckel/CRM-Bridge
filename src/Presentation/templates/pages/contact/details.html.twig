@@ -1,0 +1,110 @@
+{% extends '/layout/dynamic-layout.html.twig' %}
+
+{% block page_title %}{{ contact.displayName }}{% endblock %}
+
+{% block page_actions %}
+    {#    <a href="{{ url('setup.index') }}" class="btn btn-default"><i class="ti ti-inbox"></i>&nbsp;{{ 'imap.action.list'|trans }}</a>#}
+{% endblock %}
+
+{% block page_content %}
+<div class="card">
+    <div class="card-header">
+        <div>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <twig:Avatar :email="contact.primaryEmailAddress" />
+                </div>
+                <div class="col">
+                    <div class="card-title">
+                        {{ contact.displayName }}
+                    </div>
+                    {% if contact.company %}
+                    <div class="card-subtitle">
+                        {{ contact.company.name }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-actions">
+            <div class="dropdown">
+                <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">{{ 'action.edit'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                        <a href="#tabs-summary" class="nav-link active" data-bs-toggle="tab">{{ 'contact.tab.summary'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="#tabs-mails"
+                            class="nav-link"
+                            data-bs-toggle="tab"
+                            hx-get="{{ url('webmail.contact.mails', {contactId: contact.id}) }}"
+                            hx-trigger="revealed, click"
+                            hx-swap="outerHTML"
+                            hx-target="#mailList"
+                        >{{ 'contact.tab.mails'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tabs-activity" class="nav-link" data-bs-toggle="tab">{{ 'contact.tab.activity'|trans }}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="tabs-summary">
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.display_name'|trans }}</div>
+                            <div class="col">{{ contact.displayName }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.primary_email'|trans }}</div>
+                            <div class="col">{{ contact.primaryEmailAddress }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.secondary_emails'|trans }}</div>
+                            <div class="col">@todo</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.first_name'|trans }}</div>
+                            <div class="col">{{ contact.firstname }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.last_name'|trans }}</div>
+                            <div class="col">{{ contact.lastname }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.phone_number'|trans }}</div>
+                            <div class="col">{{ contact.phoneNumber }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.company'|trans }}</div>
+                            <div class="col">{{ contact.company }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.address_book'|trans }}</div>
+                            <div class="col">{{ contact.addressBook }}</div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-mails">
+                        <div
+                            id="mailList"
+                        ></div>
+                    </div>
+                    <div class="tab-pane" id="tabs-activity">
+                        Activity
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

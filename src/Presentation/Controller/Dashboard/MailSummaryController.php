@@ -18,13 +18,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class MailSummaryController extends AbstractController
 {
     #[Route(
-        path: "/dashboard/part/mail-summary/",
-        name: "dashboard_part_mail_summary",
+        path: "/dashboard/embed/mail-summary/",
+        name: "dashboard.embed.mail_summary",
         methods: ['GET']
     )]
     public function __invoke(EntityManagerInterface $entityManager, ImapMessageRepository $repository): Response
     {
-        $count = $repository->count();
+        $count = $repository->count([]);
 
         $result = $entityManager->getConnection()
             ->prepare(
@@ -35,7 +35,7 @@ class MailSummaryController extends AbstractController
             )->executeQuery()
             ->fetchAllKeyValue();
         return $this->render(
-            'dashboard/mail_summary.html.twig',
+            'pages/dashboard/mail_summary.html.twig',
             [
                 'count' => $count,
                 'mail_history' => $result

@@ -15,6 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route(
+    path: "/webmail/{mailId}",
+    name: "webmail.mail.",
+)]
 class TreatedController extends AbstractController
 {
     public function __construct(
@@ -23,8 +27,8 @@ class TreatedController extends AbstractController
     ) {}
 
     #[Route(
-        path: '/webmail/{mailId}/mark_as_treated',
-        name: "webmail_mark_as_treated",
+        path: '/mark_as_treated',
+        name: "mark_as_treated",
         methods: ['PUT']
     )]
     public function markAsTreated(string $mailId): Response
@@ -34,12 +38,12 @@ class TreatedController extends AbstractController
                 ->setIsTreated(true)
                 ->setTreatedAt($this->clock->now())
         );
-        return $this->redirectToRoute('webmail_mail', ['mailId' => $mailId]);
+        return $this->redirectToRoute('webmail.mail.details', ['mailId' => $mailId]);
     }
 
     #[Route(
-        path: '/webmail/{mailId}/mark_as_untreated',
-        name: "webmail_mark_as_untreated",
+        path: '/mark_as_untreated',
+        name: "mark_as_untreated",
         methods: ['PUT']
     )]
     public function markAsUntreated(string $mailId): Response
@@ -49,6 +53,6 @@ class TreatedController extends AbstractController
                 ->setIsTreated(false)
                 ->setTreatedAt(null)
         );
-        return $this->redirectToRoute('webmail_mail', ['mailId' => $mailId]);
+        return $this->redirectToRoute('webmail.mail.details', ['mailId' => $mailId]);
     }
 }

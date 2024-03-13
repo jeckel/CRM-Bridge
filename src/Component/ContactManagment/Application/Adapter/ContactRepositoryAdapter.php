@@ -17,6 +17,7 @@ use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
 use Override;
+use Ramsey\Uuid\Uuid;
 
 readonly class ContactRepositoryAdapter implements ContactRepository
 {
@@ -28,7 +29,7 @@ readonly class ContactRepositoryAdapter implements ContactRepository
     #[Override]
     public function save(Contact $contact): void
     {
-        $entity = $this->repository->find((string) $contact->id) ?? new DoctrineContact();
+        $entity = $this->repository->find(Uuid::fromString((string) $contact->id)) ?? new DoctrineContact();
         $entity = $this->contactMapper->mapToDoctrine($entity, $contact);
         $this->repository->persist($entity);
     }

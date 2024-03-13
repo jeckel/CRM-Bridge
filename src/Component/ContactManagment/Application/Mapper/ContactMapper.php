@@ -25,6 +25,7 @@ use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function App\new_uuid;
@@ -35,7 +36,7 @@ use function App\new_uuid;
 readonly class ContactMapper
 {
     public function __construct(
-        private ContactActivityRepository $activityRepository,
+        //        private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
         private EntityManagerInterface $entityManager,
         private SluggerInterface $slugger
@@ -91,7 +92,7 @@ readonly class ContactMapper
         }
 
         $entity
-            ->setId((string) $contact->id)
+            ->setId(Uuid::fromString((string) $contact->id))
             ->setFirstname($contact->firstName)
             ->setLastname($contact->lastName)
             ->setDisplayName($contact->displayName)
@@ -105,17 +106,17 @@ readonly class ContactMapper
 
         $this->mapEmailAddressesToDoctrineEntity($contact, $entity);
 
-        if ($contact->activities->hasChanged()) {
-            foreach ($contact->activities as $activity) {
-                $entity->addActivity(
-                    ($this->activityRepository->find((string) $activity->id) ?? new DoctrineContactActivity())
-                        ->setId((string) $activity->id)
-                        ->setDate($activity->date)
-                        ->setSubject($activity->subject)
-                        ->setDescription($activity->description)
-                );
-            }
-        }
+        //        if ($contact->activities->hasChanged()) {
+        //            foreach ($contact->activities as $activity) {
+        //                $entity->addActivity(
+        //                    ($this->activityRepository->find((string) $activity->id) ?? new DoctrineContactActivity())
+        //                        ->setId((string) $activity->id)
+        //                        ->setDate($activity->date)
+        //                        ->setSubject($activity->subject)
+        //                        ->setDescription($activity->description)
+        //                );
+        //            }
+        //        }
         return $entity;
     }
 
