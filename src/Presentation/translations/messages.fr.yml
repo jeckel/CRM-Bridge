@@ -44,6 +44,7 @@ setup:
       login: CardDav Login
       host: CardDav serveur
       password: CardDav Password
+      address_books: Carnets d'adresses
     title:
       index: Synchronisation des contacts CardDav
       create_account: Ajouter un nouveau compte CardDav

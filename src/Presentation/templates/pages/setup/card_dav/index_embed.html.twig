@@ -16,6 +16,7 @@
                 <tr>
                     <th>{{ 'setup.card_dav.field.label'|trans }}</th>
                     <th>{{ 'setup.card_dav.field.login'|trans }}</th>
+                    <th>{{ 'setup.card_dav.field.address_books'|trans }}</th>
                     <th>{{ 'action.actions'|trans }}</th>
                 </tr>
                 </thead>
@@ -24,6 +25,11 @@
                     <tr>
                         <td>{{ account.name }}</td>
                         <td>{{ account.login }}</td>
+                        <td>
+                            {% for addressBook in account.addressBooks %}
+                                <span class="badge badge-outline {% if addressBook.enabled %}text-green{% else %}text-secondary{% endif %}">{{ addressBook.name }}</span>
+                            {% endfor %}
+                        </td>
                         <td><a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modalEmbed"
                             hx-get="{{ url('setup.card_dav.setup_address_books', {accountId: account.id }) }}" hx-target="#modalEmbedContent"
                             >Config</a></td>
