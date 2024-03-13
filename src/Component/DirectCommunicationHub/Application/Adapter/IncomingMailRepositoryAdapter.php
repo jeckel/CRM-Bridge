@@ -33,7 +33,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
         $mail = $this->repository->findOneBy([
             'id' => $incomingMail->mailId->id()
         ]) ?? (new ImapMessage())
-            ->setId($incomingMail->mailId->id())
+            ->setId($incomingMail->mailId)
             ->setImapAccount($this->mailContext->getImapConfigReference());
         $mail->setMessageId($incomingMail->messageId)
             ->setDate($incomingMail->date)
@@ -41,7 +41,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             ->setFromName($incomingMail->fromName)
             ->setFromAddress((string) $incomingMail->fromAddress)
             ->setToString($incomingMail->toString)
-            ->setFolder($incomingMail->folder)
+            ->setImapPath($incomingMail->folder)
             ->setTextPlain($incomingMail->textPlain ?? '')
             ->setTextHtml($incomingMail->textHtml ?? '');
         if (null !== ($authorId = $incomingMail->authorId())) {
@@ -61,12 +61,12 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
             yield new IncomingMail(
                 MailId::from((string) $mail->getId()),
                 $mail->getMessageId(),
-                $mail->getFolder(),
+                $mail->getImapPath(),
                 $mail->getDate(),
                 $mail->getSubject(),
                 $mail->getFromName(),
                 new Email($mail->getFromAddress()),
-                $mail->getToString(),
+                $mail->getToString() ?? '',
                 $mail->getTextPlain(),
                 $mail->getTextHtml()
             );

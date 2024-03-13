@@ -15,7 +15,7 @@ use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
-use App\Infrastructure\Imap\ImapMailbox;
+use App\Infrastructure\Imap\ImapMailboxConnector;
 use DateTimeImmutable;
 use LogicException;
 use Override;
@@ -37,7 +37,7 @@ use function App\new_uuid;
 class MailProxy implements MailInterface
 {
     protected ?ImapMessage $entity = null;
-    protected ?IncomingMail $imapMail = null;
+    protected ?ImapMailDto $imapMail = null;
 
     public function __construct(
         private readonly ImapMessageRepository $repository,
@@ -48,32 +48,26 @@ class MailProxy implements MailInterface
         private readonly int $uid
     ) {}
 
-    public function getImapMail(): IncomingMail
+    public function getImapMail(): ImapMailDto
     {
         if (null === $this->imapMail) {
             $key = sprintf('%s-%s-%d', $this->account->getId(), $this->folder, $this->uid);
             $this->imapMail = $this->imapMailCache->get(
                 $key,
-                fn(ItemInterface $item): IncomingMail => $this->retrieveIncomingMail($item)
+                fn(ItemInterface $item): ImapMailDto => $this->retrieveIncomingMail($item)
             );
         }
         return $this->imapMail;
     }
 
-    private function retrieveIncomingMail(?ItemInterface $item = null): IncomingMail
+    private function retrieveIncomingMail(?ItemInterface $item = null): ImapMailDto
     {
         $item?->expiresAfter(300);
-        $mailbox = ImapMailbox::fromImapAccount($this->account);
+        $mailbox = ImapMailboxConnector::fromImapAccount($this->account);
         $mail = $mailbox->getMail($this->uid, $this->folder);
-
-        // Hack to remove dependency to IMAP/Connection which is not serializable in Cache
-        // Force loading of text and html content before removing dataInfo
-        $mail->textHtml;    // @phpstan-ignore-line
-        $mail->textPlain;   // @phpstan-ignore-line
-        $reflection = new ReflectionClass($mail);
-        $property = $reflection->getProperty('dataInfo');
-        $property->setAccessible(true);
-        $property->setValue($mail, [[], []]);
+        if (null === $mail) {
+            throw new LogicException('Mail not found');
+        }
         return $mail;
     }
 
@@ -92,24 +86,27 @@ class MailProxy implements MailInterface
             $mail = $this->getImapMail();
             $parsedHeaders = Message::from($mail->headersRaw ?? '', true);
             $this->entity = (new ImapMessage())
-                ->setId(new_uuid())
                 ->setImapAccount($this->account)
-                ->setFolder($this->folder)
-                ->setUid($this->uid)
+                ->setImapPath($this->folder)
+                ->setImapUid($this->uid)
                 ->setMessageId($mail->messageId ?? '')
                 ->setDate(new DateTimeImmutable($mail->date ?? throw new LogicException('Date can not be null')))
                 ->setSubject($mail->subject ?? throw new LogicException('Subject can not be null'))
                 ->setFromName($mail->fromName ?? $mail->fromAddress ?? throw new LogicException('Both fromName and fromAddress can not be null'))
                 ->setFromAddress($mail->fromAddress ?? throw new LogicException('fromAddress can not be null'))
-                ->setToString($mail->toString ?? throw new LogicException('toString can not be null'))
+                ->setToString($this->extractEmailTarget($mail, $parsedHeaders))
                 ->setHeaderRaw($mail->headersRaw ?? '')
                 ->setTextPlain($mail->textPlain)
-                ->setTextHtml($mail->textHtml)
+//                ->setTextHtml(imap_utf8($mail->textHtml))
                 ->setIsSpam($this->extractSpamStatusFromHeaders($parsedHeaders))
                 ->setSpamScore($this->extractSpamScoreFromHeaders($parsedHeaders))
                 ->setSpamHeaders($this->extractSpamHeadersFromHeaders($parsedHeaders))
             ;
-            $this->repository->persist($this->entity);
+            try {
+                $this->repository->persist($this->entity);
+            } catch (\Exception $e) {
+                dd($this->entity, $e);
+            }
             $this->eventDispatcher->dispatch(new NewIncomingEmail(
                 mailId: MailId::from((string) $this->entity->getId()),
                 email: new Email($this->entity->getFromAddress()),
@@ -117,6 +114,18 @@ class MailProxy implements MailInterface
             ));
         }
         return $this->entity;
+    }
+
+    private function extractEmailTarget(ImapMailDto $mail, IMessage $parsedHeaders): string
+    {
+        if (null !== $mail->toString) {
+            return $mail->toString;
+        }
+        $deliveredTo = $parsedHeaders->getHeader('Delivered-To');
+        if (null !== $deliveredTo) {
+            return (string) $deliveredTo->getValue();
+        }
+        throw new LogicException('Enable to extract email target from headers');
     }
 
     private function extractSpamStatusFromHeaders(IMessage $parsedHeaders): bool
@@ -169,7 +178,7 @@ class MailProxy implements MailInterface
         return $this->getEntity()->getFromName();
     }
 
-    #[\Override]
+    #[Override]
     public function date(): DateTimeImmutable
     {
         return $this->getEntity()->getDate();

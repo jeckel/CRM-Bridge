@@ -1,24 +1,29 @@
-imap:
-  action:
-    add: Ajouter un compte IMAP
-    list: Comptes IMAP
-  title:
-    list: WebMail - Comptes IMAP
-
-mail:
-  action:
-    attach_contact: Lier à un contact existant
-    create_contact: Créer un nouveau contact
-    mark_as_treated: Marquer comme traité
-    mark_as_untreated: Marquer comme non traité
-  alert:
-    empty_folder:
-      title: Aucun message
-      message: Vous n'avez aucun message dans cette boîte.
-    html_disable:
-      title: HTML inactif
-      message: La vue HTML est désactivé actuellement pour des raisons de sécurité.
-  field:
-    date: Date
-    subject: Objet
-    from: Auteur
+#imap:
+#  action:
+#    add: Ajouter un compte IMAP
+#    list: Comptes IMAP
+#  field:
+#    label: Libellé
+#    host: Host
+#    login: Login
+#    password: Mot de passe
+#  title:
+#    list: WebMail - Comptes IMAP
+#
+#mail:
+#  action:
+#    attach_contact: Lier à un contact existant
+#    create_contact: Créer un nouveau contact
+#    mark_as_treated: Marquer comme traité
+#    mark_as_untreated: Marquer comme non traité
+#  alert:
+#    empty_folder:
+#      title: Aucun message
+#      message: Vous n'avez aucun message dans cette boîte.
+#    html_disable:
+#      title: HTML inactif
+#      message: La vue HTML est désactivé actuellement pour des raisons de sécurité.
+#  field:
+#    date: Date
+#    subject: Objet
+#    from: Auteur

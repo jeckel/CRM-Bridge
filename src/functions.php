@@ -11,6 +11,7 @@ namespace App;
 
 use BackedEnum;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 if (! function_exists('App\slug')) {
@@ -21,9 +22,9 @@ if (! function_exists('App\slug')) {
 }
 
 if (! function_exists('App\new_uuid')) {
-    function new_uuid(): string
+    function new_uuid(): UuidInterface
     {
-        return Uuid::uuid4()->toString();
+        return Uuid::uuid4();
     }
 }
 
@@ -38,5 +39,25 @@ if (! function_exists('App\enum_to_choices')) {
             array_map(fn(BackedEnum $service) => $i18nPrefix . '.' . $service->name, $enumClass::cases()),
             array_map(fn(BackedEnum $service) => $service->value, $enumClass::cases())
         );
+    }
+}
+
+if (! function_exists('App\getImageMimeType')) {
+    /**
+     * @SuppressWarnings(PHPMD)
+     */
+    function getImageMimeType(string $imageUrl): ?string
+    {
+        // Get image info
+        if (! is_readable($imageUrl)) {
+            return null;
+        }
+        $imageInfo = getimagesize($imageUrl);
+
+        // Check if getimagesize() was successful
+        if ($imageInfo !== false) {
+            return $imageInfo['mime'];
+        }
+        return null;
     }
 }

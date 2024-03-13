@@ -1,0 +1,73 @@
+{% extends '/layout/tabler-layout.html.twig' %}
+
+{% block page_title %}Supervisor worker: {{ worker.group }}:{{ worker.name }}{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ url('setup.worker.index') }}" class="btn btn-default"><i class="ti ti-arrow-left"></i>&nbsp;{{ 'action.list'|trans }}</a>
+    <a href="{{ url('setup.worker.clear_logs', {name: worker.name, group: worker.group}) }}" class="btn btn-outline-warning"><i class="ti ti-trash"></i>&nbsp;{{ 'worker.action.clear_logs'|trans }}</a>
+    {% if worker.state != 20 %}
+        <a href="{{ url('setup.worker.start', {name: worker.name, group: worker.group}) }}" class="btn btn-outline-success"><i class="ti ti-player-play"></i>&nbsp;{{ 'action.start'|trans }}</a>
+    {% else %}
+        <a href="{{ url('setup.worker.stop', {name: worker.name, group: worker.group}) }}" class="btn btn-outline-danger"><i class="ti ti-player-stop"></i>&nbsp;{{ "action.stop"|trans }}</a>
+        <a href="{{ url('setup.worker.restart', {name: worker.name, group: worker.group}) }}" class="btn btn-outline-warning"><i class="ti ti-refresh"></i>&nbsp;{{ 'action.restart'|trans }}</a>
+    {% endif %}
+
+{% endblock %}
+
+{% block page_content %}
+<div class="card mb-2">
+    <div class="card-body">
+    <dl class="row">
+        <dt class="col-sm-3">{{ 'worker.field.name'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.group }}:{{ worker.name }}</dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.description'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.description }}</dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.state'|trans }}</dt>
+        <dd class="col-sm-9"><twig:WorkerStateBadge :state="worker.state" :stateName="worker.getState.name" /></dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.pid'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.pid }}</dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.start_date'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.start != 0 ? worker.start|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.stop_date'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.stop != 0 ? worker.stop|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</dd>
+
+        <dt class="col-sm-3">Logfile</dt>
+        <dd class="col-sm-9">{{ worker.logfile }}</dd>
+
+        <dt class="col-sm-3">Stdout Logfile</dt>
+        <dd class="col-sm-9">{{ worker.stdout_logfile }}</dd>
+
+        <dt class="col-sm-3">Stderr Logfile</dt>
+        <dd class="col-sm-9">{{ worker.stderr_logfile }}</dd>
+
+        <dt class="col-sm-3">Exit Status</dt>
+        <dd class="col-sm-9">{{ worker.exitstatus }}</dd>
+
+        <dt class="col-sm-3">{{ 'worker.field.spawn_error'|trans }}</dt>
+        <dd class="col-sm-9">{{ worker.spawnerr }}</dd>
+    </dl>
+    </div>
+</div>
+
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title">StdOut ({{ stdoutLog[1] }} lignes)</h5>
+            <p class="card-text">{{ stdoutLog[0] | nl2br }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">StdErr ({{ stderrLog[1] }} lignes)</h5>
+            <p class="card-text">{{ stderrLog[0] | nl2br }}</p>
+        </div>
+    </div>
+
+{#    {{ dump(stdoutLog) }}#}
+{#    {{ dump(stderrLog) }}#}
+{% endblock %}

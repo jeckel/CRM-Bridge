@@ -1,0 +1,5 @@
+{% extends
+    app.request.headers.get('hx-request', 'false') == 'true' ?
+    '/layout/embed-layout.html.twig' :
+    '/layout/tabler-layout.html.twig'
+%}

@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Presentation\Controller\Admin\Dashboard;
 
 use App\Infrastructure\Doctrine\Entity\ServiceConnector;
-use App\Infrastructure\Doctrine\Entity\CardDavConfig;
+use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
@@ -31,7 +31,7 @@ trait DashboardMenuTrait
         yield MenuItem::section('menu.admin');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
-                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavConfig::class),
+                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavAccount::class),
                 MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapAccount::class),
                 MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', ServiceConnector::class),
             ])

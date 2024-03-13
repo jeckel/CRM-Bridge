@@ -9,8 +9,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
@@ -18,39 +22,53 @@ use Stringable;
 class CardDavAddressBook implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(name: 'card_dav_address_book_id', type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private UuidInterface|string $id;
+    #[ORM\Column(name: 'card_dav_address_book_id', type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private UuidInterface $id;
 
-    #[ORM\Column(length: 180, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: false)]
     private string $name;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $uri;
 
-    #[ORM\Column()]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $enabled = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $lastSyncToken = null;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isDefault = false;
 
     #[ORM\ManyToOne(
         inversedBy: 'addressBooks'
     )]
     #[ORM\JoinColumn(
-        name: 'card_dav_config_id',
-        referencedColumnName: 'card_dav_config_id',
+        name: 'card_dav_account_id',
+        referencedColumnName: 'card_dav_account_id',
         nullable: false,
         onDelete: 'CASCADE'
     )]
-    private ?CardDavConfig $cardDavConfig = null;
+    private ?CardDavAccount $cardDavAccount = null;
 
-    public function getId(): UuidInterface|string
+    private AddressBookId $addressBookId;
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface|string $id): CardDavAddressBook
+    public function getIdentity(): AddressBookId
+    {
+        if (! isset($this->addressBookId)) {
+            $this->addressBookId = AddressBookId::from($this->id->toString());
+        }
+        return $this->addressBookId;
+    }
+
+    public function setId(UuidInterface $id): self
     {
         $this->id = $id;
         return $this;
@@ -112,14 +130,24 @@ class CardDavAddressBook implements Stringable
         return $this;
     }
 
-    public function getCardDavConfig(): ?CardDavConfig
+    public function isDefault(): bool
     {
-        return $this->cardDavConfig;
+        return $this->isDefault;
     }
 
-    public function setCardDavConfig(?CardDavConfig $cardDavConfig): CardDavAddressBook
+    public function setIsDefault(bool $isDefault): void
     {
-        $this->cardDavConfig = $cardDavConfig;
+        $this->isDefault = $isDefault;
+    }
+
+    public function getCardAccount(): ?CardDavAccount
+    {
+        return $this->cardDavAccount;
+    }
+
+    public function setCardDavAccount(?CardDavAccount $cardDavAccount): CardDavAddressBook
+    {
+        $this->cardDavAccount = $cardDavAccount;
         return $this;
     }
 
