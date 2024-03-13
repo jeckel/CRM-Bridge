@@ -38,7 +38,7 @@ class CardDavAccountController extends AbstractController
     public function index(): Response
     {
         return $this->render(
-            'pages/setup/card_dav/index_embed   .html.twig',
+            'pages/setup/card_dav/index_embed.html.twig',
             [
                 'card_dav_accounts' => $this->cardDavConfigRepository->findAll()
             ]
