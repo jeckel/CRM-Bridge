@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Service;
 
+use App\Component\ContactManagment\Application\Adapter\ContactRepositoryAdapter;
 use App\Component\ContactManagment\Application\Command\UpsertContactVCard;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use Doctrine\ORM\EntityManagerInterface;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;
 use MStilkerich\CardDavClient\Config;
@@ -33,6 +35,8 @@ class CardDavAddressBookSynchronizer implements SyncHandler
 
     public function __construct(
         private readonly MessageBusInterface $messageBus,
+        private readonly ContactRepositoryAdapter $contactRepository,
+        private readonly EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ) {
         Config::init($logger, $logger);
@@ -59,9 +63,16 @@ class CardDavAddressBookSynchronizer implements SyncHandler
             restype: [ElementNames::RESTYPE_ABOOK]
         );
         $this->addressBookId = AddressBookId::from((string) $cardDavAddressBook->getId());
-        $syncManager->synchronize($addressBook, $this, [ "FN" ], "");
+        $lastSyncToken = $syncManager->synchronize(
+            $addressBook,
+            $this,
+            ["FN"],
+            $cardDavAddressBook->getLastSyncToken() ?? ''
+        );
+        $cardDavAddressBook->setLastSyncToken($lastSyncToken);
+        $this->entityManager->persist($cardDavAddressBook);
+        $this->entityManager->flush();
     }
-
 
     #[Override]
     public function addressObjectChanged(string $uri, string $etag, ?VCard $card): void
@@ -85,7 +96,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
     #[Override]
     public function addressObjectDeleted(string $uri): void
     {
-        // TODO: Implement addressObjectDeleted() method.
+        $this->contactRepository->deleteByVCardUri($uri);
     }
 
     #[Override]

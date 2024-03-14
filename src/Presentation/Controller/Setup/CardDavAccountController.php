@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Setup;
 
-use App\Infrastructure\CardDav\AddressBookDiscovery;
+use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
 use App\Presentation\Form\CardDav\CardDavAccountFormType;
 use App\Presentation\Form\CardDav\DefaultAddressBookFormType;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,16 +23,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Translation\TranslatableMessage;
 
-use function App\new_uuid;
-
 #[Route("/setup/card_dav", name: "setup.card_dav.")]
 #[IsGranted("ROLE_ADMIN")]
 class CardDavAccountController extends AbstractController
 {
     public function __construct(
-        private AddressBookDiscovery $addressBookDiscovery,
-        private CardDavAddressBookRepository $addressBookRepository,
-        private CardDavConfigRepository $cardDavConfigRepository
+        private readonly CardDavClientProvider $cardDavClientProvider,
+        private readonly CardDavAddressBookRepository $addressBookRepository,
+        private readonly CardDavConfigRepository $cardDavConfigRepository
     ) {}
 
     #[Route('/', name: 'index')]
@@ -124,9 +123,12 @@ class CardDavAccountController extends AbstractController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     private function fetchAddressBookFromAccount(CardDavAccount $account): void
     {
-        foreach($this->addressBookDiscovery->discoverAddressBooks($account) as $addressBook) {
+        foreach($this->cardDavClientProvider->getClient($account)->discoverAddressBooks() as $addressBook) {
             if (null !== $this->addressBookRepository->findOneBy([
                     'uri' => $addressBook->getUri(),
                     'cardDavAccount' => $account,
@@ -144,6 +146,7 @@ class CardDavAccountController extends AbstractController
     /**
      * @param CardDavAccount $account
      * @return array<string, string>
+     * @throws Exception
      */
     private function extractAddressBooksChoices(CardDavAccount $account): array
     {

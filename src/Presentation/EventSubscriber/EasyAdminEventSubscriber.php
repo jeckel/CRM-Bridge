@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\EventSubscriber;
 
-use App\Infrastructure\CardDav\AddressBookDiscovery;
+use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
@@ -21,7 +21,7 @@ use function App\new_uuid;
 readonly class EasyAdminEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private AddressBookDiscovery $addressBookDiscovery,
+        private CardDavClientProvider $cardDavClientProvider,
         private CardDavAddressBookRepository $addressBookRepository
     ) {}
 
@@ -38,7 +38,7 @@ readonly class EasyAdminEventSubscriber implements EventSubscriberInterface
     {
         $instance = $event->getEntityInstance();
         if ($instance instanceof CardDavAccount) {
-            foreach($this->addressBookDiscovery->discoverAddressBooks($instance) as $addressBook) {
+            foreach($this->cardDavClientProvider->getClient($instance)->discoverAddressBooks() as $addressBook) {
                 if (null !== $this->addressBookRepository->findOneBy([
                         'uri' => $addressBook->getUri(),
                         'cardDavConfig' => $instance,

@@ -63,4 +63,14 @@ readonly class ContactRepositoryAdapter implements ContactRepository
             $this->repository->getById((string) $contactId)
         );
     }
+
+    public function deleteByVCardUri(string $vCardUri): void
+    {
+        $contact = $this->repository->findOneBy([
+            'vCardUri' => $vCardUri
+        ]);
+        if (null !== $contact) {
+            $this->repository->remove($contact);
+        }
+    }
 }

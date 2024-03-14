@@ -65,6 +65,18 @@ class IndexController extends AbstractController
         return $this->render('pages/contact/details.html.twig', ['contact' => $contact]);
     }
 
+    #[Route(
+        path: '/{contactId}/delete',
+        name: 'delete',
+        methods: ['GET']
+    )]
+    public function delete(string $contactId): Response
+    {
+        $contact = $this->contactRepository->getById($contactId);
+        $this->contactRepository->remove($contact);
+        return $this->redirectToRoute('contact.index');
+    }
+
     #[Route(path: '/{contactId}/dumpCardDav', name: 'contact.debug', methods: ['GET'])]
     public function dumpCardDav(string $contactId, CardDavClientProvider $cardDavClientProvider): Response
     {
@@ -76,6 +88,7 @@ class IndexController extends AbstractController
         $vCard = $cardDavClientProvider
             ->getClient($contact->getCardDavAccountOrFail())
             ->getVCard($vCardUri);
+//        dd($vCard->uid());
         dd($vCard);
     }
 }

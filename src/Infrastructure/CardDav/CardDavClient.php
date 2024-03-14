@@ -9,9 +9,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CardDav;
 
+use App\Infrastructure\CardDav\VCard\ContactVCard;
 use Exception;
 use MStilkerich\CardDavClient\Account;
-use Sabre\VObject\Document;
+use MStilkerich\CardDavClient\AddressbookCollection;
+use MStilkerich\CardDavClient\Services\Discovery;
+use RuntimeException;
+use Sabre\VObject\Component\VCard;
 use Sabre\VObject\Reader;
 
 readonly class CardDavClient
@@ -19,13 +23,26 @@ readonly class CardDavClient
     public function __construct(private Account $account) {}
 
     /**
+     * @return array<int,AddressbookCollection>
      * @throws Exception
      */
-    public function getVCard(string $vCardUri): Document
+    public function discoverAddressBooks(): array
+    {
+        return (new Discovery())->discoverAddressbooks($this->account);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getVCard(string $vCardUri): ContactVCard
     {
         $response = $this->account->getClient(
             $this->account->getDiscoveryUri()
         )->getAddressObject($vCardUri);
-        return Reader::read($response["vcf"]);
+        $vCard = Reader::read($response["vcf"]);
+        if (! $vCard instanceof VCard) {
+            throw new RuntimeException('Could not parse vCard');
+        }
+        return new ContactVCard($vCardUri, $vCard);
     }
 }

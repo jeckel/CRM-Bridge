@@ -32,6 +32,7 @@
                 <div class="dropdown-menu">
 {#                    <a href="#" class="dropdown-item">{{ 'action.edit'|trans }}</a>#}
                     <a href="{{ url('contact.contact.debug', {contactId: contact.id}) }}" class="dropdown-item">Debug</a>
+                    <a href="{{ url('contact.delete', {contactId: contact.id}) }}" class="dropdown-item">Supprimer</a>
                 </div>
             </div>
         </div>

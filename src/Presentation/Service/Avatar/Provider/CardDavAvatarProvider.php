@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace App\Presentation\Service\Avatar\Provider;
 
 use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\CardDav\VCardHelper;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Service\Avatar\AvatarDto;
 use App\Presentation\Service\Avatar\AvatarDtoInterface;
@@ -45,12 +44,12 @@ readonly class CardDavAvatarProvider implements AvatarProviderInterface
             $vCard = $this->cardDavClientProvider
                 ->getClient($contact->getCardDavAccountOrFail())
                 ->getVCard($vCardUri);
-            if (! VCardHelper::hasPhoto($vCard)) {
+            if (! $vCard->hasPhoto()) {
                 return null;
             }
             return new AvatarDto(
-                content: VCardHelper::getPhotoContent($vCard),
-                mimeType: VCardHelper::getPhotoMimeType($vCard)
+                content: $vCard->getPhotoContent(),
+                mimeType: $vCard->getPhotoMimeType()
             );
         } catch (Throwable) {
             return null;

@@ -67,8 +67,7 @@ class WorkerController extends AbstractController
         $this->supervisor->startProcess("$group:$name");
         $this->addFlash('success', new TranslatableMessage(
             'worker.flash_message.worker_started',
-            ['%worker%' => "$group:$name"],
-            'admin'
+            ['%worker%' => "$group:$name"]
         ));
         return $this->redirectToReferer($request);
     }
@@ -83,8 +82,7 @@ class WorkerController extends AbstractController
         $this->supervisor->stopProcess("$group:$name");
         $this->addFlash('success', new TranslatableMessage(
             'worker.flash_message.worker_stopped',
-            ['%worker%' => "$group:$name"],
-            'admin'
+            ['%worker%' => "$group:$name"]
         ));
         return $this->redirectToReferer($request);
     }
@@ -100,8 +98,7 @@ class WorkerController extends AbstractController
         $this->supervisor->startProcess("$group:$name");
         $this->addFlash('success', new TranslatableMessage(
             'worker.flash_message.worker_restarted',
-            ['%worker%' => "$group:$name"],
-            'admin'
+            ['%worker%' => "$group:$name"]
         ));
         return $this->redirectToReferer($request);
     }
