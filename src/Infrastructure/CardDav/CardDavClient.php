@@ -34,6 +34,21 @@ readonly class CardDavClient
     /**
      * @throws Exception
      */
+    public function getAddressBook(string $addressBookUri): AddressbookCollection
+    {
+        $filtered = array_filter(
+            $this->discoverAddressBooks(),
+            fn(AddressbookCollection $collection) => $collection->getUri() === $addressBookUri
+        );
+        if (count($filtered) === 0) {
+            throw new AddressBookNotFoundException($addressBookUri);
+        }
+        return array_values($filtered)[0];
+    }
+
+    /**
+     * @throws Exception
+     */
     public function getVCard(string $vCardUri): ContactVCard
     {
         $response = $this->account->getClient(

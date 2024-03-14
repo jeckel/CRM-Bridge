@@ -17,15 +17,21 @@ contact:
     company: Organisation
     display_name: Nom
     email_address: E-Mail
+    existing_company: Organisation existante
     first_name: Prénom
     last_name: Nom
+    new_company: Nouvelle organisation
     phone_number: Tel
     primary_email: E-Mail principal
     secondary_emails: E-Mails secondaires
+  flash_message:
+    contact_created: Contact %contact% créé
   tab:
     activity: Activité
     mails: Mails
     summary: Résumé
+  title:
+    create_contact: Créer un nouveau contact
 
 dashboard:
   running_workers: Workers
@@ -45,10 +51,12 @@ setup:
   card_dav:
     field:
       address_books: Carnets d'adresses
+      default_address_book: Carnet d'adresses par défaut
       host: CardDav serveur
       label: Libellé
       login: CardDav Login
       password: CardDav Password
+      sync_address_books: Carnets d'adresses synchronisés
     title:
       index: Synchronisation des contacts CardDav
       create_account: Ajouter un nouveau compte CardDav

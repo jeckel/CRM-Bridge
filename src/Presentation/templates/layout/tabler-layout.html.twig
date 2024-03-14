@@ -13,3 +13,15 @@
 {% block page_pretitle %}{% endblock %}
 {% block page_subtitle %}{% endblock %}
 {% block page_actions %}{% endblock %}
+
+{% block page_content_after %}
+    {% embed '@Tabler/embeds/modal.html.twig' with {id: 'modalEmbed', header: true, footer: false} %}
+{#        {% block modal_class %}{% endblock %}#}
+        {% block modal_title %}<span id="modalEmbedTitle"></span>{% endblock %}
+        {% block modal_size 'modal-lg' %}
+        {% block modal_body %}
+            <div id="modalEmbedContent"></div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+

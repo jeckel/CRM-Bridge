@@ -25,8 +25,9 @@ class DefaultAddressBookFormType extends AbstractType
                 type: ChoiceType::class,
                 options: [
                     'choices' => $options['addressBooks'],
-                    'label' => 'card_dav.field.sync_address_books',
+                    'label' => 'setup.card_dav.field.sync_address_books',
                     'multiple' => true,
+                    'expanded' => true
                 ]
             )
             ->add(
@@ -34,7 +35,7 @@ class DefaultAddressBookFormType extends AbstractType
                 type: ChoiceType::class,
                 options: [
                     'choices' => $options['addressBooks'],
-                    'label' => 'card_dav.field.default_address_book',
+                    'label' => 'setup.card_dav.field.default_address_book',
                     'multiple' => false,
                 ]
             )
@@ -51,7 +52,7 @@ class DefaultAddressBookFormType extends AbstractType
     {
         $resolver->setDefaults([
             'addressBooks' => [],
-            'translation_domain' => 'admin',
+//            'translation_domain' => 'admin',
             'hx-post' => null
         ]);
     }

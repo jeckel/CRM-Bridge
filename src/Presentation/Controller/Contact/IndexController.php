@@ -88,7 +88,7 @@ class IndexController extends AbstractController
         $vCard = $cardDavClientProvider
             ->getClient($contact->getCardDavAccountOrFail())
             ->getVCard($vCardUri);
-//        dd($vCard->uid());
+        //        dd($vCard->uid());
         dd($vCard);
     }
 }

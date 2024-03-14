@@ -1,3 +1,6 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
 <div class="card">
         {% if not mail.isTreated %}
         <div class="ribbon bg-red ribbon-top ribbon-start">NEW</div>
@@ -35,7 +38,16 @@
                 <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                 <div class="dropdown-menu">
                     {% if not mail.contact %}
-                    <a href="{{ ea_url().setRoute('create_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'webmail.action.create_contact'|trans }}</a>
+                        <a hx-get="{{ url('contact.new', {email: mail.fromAddress, displayName: mail.fromName}) }}"
+                            hx-target="#modalEmbedContent"
+                            hx-swap="outerHTML"
+                            hx-headers='{"x-modal": "true"}'
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEmbed"
+                            class="dropdown-item">{{ 'webmail.action.create_contact'|trans }}
+                        </a>
+{#                    <a href="{{ ea_url().setRoute('create_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'webmail.action.create_contact'|trans }}</a>#}
                     <a href="{{ ea_url().setRoute('attach_contact_from_mail_author', { mailId: mail.id}) }}" class="dropdown-item">{{ 'webmail.action.attach_contact'|trans }}</a>
                     {% endif %}
 
@@ -88,8 +100,7 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 </div>
+
+{% endblock %}

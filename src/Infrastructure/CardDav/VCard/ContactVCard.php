@@ -24,11 +24,11 @@ readonly class ContactVCard
         private VCard $vCard
     ) {}
 
-//    public function uid(): string
-//    {
-//        dd($this->vCard->UID);
-//        return (string) $this->vCard->UID;
-//    }
+    //    public function uid(): string
+    //    {
+    //        dd($this->vCard->UID);
+    //        return (string) $this->vCard->UID;
+    //    }
 
     public function hasPhoto(): bool
     {

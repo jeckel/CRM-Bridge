@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/src/Presentation/templates'
+    paths:
+        'src/Presentation/templates/layout': 'layout'
+        'src/Presentation/templates/pages/contact': 'contact'
     form_themes:
         - '@Tabler/layout/form-theme.html.twig'
 
