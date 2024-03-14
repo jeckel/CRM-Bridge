@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\Identity\ContactId;
+use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -336,6 +337,14 @@ class Contact implements Stringable
     public function getAddressBook(): ?CardDavAddressBook
     {
         return $this->addressBook;
+    }
+
+    public function getCardDavAccountOrFail(): CardDavAccount
+    {
+        if (null === $this->addressBook) {
+            throw new RelationNotFoundException('Address book not set');
+        }
+        return $this->addressBook->getCardDavAccountOrFail();
     }
 
     public function setAddressBook(?CardDavAddressBook $addressBook): Contact

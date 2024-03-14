@@ -1,17 +1,29 @@
 <?php
 
 /**
- * @author Julien Mercier-Rojas <julien@jeckel-lab.fr>
- * Created at: 09/03/2024 10:06
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 13/03/2024
  */
+
 declare(strict_types=1);
 
 namespace App\Presentation\Service\Avatar;
 
-readonly class AvatarDto
+use Override;
+
+readonly class AvatarDto implements AvatarDtoInterface
 {
-    public function __construct(
-        public string $url,
-        public string $mimeType
-    ) {}
+    public function __construct(public string $content, public string $mimeType) {}
+
+    #[Override]
+    public function getMimeType(): string
+    {
+        return $this->mimeType;
+    }
+
+    #[Override]
+    public function getContent(): string
+    {
+        return $this->content;
+    }
 }

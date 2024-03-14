@@ -6,8 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace App\Presentation\Service\Avatar;
+namespace App\Presentation\Service\Avatar\Provider;
 
+use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Presentation\Service\Avatar\AvatarDtoInterface;
+use App\Presentation\Service\Avatar\RemoteAvatarDto;
 use Override;
 use Stringable;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -22,22 +25,31 @@ readonly class GravatarProvider implements AvatarProviderInterface
     ) {}
 
     #[Override]
-    public function getAvatar(string $email, int $size = 40): ?AvatarDto
+    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
     {
         return $this->getFromEmail($email, $size);
     }
 
+    #[Override]
+    public function getAvatarFromContact(Contact $contact, int $size = 40): ?AvatarDtoInterface
+    {
+        $email = $contact->getPrimaryEmailAddress();
+        if (null === $email) {
+            return null;
+        }
+        return $this->getAvatarFromEmail($email, $size);
+    }
 
-    public function getFromEmail(string|Stringable $email, int $size = 40): ?AvatarDto
+    public function getFromEmail(string|Stringable $email, int $size = 40): ?RemoteAvatarDto
     {
         $key = sprintf('%s-x-%d', str_replace('@', '-at-', (string) $email), $size);
         return $this->gravatarCache->get(
             $key,
-            fn(ItemInterface $item): ?AvatarDto => $this->retrieveGravatarUrl($email, $size, $item)
+            fn(ItemInterface $item): ?RemoteAvatarDto => $this->retrieveGravatarUrl($email, $size, $item)
         );
     }
 
-    private function retrieveGravatarUrl(Stringable|string $email, int $size, ItemInterface $item): ?AvatarDto
+    private function retrieveGravatarUrl(Stringable|string $email, int $size, ItemInterface $item): ?RemoteAvatarDto
     {
         // Expire after 7 days
         $item->expiresAfter(3600 * 24 * 7);
@@ -54,7 +66,7 @@ readonly class GravatarProvider implements AvatarProviderInterface
         if (null === $mimeType) {
             return null;
         }
-        return new AvatarDto(
+        return new RemoteAvatarDto(
             url: $url,
             mimeType: $mimeType
         );

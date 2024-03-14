@@ -20,7 +20,7 @@
                 <tr>
                     <td>
                         <a href="{{ path('contact.contact.details', { contactId: contact.id }) }}" class="text-reset">
-                            <twig:Avatar :email="contact.emailAddress" size="xs"/>
+                            <twig:Avatar :contactId="contact.id" size="xs"/>
                             <span>{{ contact.displayName }}</span>
                         </a>
                     </td>

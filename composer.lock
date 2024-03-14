@@ -13062,16 +13062,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.60",
+            "version": "1.10.61",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "95dcea7d6c628a3f2f56d091d8a0219485a86bbe"
+                "reference": "30049da2df0941c38e2ba49372018aa796b90db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/95dcea7d6c628a3f2f56d091d8a0219485a86bbe",
-                "reference": "95dcea7d6c628a3f2f56d091d8a0219485a86bbe",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/30049da2df0941c38e2ba49372018aa796b90db4",
+                "reference": "30049da2df0941c38e2ba49372018aa796b90db4",
                 "shasum": ""
             },
             "require": {
@@ -13120,7 +13120,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-07T13:30:19+00:00"
+            "time": "2024-03-13T09:49:39+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -13771,12 +13771,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f5eb6c99c181efe59f82027eb7bef49c7d7bd0bc"
+                "reference": "0483c0973a9b7cba2119e98f2df6adc5ea87f3e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f5eb6c99c181efe59f82027eb7bef49c7d7bd0bc",
-                "reference": "f5eb6c99c181efe59f82027eb7bef49c7d7bd0bc",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0483c0973a9b7cba2119e98f2df6adc5ea87f3e2",
+                "reference": "0483c0973a9b7cba2119e98f2df6adc5ea87f3e2",
                 "shasum": ""
             },
             "conflict": {
@@ -14503,7 +14503,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-13T08:04:43+00:00"
+            "time": "2024-03-13T10:04:34+00:00"
         },
         {
             "name": "sanmai/later",
@@ -16348,5 +16348,5 @@
         "ext-posix": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

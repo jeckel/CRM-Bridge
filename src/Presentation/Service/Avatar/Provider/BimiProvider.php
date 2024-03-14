@@ -6,14 +6,15 @@
  */
 declare(strict_types=1);
 
-namespace App\Presentation\Service\Avatar;
+namespace App\Presentation\Service\Avatar\Provider;
 
+use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Presentation\Service\Avatar\AvatarDtoInterface;
+use App\Presentation\Service\Avatar\RemoteAvatarDto;
 use Override;
 use Stringable;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-
-use function App\getImageMimeType;
 
 readonly class BimiProvider implements AvatarProviderInterface
 {
@@ -21,13 +22,26 @@ readonly class BimiProvider implements AvatarProviderInterface
         private CacheInterface $bimiCache,
     ) {}
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     #[Override]
-    public function getAvatar(string $email, int $size = 40): ?AvatarDto
+    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
     {
         return $this->getFromEmail($email);
     }
 
-    public function getFromEmail(string|Stringable $email): ?AvatarDto
+    #[Override]
+    public function getAvatarFromContact(Contact $contact, int $size = 40): ?AvatarDtoInterface
+    {
+        $email = $contact->getPrimaryEmailAddress();
+        if (null === $email) {
+            return null;
+        }
+        return $this->getAvatarFromEmail($email, $size);
+    }
+
+    public function getFromEmail(string|Stringable $email): ?RemoteAvatarDto
     {
         // Extract domain from email
         $atPos = strrchr((string) $email, "@");
@@ -40,7 +54,7 @@ readonly class BimiProvider implements AvatarProviderInterface
         return $this->getFromDomainName($domain);
     }
 
-    public function getFromDomainName(string $domain): ?AvatarDto
+    public function getFromDomainName(string $domain): ?RemoteAvatarDto
     {
         // Remove subdomains
         $parts = explode('.', $domain);
@@ -51,15 +65,15 @@ readonly class BimiProvider implements AvatarProviderInterface
         return $this->getFromRootDomainName($domain);
     }
 
-    public function getFromRootDomainName(string $domain): ?AvatarDto
+    public function getFromRootDomainName(string $domain): ?RemoteAvatarDto
     {
         return $this->bimiCache->get(
             $domain,
-            fn(ItemInterface $item): ?AvatarDto => $this->retrieveBimiUrl($domain, $item)
+            fn(ItemInterface $item): ?RemoteAvatarDto => $this->retrieveBimiUrl($domain, $item)
         );
     }
 
-    private function retrieveBimiUrl(string $domain, ItemInterface $item): ?AvatarDto
+    private function retrieveBimiUrl(string $domain, ItemInterface $item): ?RemoteAvatarDto
     {
         // Expire after 7 days
         $item->expiresAfter(3600 * 24 * 7);
@@ -83,7 +97,7 @@ readonly class BimiProvider implements AvatarProviderInterface
                     if (! isset($matches[1])) {
                         continue;
                     }
-                    return new AvatarDto(
+                    return new RemoteAvatarDto(
                         url: $matches[1],
                         mimeType: 'image/svg+xml'
                     );

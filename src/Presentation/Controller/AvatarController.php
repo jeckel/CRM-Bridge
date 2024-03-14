@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller;
 
-use App\Presentation\Service\Avatar\ChainAvatarProvider;
+use App\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Presentation\Service\Avatar\AvatarDtoInterface;
+use App\Presentation\Service\Avatar\Provider\ChainAvatarProvider;
+use App\Presentation\Service\Avatar\RemoteAvatarDto;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,38 +20,47 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AvatarController extends AbstractController
 {
+    public function __construct(
+        private readonly string $projectDir
+    ) {}
+
     #[Route('/avatar/{emailB64}', name: 'avatar')]
-    public function __invoke(string $emailB64, ChainAvatarProvider $avatarProvider, string $projectDir): Response
+    public function emailAvatar(string $emailB64, ChainAvatarProvider $avatarProvider): Response
     {
         $email = base64_decode($emailB64, true);
         if ($email === false) {
             throw new LogicException('Unable to decode email');
         }
-        $avatar = $avatarProvider->getAvatar($email);
-        if (null === $avatar) {
-            return $this->returnContent(
-                $projectDir . '/assets/default_avatar.svg',
-                'image/svg+xml'
-            );
-        }
         return $this->returnContent(
-            $avatar->url,
-            $avatar->mimeType
+            $avatarProvider->getAvatarFromEmail($email)
         );
     }
 
-    protected function returnContent(string $path, string $mimeType): Response
+    #[Route('/avatar/contact/{contactId}', name: 'avatar.contact')]
+    public function contactAvatar(string $contactId, ChainAvatarProvider $avatarProvider, ContactRepository $contactRepository): Response
     {
-        $content = file_get_contents($path);
-        if (false === $content) {
-            throw new LogicException('Unable to read file');
+        return $this->returnContent(
+            $avatarProvider->getAvatarFromContact(
+                $contactRepository->getById($contactId)
+            )
+        );
+    }
+
+    protected function returnContent(?AvatarDtoInterface $avatarDto): Response
+    {
+        if (null === $avatarDto) {
+            $avatarDto = new RemoteAvatarDto(
+                url: $this->projectDir . '/assets/default_avatar.svg',
+                mimeType: 'image/svg+xml'
+            );
         }
+
         // Set the appropriate MIME type in the response
         $response = new Response(
-            content: $content,
+            content: $avatarDto->getContent(),
             status: 200,
             headers: [
-                'Content-Type' => $mimeType,
+                'Content-Type' => $avatarDto->getMimeType(),
                 'Cache-Control' => 'public, max-age=604800'
             ]
         );

@@ -40,7 +40,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
 
     public function syncAddressBook(CardDavAddressBook $cardDavAddressBook): void
     {
-        $config = $cardDavAddressBook->getCardAccount();
+        $config = $cardDavAddressBook->getCardDavAccount();
         if (null === $config) {
             return;
         }

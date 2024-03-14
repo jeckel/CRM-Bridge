@@ -146,7 +146,7 @@ class CardDavAccount implements Stringable
     {
         if ($this->addressBooks->removeElement($addressBook)) {
             // set the owning side to null (unless already changed)
-            if ($addressBook->getCardAccount() === $this) {
+            if ($addressBook->getCardDavAccount() === $this) {
                 $addressBook->setCardDavAccount(null);
             }
         }

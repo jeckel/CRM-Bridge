@@ -12,7 +12,7 @@
         <div>
             <div class="row align-items-center">
                 <div class="col-auto">
-                    <twig:Avatar :email="contact.primaryEmailAddress" />
+                    <twig:Avatar :contactId="contact.id"/>
                 </div>
                 <div class="col">
                     <div class="card-title">
@@ -30,7 +30,8 @@
             <div class="dropdown">
                 <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">{{ 'action.edit'|trans }}</a>
+{#                    <a href="#" class="dropdown-item">{{ 'action.edit'|trans }}</a>#}
+                    <a href="{{ url('contact.contact.debug', {contactId: contact.id}) }}" class="dropdown-item">Debug</a>
                 </div>
             </div>
         </div>

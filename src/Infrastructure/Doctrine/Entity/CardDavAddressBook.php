@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\Identity\AddressBookId;
+use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -140,8 +141,16 @@ class CardDavAddressBook implements Stringable
         $this->isDefault = $isDefault;
     }
 
-    public function getCardAccount(): ?CardDavAccount
+    public function getCardDavAccount(): ?CardDavAccount
     {
+        return $this->cardDavAccount;
+    }
+
+    public function getCardDavAccountOrFail(): CardDavAccount
+    {
+        if (null === $this->cardDavAccount) {
+            throw new RelationNotFoundException('The cardDavAccount is not set');
+        }
         return $this->cardDavAccount;
     }
 

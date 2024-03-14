@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controller\Contact;
 
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
-use App\Infrastructure\Doctrine\Entity\Company;
-use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
+use App\Infrastructure\CardDav\AddressBookDiscovery;
+use App\Infrastructure\CardDav\CardDavClientProvider;
+use App\Infrastructure\CardDav\VCardHelper;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
-use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,5 +63,19 @@ class IndexController extends AbstractController
     {
         $contact = $this->contactRepository->getById($contactId);
         return $this->render('pages/contact/details.html.twig', ['contact' => $contact]);
+    }
+
+    #[Route(path: '/{contactId}/dumpCardDav', name: 'contact.debug', methods: ['GET'])]
+    public function dumpCardDav(string $contactId, CardDavClientProvider $cardDavClientProvider): Response
+    {
+        $contact = $this->contactRepository->getById($contactId);
+        $vCardUri = $contact->getVCardUri();
+        if (null === $vCardUri) {
+            dd(null);
+        }
+        $vCard = $cardDavClientProvider
+            ->getClient($contact->getCardDavAccountOrFail())
+            ->getVCard($vCardUri);
+        dd($vCard);
     }
 }
