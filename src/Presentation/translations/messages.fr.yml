@@ -26,6 +26,7 @@ contact:
     secondary_emails: E-Mails secondaires
   flash_message:
     contact_created: Contact %contact% créé
+    contact_deleted: Contact %contact% supprimé
   tab:
     activity: Activité
     mails: Mails

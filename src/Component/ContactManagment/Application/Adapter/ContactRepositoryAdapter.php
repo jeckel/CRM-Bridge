@@ -16,6 +16,7 @@ use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository as DoctrineContactRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Override;
 use Ramsey\Uuid\Uuid;
 
@@ -72,5 +73,25 @@ readonly class ContactRepositoryAdapter implements ContactRepository
         if (null !== $contact) {
             $this->repository->remove($contact);
         }
+    }
+
+    public function findByVCardUri(string $vCardUri): ?Contact
+    {
+        $entity = $this->repository->findOneBy([
+            'vCardUri' => $vCardUri
+        ]);
+        if (null === $entity) {
+            return null;
+        }
+        return $this->contactMapper->mapToDomain($entity);
+    }
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function delete(Contact $contact): void
+    {
+        $entity = $this->repository->getById($contact->id);
+        $this->repository->remove($entity);
     }
 }

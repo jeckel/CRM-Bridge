@@ -339,12 +339,17 @@ class Contact implements Stringable
         return $this->addressBook;
     }
 
-    public function getCardDavAccountOrFail(): CardDavAccount
+    public function getAddressBookOrFail(): CardDavAddressBook
     {
         if (null === $this->addressBook) {
             throw new RelationNotFoundException('Address book not set');
         }
-        return $this->addressBook->getCardDavAccountOrFail();
+        return $this->addressBook;
+    }
+
+    public function getCardDavAccountOrFail(): CardDavAccount
+    {
+        return $this->getAddressBookOrFail()->getCardDavAccountOrFail();
     }
 
     public function setAddressBook(?CardDavAddressBook $addressBook): Contact

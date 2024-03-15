@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Service;
 
-use App\Component\ContactManagment\Application\Adapter\ContactRepositoryAdapter;
+use App\Component\ContactManagment\Application\Command\DeleteInternalContact;
 use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
@@ -35,7 +35,6 @@ class CardDavAddressBookSynchronizer implements SyncHandler
 
     public function __construct(
         private readonly MessageBusInterface $messageBus,
-        private readonly ContactRepositoryAdapter $contactRepository,
         private readonly EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ) {
@@ -96,7 +95,11 @@ class CardDavAddressBookSynchronizer implements SyncHandler
     #[Override]
     public function addressObjectDeleted(string $uri): void
     {
-        $this->contactRepository->deleteByVCardUri($uri);
+        $this->messageBus->dispatch(
+            new DeleteInternalContact(
+                vCardUri: $uri
+            )
+        );
     }
 
     #[Override]

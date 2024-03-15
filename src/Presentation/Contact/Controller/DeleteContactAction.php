@@ -9,9 +9,14 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Controller;
 
+use App\Component\ContactManagment\Application\Command\DeleteCardDavContact;
+use App\Component\Shared\Identity\ContactId;
+use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\TranslatableMessage;
 
 #[Route(
     path: "/contact",
@@ -24,12 +29,17 @@ class DeleteContactAction extends AbstractController
         name: 'delete',
         methods: ['GET']
     )]
-    public function delete(string $contactId): Response
-    {
-        // @todo: Delete on CardDav Server
-        dd($contactId);
-//        $contact = $this->contactRepository->getById($contactId);
-//        $this->contactRepository->remove($contact);
-//        return $this->redirectToRoute('contact.index');
+    public function delete(
+        string $contactId,
+        MessageBusInterface $messageBus,
+        ContactRepository $repository
+    ): Response {
+        $contact = $repository->getById($contactId);
+        $messageBus->dispatch(new DeleteCardDavContact($contact->getIdentity()));
+        $this->addFlash('success', new TranslatableMessage(
+            'contact.flash_message.contact_deleted',
+            ['%contact%' => $contact->getDisplayName()]
+        ));
+        return $this->redirectToRoute('contact.index');
     }
 }
