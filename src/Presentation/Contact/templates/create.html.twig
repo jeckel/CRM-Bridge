@@ -1,0 +1,42 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+{% block page_title %}{{ 'contact.title.create_contact'|trans }}{% endblock %}
+
+{% block page_content %}
+    <div class="card-body">
+        {% if isRequestModal %}
+            <form name="{{ form.vars.name }}" method="post" hx-post="{{ url('contact.new') }}" hx-target="#modalEmbedContent" hx-swap="outerHTML" hx-headers='{"x-modal": "true"}'>
+        {% else %}
+            {{ form_start(form) }}
+        {% endif %}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(form) }}
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.displayName) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.firstName) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.lastName) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.email) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.company) }}
+            </div>
+            <div class="col" style="border-left: 1px solid silver">
+                {{ form_row(form.companyNew) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

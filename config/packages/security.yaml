@@ -25,7 +25,7 @@ security:
             pattern: ^/webhook/
             provider: account_service_provider
             access_token:
-                token_handler: App\Presentation\Security\AccessTokenHandler
+                token_handler: App\Presentation\Common\Security\AccessTokenHandler
         main:
             lazy: true
             provider: app_user_provider

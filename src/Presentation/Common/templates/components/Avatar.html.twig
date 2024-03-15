@@ -1,0 +1,6 @@
+{% if contactId != null %}
+{% set avatar_url = url('avatar.contact', {contactId: contactId}) %}
+{% else %}
+{% set avatar_url = url('avatar', {emailB64: this.encodedEmail}) %}
+{% endif %}
+<span class="avatar {% if this.size is not null %}avatar-{{ size }}{% endif %}" style="background-image: url({{ avatar_url }})"></span>

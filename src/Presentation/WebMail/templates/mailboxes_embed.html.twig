@@ -1,0 +1,24 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
+<div class="card">
+{% for imapAccount in imapAccounts %}
+    <table class="table table-vcenter card-table table-striped table-hover table-sm">
+    <thead>
+        <tr><th>{{ imapAccount.name }}</th></tr>
+    </thead>
+    <tbody>
+    {% for mailbox in imapAccount.mailboxes|sort((a, b) => a.name <=> b.name) %}
+        <tr><td
+                style="cursor: pointer"
+            hx-get="{{ path('webmail.list_mails', { mailboxId: mailbox.id }) }}"
+            hx-target="#mailList"
+            hx-swap="outerHTML"
+            >{{ mailbox.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endfor %}
+</div>
+{% endblock %}

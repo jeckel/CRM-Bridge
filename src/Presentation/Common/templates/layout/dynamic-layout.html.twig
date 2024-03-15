@@ -1,0 +1,11 @@
+{% set isRequestHtmx = (app.request.headers.get('hx-request', 'false') == 'true') %}
+{% set isRequestModal = isRequestHtmx and (app.request.headers.get('x-modal', 'false') == 'true') %}
+{% extends
+    isRequestHtmx ?
+    (
+        isRequestModal ?
+        '@layout/modal-layout.html.twig' :
+        '@layout/embed-layout.html.twig'
+    ) :
+    '@layout/tabler-layout.html.twig'
+%}

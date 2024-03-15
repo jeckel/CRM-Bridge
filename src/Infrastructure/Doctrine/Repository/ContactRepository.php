@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
+use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact;
@@ -57,6 +58,13 @@ class ContactRepository extends AbstractEntityRepository
             )
             ->innerJoin(CardDavAddressBook::class, 'a', 'WITH', 'c.addressBook = a.id')
             ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
-            ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact');
+            ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact AND e.emailType = :emailType')
+            ->setParameter('emailType', EmailType::PRIMARY->value);
+    }
+
+    public function remove(Contact $contact): void
+    {
+        $this->getEntityManager()->remove($contact);
+        $this->getEntityManager()->flush();
     }
 }
