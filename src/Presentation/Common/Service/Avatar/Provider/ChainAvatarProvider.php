@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use Override;
@@ -21,7 +22,7 @@ readonly class ChainAvatarProvider implements AvatarProviderInterface
     ) {}
 
     #[Override]
-    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromEmail(Email $email, int $size = 40): ?AvatarDtoInterface
     {
         return
             $this->cardDavProvider->getAvatarFromEmail($email, $size) ??

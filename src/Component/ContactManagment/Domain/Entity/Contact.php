@@ -16,6 +16,7 @@ use App\Component\Shared\Identity\AddressBookId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
+use App\Component\Shared\ValueObject\EmailType;
 use DateTimeImmutable;
 
 /**

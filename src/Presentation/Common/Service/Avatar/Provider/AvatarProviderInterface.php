@@ -6,12 +6,13 @@
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 
 interface AvatarProviderInterface
 {
-    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface;
+    public function getAvatarFromEmail(Email $email, int $size = 40): ?AvatarDtoInterface;
 
     public function getAvatarFromContact(Contact $contact, int $size = 40): ?AvatarDtoInterface;
 }

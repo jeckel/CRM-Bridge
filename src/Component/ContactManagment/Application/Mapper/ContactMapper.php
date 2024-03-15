@@ -16,15 +16,14 @@ use App\Component\ContactManagment\Domain\Entity\EmailAddressCollection;
 use App\Component\Shared\Identity\ContactActivityId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
+use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
-use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function App\new_uuid;
 use function App\slug;
@@ -118,9 +117,9 @@ readonly class ContactMapper
     {
         $addresses = [];
         foreach ($contact->getEmailAddresses() as $emailAddress) {
-            $addresses[$emailAddress->getEmailAddress()] = [
-                'email' => new Email($emailAddress->getEmailAddress()),
-                'type' => $emailAddress->getEmailType(),
+            $addresses[(string) $emailAddress->address()] = [
+                'email' => $emailAddress->address(),
+                'type' => $emailAddress->type(),
             ];
         }
         return new EmailAddressCollection($addresses);
@@ -133,10 +132,11 @@ readonly class ContactMapper
      */
     protected function mapEmailAddressesToDoctrineEntity(DomainContact $contact, DoctrineContact $entity): void
     {
-        $repository = $this->entityManager->getRepository(ContactEmailAddress::class);
-        foreach ($contact->emailAddresses as $strEmail => $emailAddressData) {
-            $email = $repository->find($strEmail);
-            $entity->addEmailAddress($email ?? (new ContactEmailAddress())->setEmailAddress($strEmail)->setEmailType($emailAddressData['type']));
+        /**
+         * @var array{email: Email, type: EmailType} $emailAddressData
+         */
+        foreach ($contact->emailAddresses as $emailAddressData) {
+            $entity->addEmailAddress($emailAddressData['email'], $emailAddressData['type']);
         }
     }
 }

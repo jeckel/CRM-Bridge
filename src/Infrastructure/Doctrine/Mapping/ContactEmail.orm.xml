@@ -1,0 +1,17 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Infrastructure\Doctrine\EntityModel\ContactEmail"
+        table="contact_email"
+    >
+        <id name="emailAddress" type="email" column="email_address">
+            <generator strategy="NONE"/>
+        </id>
+        <many-to-one field="contact" target-entity="App\Infrastructure\Doctrine\Entity\Contact" inversed-by="emailAddresses">
+            <join-column name="contact_id" on-delete="CASCADE" nullable="false" referenced-column-name="contact_id"/>
+        </many-to-one>
+        <field name="emailType" enum-type="\App\Component\Shared\ValueObject\EmailType" nullable="false"/>
+    </entity>
+</doctrine-mapping>

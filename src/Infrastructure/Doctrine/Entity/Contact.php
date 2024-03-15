@@ -10,7 +10,10 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
+use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\EntityModel\Company;
+use App\Infrastructure\Doctrine\EntityModel\ContactEmail;
 use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +26,7 @@ use Stringable;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact implements Stringable
@@ -68,11 +72,11 @@ class Contact implements Stringable
     private Collection $activities;
 
     /**
-     * @var Collection<string, ContactEmailAddress> $emailAddresses
+     * @var Collection<string, ContactEmail> $emailAddresses
      */
     #[ORM\OneToMany(
         mappedBy: 'contact',
-        targetEntity: ContactEmailAddress::class,
+        targetEntity: ContactEmail::class,
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -284,45 +288,47 @@ class Contact implements Stringable
     }
 
     /**
-     * @return Collection<string, ContactEmailAddress>
+     * @return Collection<string, ContactEmail>
      */
     public function getEmailAddresses(): Collection
     {
         return $this->emailAddresses;
     }
 
-    public function addEmailAddress(ContactEmailAddress $emailAddress): static
+    public function addEmailAddress(Email $emailAddress, EmailType $type = EmailType::PRIMARY): static
     {
-        if (!$this->emailAddresses->contains($emailAddress)) {
-            $this->emailAddresses->add($emailAddress);
-            $emailAddress->setContact($this);
+        $found = array_filter(
+            $this->emailAddresses->toArray(),
+            static fn(ContactEmail $contactEmail) => $contactEmail->address()->equals($emailAddress)
+        );
+        if (count($found) === 0) {
+            $this->emailAddresses->add(ContactEmail::new($emailAddress, $this, $type));
         }
-
         return $this;
     }
 
-    public function getPrimaryEmailAddress(): ?string
+    public function getPrimaryEmailAddress(): ?Email
     {
         $filtered = $this->emailAddresses->filter(
-            fn(ContactEmailAddress $emailAddress) => $emailAddress->isPrimary()
+            fn(ContactEmail $emailAddress) => $emailAddress->isPrimary()
         );
         if (count($filtered) > 0) {
-            return array_values($filtered->toArray())[0]->getEmailAddress();
+            return array_values($filtered->toArray())[0]->address();
         }
         return null;
     }
-
-    public function removeEmailAddress(ContactEmailAddress $emailAddress): static
-    {
-        if ($this->emailAddresses->removeElement($emailAddress)) {
-            // set the owning side to null (unless already changed)
-            if ($emailAddress->getContact() === $this) {
-                $emailAddress->setContact(null);
-            }
-        }
-
-        return $this;
-    }
+    //
+    //    public function removeEmailAddress(ContactEmail $emailAddress): static
+    //    {
+    //        if ($this->emailAddresses->removeElement($emailAddress)) {
+    //            // set the owning side to null (unless already changed)
+    //            if ($emailAddress->getContact() === $this) {
+    //                $emailAddress->setContact(null);
+    //            }
+    //        }
+    //
+    //        return $this;
+    //    }
 
     public function getCompany(): ?Company
     {

@@ -12,8 +12,8 @@ namespace App\Infrastructure\Doctrine\Repository;
 use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Contact;
-use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
 use App\Infrastructure\Doctrine\EntityModel\Company;
+use App\Infrastructure\Doctrine\EntityModel\ContactEmail;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -58,7 +58,7 @@ class ContactRepository extends AbstractEntityRepository
             )
             ->innerJoin(CardDavAddressBook::class, 'a', 'WITH', 'c.addressBook = a.id')
             ->leftJoin(Company::class, 'co', 'WITH', 'co.id = c.company')
-            ->leftJoin(ContactEmailAddress::class, 'e', 'WITH', 'c.id = e.contact AND e.emailType = :emailType')
+            ->leftJoin(ContactEmail::class, 'e', 'WITH', 'c.id = e.contact AND e.emailType = :emailType')
             ->setParameter('emailType', EmailType::PRIMARY->value);
     }
 

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use App\Presentation\Common\Service\Avatar\RemoteAvatarDto;
@@ -25,7 +26,7 @@ readonly class GravatarProvider implements AvatarProviderInterface
     ) {}
 
     #[Override]
-    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromEmail(Email $email, int $size = 40): ?AvatarDtoInterface
     {
         return $this->getFromEmail($email, $size);
     }
@@ -49,7 +50,7 @@ readonly class GravatarProvider implements AvatarProviderInterface
         );
     }
 
-    private function retrieveGravatarUrl(Stringable|string $email, int $size, ItemInterface $item): ?RemoteAvatarDto
+    private function retrieveGravatarUrl(Stringable|string|Email $email, int $size, ItemInterface $item): ?RemoteAvatarDto
     {
         // Expire after 7 days
         $item->expiresAfter(3600 * 24 * 7);

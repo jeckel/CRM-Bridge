@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use App\Presentation\Common\Service\Avatar\RemoteAvatarDto;
@@ -26,7 +27,7 @@ readonly class BimiProvider implements AvatarProviderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[Override]
-    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromEmail(Email $email, int $size = 40): ?AvatarDtoInterface
     {
         return $this->getFromEmail($email);
     }
@@ -41,7 +42,7 @@ readonly class BimiProvider implements AvatarProviderInterface
         return $this->getAvatarFromEmail($email, $size);
     }
 
-    public function getFromEmail(string|Stringable $email): ?RemoteAvatarDto
+    public function getFromEmail(string|Stringable|Email $email): ?RemoteAvatarDto
     {
         // Extract domain from email
         $atPos = strrchr((string) $email, "@");

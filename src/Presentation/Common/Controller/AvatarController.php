@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Controller;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use App\Presentation\Common\Service\Avatar\Provider\ChainAvatarProvider;
@@ -32,7 +33,7 @@ class AvatarController extends AbstractController
             throw new LogicException('Unable to decode email');
         }
         return $this->returnContent(
-            $avatarProvider->getAvatarFromEmail($email)
+            $avatarProvider->getAvatarFromEmail(new Email($email))
         );
     }
 

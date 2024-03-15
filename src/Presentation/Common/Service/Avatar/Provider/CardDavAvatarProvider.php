@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDto;
@@ -24,7 +25,7 @@ readonly class CardDavAvatarProvider implements AvatarProviderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[Override]
-    public function getAvatarFromEmail(string $email, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromEmail(Email $email, int $size = 40): ?AvatarDtoInterface
     {
         return null;
     }
