@@ -1,0 +1,32 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_title %}{{ 'setup.index.title'|trans }}{% endblock %}
+
+{% block page_actions %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6"
+            hx-get="{{ path('setup.imap.index') }}"
+            hx-trigger="revealed"
+            id="imapList"
+        >
+        </div>
+        <div class="col-md-6"
+            hx-get="{{ path('setup.card_dav.index') }}"
+            hx-trigger="revealed"
+            id="cardDavList"
+        >
+        </div>
+    </div>
+
+    {% embed '@Tabler/embeds/modal.html.twig' with {id: 'modalEmbed', header: true, footer: false} %}
+        {% block modal_title %}<span id="modalEmbedTitle"></span>{% endblock %}
+        {% block modal_size 'modal_sm' %}
+        {% block modal_body %}
+            <div id="modalEmbedContent"></div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+

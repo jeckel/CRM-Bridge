@@ -1,0 +1,38 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
+{% set runningWorker = 0 %}
+{% set totalWorker = workers | length %}
+{% for worker in workers %}
+    {% if worker.state == 20 %}
+        {% set runningWorker = runningWorker + 1 %}
+    {% endif %}
+{% endfor %}
+{% set runningPercent = (runningWorker * 100 / totalWorker)|round %}
+{% set progressBg = (runningWorker != totalWorker) ? 'bg-red' : 'bg-green' %}
+<div class="card">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="card-title mb-1">
+                    <a href="{{ path('setup.worker.index') }}" class="text-reset">{{ 'dashboard.running_workers'|trans }}</a>
+                </h3>
+                <div class="mt-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-auto">
+                            {{ runningWorker }} / {{ totalWorker }}
+                        </div>
+                        <div class="col">
+                            <div class="progress progress-sm">
+                                <div class="progress-bar {{ progressBg }}" style="width: {{ runningPercent }}%" role="progressbar" aria-valuenow="{{ runningPercent }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ runningWorker }} / {{ totalWorker }}">
+                                    <span class="visually-hidden">{{ runningWorker }} / {{ totalWorker }} {{ 'worker.title.running_workers'|trans }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

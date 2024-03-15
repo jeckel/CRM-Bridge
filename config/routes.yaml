@@ -4,8 +4,44 @@
 #        namespace: App\Controller
 #    type: attribute
 
-presentation:
-  resource:
-    path: ../src/Presentation/
-    namespace: App\Presentation
-  type: attribute
+common:
+    resource:
+        path: ../src/Presentation/Common/Controller/
+        namespace: App\Presentation\Common\Controller
+    type: attribute
+
+contact:
+    resource:
+        path: ../src/Presentation/Contact/Controller/
+        namespace: App\Presentation\Contact\Controller
+    type: attribute
+
+dashboard:
+    resource:
+        path: ../src/Presentation/Dashboard/Controller/
+        namespace: App\Presentation\Dashboard\Controller
+    type: attribute
+
+setup:
+    resource:
+        path: ../src/Presentation/Setup/Controller/
+        namespace: App\Presentation\Setup\Controller
+    type: attribute
+
+webmail:
+    resource:
+        path: ../src/Presentation/WebMail/Controller/
+        namespace: App\Presentation\WebMail\Controller
+    type: attribute
+
+easyadmin:
+    resource:
+        path: ../src/Presentation/EasyAdmin/Controller/
+        namespace: App\Presentation\EasyAdmin\Controller
+    type: attribute
+
+#presentation:
+#  resource:
+#    path: ../src/Presentation/
+#    namespace: App\Presentation
+#  type: attribute

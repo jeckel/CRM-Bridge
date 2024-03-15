@@ -1,0 +1,42 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_title %}Workers{% endblock %}
+
+{% block page_content %}
+<div class="card">
+    <table class="table">
+        <tr>
+            <th>{{ 'worker.field.pid'|trans }}</th>
+            <th>{{ 'worker.field.name'|trans }}</th>
+            <th>{{ 'worker.field.description'|trans }}</th>
+            <th>{{ 'worker.field.state'|trans }}</th>
+            <th>{{ 'worker.field.start_date'|trans }}</th>
+            <th>{{ 'worker.field.stop_date'|trans }}</th>
+            <th>{{ 'worker.field.spawn_error'|trans }}</th>
+            <th>{{ 'action.actions'|trans }}</th>
+        </tr>
+        {% for worker in workers %}
+            <tr>
+                <td>{{ worker.pid }}</td>
+                <td><a href="{{ url('setup.worker.details', {name: worker.name, group: worker.group}) }}">{{ worker.group }}:{{ worker.name }}</a></td>
+                <td>{{ worker.description }}</td>
+                <td><twig:WorkerStateBadge :state="worker.state" :stateName="worker.getState.name" /></td>
+                <td>{{ worker.start != 0 ? worker.start|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</td>
+                <td>{{ worker.stop != 0 ? worker.stop|date('d/m/Y H:i:s') : '<span class="badge badge-outline">Null</span>' }}</td>
+                <td>{{ worker.spawnerr }}</td>
+                <td>
+                    <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown" aria-expanded="false">{{ 'action.actions'|trans }}</button>
+                    <div class="dropdown-menu">
+                        {% if worker.state != 20 %}
+                            <a href="{{ url('setup.worker.start', {name: worker.name, group: worker.group}) }}" class="dropdown-item"><i class="ti ti-player-play"></i>&nbsp;{{ 'action.start'|trans }}</a>
+                        {% else %}
+                            <a href="{{ url('setup.worker.stop', {name: worker.name, group: worker.group}) }}" class="dropdown-item"><i class="ti ti-player-stop"></i>&nbsp;{{ 'action.stop'|trans }}</a>
+                            <a href="{{ url('setup.worker.restart', {name: worker.name, group: worker.group}) }}" class="dropdown-item"><i class="ti ti-refresh"></i>&nbsp;{{ 'action.restart'|trans }}</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
