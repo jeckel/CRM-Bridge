@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\CommandHandler;
 
-use App\Component\ContactManagment\Application\Command\UpsertContactVCard;
+use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\ContactManagment\Application\Service\UpsertContactManager;
 use App\Component\ContactManagment\Domain\Entity\Contact;
@@ -20,7 +20,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-readonly class UpsertContactVCardHandler
+readonly class UpsertInternalContactHandler
 {
     public function __construct(
         private ContactRepository $repository,
@@ -29,7 +29,7 @@ readonly class UpsertContactVCardHandler
         private Clock $clock
     ) {}
 
-    public function __invoke(UpsertContactVCard $command): void
+    public function __invoke(UpsertInternalContact $command): void
     {
         $contact = $this->repository->findByVCard($command->vCardUri);
         $contact = $this->upsertContactManager->upsertContact(
@@ -58,7 +58,7 @@ readonly class UpsertContactVCardHandler
 
     protected function upsertLinkToVCard(
         Contact $contact,
-        UpsertContactVCard $command
+        UpsertInternalContact $command
     ): Contact {
         return $contact->linkVCard(
             vCardUri: $command->vCardUri,

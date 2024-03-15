@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Controller;
 
-use App\Component\ContactManagment\Application\Command\CreateContact;
+use App\Component\ContactManagment\Application\Command\CreateCardDavContact;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
@@ -82,9 +82,9 @@ class CreateContactAction extends AbstractController
 
     /**
      * @param ContactFormDataType $formData
-     * @return CreateContact
+     * @return CreateCardDavContact
      */
-    protected function getMessageFromFormData(array $formData): CreateContact
+    protected function getMessageFromFormData(array $formData): CreateCardDavContact
     {
         $company = null;
         if ($formData['companyNew'] !== null) {
@@ -95,7 +95,7 @@ class CreateContactAction extends AbstractController
         /** @var CardDavAddressBook $addressBook */
         $addressBook = $formData['addressBook'];
 
-        return new CreateContact(
+        return new CreateCardDavContact(
             contactData: new ContactDto(
                 displayName: $formData['displayName'],
                 firstName: $formData['firstName'],

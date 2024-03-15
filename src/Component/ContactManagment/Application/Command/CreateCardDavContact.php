@@ -12,7 +12,7 @@ namespace App\Component\ContactManagment\Application\Command;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\Identity\AddressBookId;
 
-final readonly class CreateContact
+readonly class CreateCardDavContact
 {
     public function __construct(
         public ContactDto $contactData,

@@ -9,21 +9,24 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\CommandHandler;
 
-use App\Component\ContactManagment\Application\Command\CreateContact;
+use App\Component\ContactManagment\Application\Command\CreateCardDavContact;
+use App\Component\ContactManagment\Application\Event\CardDavAddressBookUpdated;
 use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Sabre\VObject\Component\VCard;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-readonly class CreateContactHandler
+readonly class CreateCardDavContactHandler
 {
     public function __construct(
         private CardDavAddressBookRepository $addressBookRepository,
-        private CardDavClientProvider $clientProvider
+        private CardDavClientProvider $clientProvider,
+        private EventDispatcherInterface $eventDispatcher
     ) {}
 
-    public function __invoke(CreateContact $command): void
+    public function __invoke(CreateCardDavContact $command): void
     {
         $data = $command->contactData;
         $vcard =  new VCard([
@@ -38,5 +41,9 @@ readonly class CreateContactHandler
             ->getAddressBook($addressBook->getUri());
 
         $abook->createCard($vcard);
+
+        $this->eventDispatcher->dispatch(
+            new CardDavAddressBookUpdated($command->addressBookId)
+        );
     }
 }

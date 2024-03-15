@@ -13,7 +13,7 @@ use App\Component\Shared\Identity\AddressBookId;
 use App\Component\Shared\ValueObject\Email;
 use Sabre\VObject\Component\VCard;
 
-readonly class UpsertContactVCard
+readonly class UpsertInternalContact
 {
     public function __construct(
         public string $vCardUri,

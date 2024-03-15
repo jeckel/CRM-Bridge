@@ -2,9 +2,10 @@
 
 namespace App\Presentation\EasyAdmin\Controller;
 
+use App\Component\ContactManagment\Application\Command\SyncCardDavAddressBook;
+use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
-use App\Presentation\Async\Message\SyncAddressBook;
 use Doctrine\ORM\EntityNotFoundException;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -99,7 +100,7 @@ class CardDavConfigCrudController extends AbstractCrudController
             throw new InvalidArgumentException('Address book id must be a string');
         }
 
-        $messageBus->dispatch(new SyncAddressBook($addressBookId));
+        $messageBus->dispatch(new SyncCardDavAddressBook(AddressBookId::from($addressBookId)));
         return $this->redirect(
             $urlGenerator->setAction(Action::DETAIL)
                 ->generateUrl()

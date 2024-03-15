@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Component\ContactManagment\Application\Service;
 
 use App\Component\ContactManagment\Application\Adapter\ContactRepositoryAdapter;
-use App\Component\ContactManagment\Application\Command\UpsertContactVCard;
+use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
 use App\Component\Shared\Identity\AddressBookId;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,7 +81,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
             return;
         }
         $this->messageBus->dispatch(
-            new UpsertContactVCard(
+            new UpsertInternalContact(
                 vCardUri: $uri,
                 vCardEtag: $etag,
                 card: $card,
