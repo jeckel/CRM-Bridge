@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\Company;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,5 +26,10 @@ class CompanyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Company::class);
+    }
+
+    public function findBySlug(string $slug): ?Company
+    {
+        return $this->findOneBy(['slug' => $slug]);
     }
 }

@@ -13,7 +13,7 @@ use App\Component\ContactManagment\Application\Command\CreateCardDavContact;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
-use App\Infrastructure\Doctrine\Entity\Company;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Presentation\Contact\Form\ContactFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

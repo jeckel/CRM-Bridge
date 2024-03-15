@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Entity;
 
 use App\Component\Shared\Identity\ContactId;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Doctrine\Common\Collections\ArrayCollection;

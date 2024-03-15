@@ -8,17 +8,17 @@
         <div class="row row-cards">
             <div class="col-sm-6 col-lg-3"
                  hx-get="{{ path('dashboard.embed.mail_summary') }}"
-                 hx-trigger="revealed, every 10s"
+                 hx-trigger="revealed"
             >
             </div>
             <div class="col-sm-6 col-lg-3"
                  hx-get="{{ path('dashboard.contacts.summary') }}"
-                 hx-trigger="revealed, every 10s"
+                 hx-trigger="revealed"
             >
             </div>
             <div class="col-sm-6 col-lg-3"
                  hx-get="{{ path('dashboard.companies.summary') }}"
-                 hx-trigger="revealed, every 10s"
+                 hx-trigger="revealed"
             >
             </div>
         </div>

@@ -17,18 +17,17 @@ use App\Component\Shared\Identity\ContactActivityId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
-use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
-use App\Infrastructure\Doctrine\Entity\ContactActivity as DoctrineContactActivity;
 use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
-use App\Infrastructure\Doctrine\Repository\ContactActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 use function App\new_uuid;
+use function App\slug;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,8 +37,7 @@ readonly class ContactMapper
     public function __construct(
         //        private ContactActivityRepository $activityRepository,
         private CompanyRepository $companyRepository,
-        private EntityManagerInterface $entityManager,
-        private SluggerInterface $slugger
+        private EntityManagerInterface $entityManager
     ) {}
 
     public function mapToDomain(DoctrineContact $contact): DomainContact
@@ -77,13 +75,9 @@ readonly class ContactMapper
     {
         $company = null;
         if ($contact->company !== null) {
-            $slug = (string) $this->slugger->slug($contact->company);
-            $company = $this->companyRepository->findOneBy(['slug' => $slug]);
+            $company = $this->companyRepository->findBySlug(slug($contact->company));
             if (null === $company) {
-                $company = (new Company())
-                    ->setName($contact->company)
-                    ->setSlug($slug)
-                    ->setId(new_uuid());
+                $company = Company::new($contact->company);
             }
         }
         $addressBook = null;

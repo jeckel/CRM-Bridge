@@ -11,9 +11,9 @@ namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
-use App\Infrastructure\Doctrine\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ContactEmailAddress;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 

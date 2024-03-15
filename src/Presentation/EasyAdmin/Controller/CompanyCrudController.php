@@ -2,7 +2,7 @@
 
 namespace App\Presentation\EasyAdmin\Controller;
 
-use App\Infrastructure\Doctrine\Entity\Company;
+use App\Infrastructure\Doctrine\EntityModel\Company;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;

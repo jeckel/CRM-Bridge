@@ -1,6 +1,9 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+        types:
+            contact_id: App\Infrastructure\Doctrine\Type\ContactIdType
+            company_id: App\Infrastructure\Doctrine\Type\CompanyIdType
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
@@ -11,6 +14,12 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
+            App\Infrastructure\Doctrine\EntityModel:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Infrastructure\Doctrine\EntityModel'
+#                alias: YourDomain
 #            App:
 #                type: attribute
 #                is_bundle: false
