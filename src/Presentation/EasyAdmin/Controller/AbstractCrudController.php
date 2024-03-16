@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\EasyAdmin\Controller;
 
-use App\Infrastructure\Doctrine\Entity\SlugAwareInterface;
 use App\Presentation\EasyAdmin\Controller\Option\CrudConfigDto;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -20,7 +18,6 @@ use Override;
 use ReflectionException;
 
 use function App\new_uuid;
-use function App\slug;
 
 abstract class AbstractCrudController extends EAAbstractCrudController
 {
@@ -77,15 +74,5 @@ abstract class AbstractCrudController extends EAAbstractCrudController
         }
 
         return $entity;
-    }
-
-    // @phpstan-ignore-next-line
-    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        if ($this->config->onCreateGenerateSlug) {
-            /** @var SlugAwareInterface $entityInstance */
-            $entityInstance->setSlug(slug($entityInstance->getSlugSource()));
-        }
-        parent::persistEntity($entityManager, $entityInstance);
     }
 }

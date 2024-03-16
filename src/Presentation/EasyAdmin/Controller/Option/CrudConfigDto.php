@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace App\Presentation\EasyAdmin\Controller\Option;
 
 use App\Component\Shared\Error\LogicError;
-use App\Infrastructure\Doctrine\Entity\SlugAwareInterface;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use ReflectionClass;
 
@@ -24,18 +23,11 @@ use ReflectionClass;
 class CrudConfigDto
 {
     private bool $onCreateGenerateUuid = false;
-    private bool $onCreateGenerateSlug = false;
     private bool $detailPage = true;
 
     public function setOnCreateGenerateUuid(): CrudConfigDto
     {
         $this->onCreateGenerateUuid = true;
-        return $this;
-    }
-
-    public function disableDetailPage(): CrudConfigDto
-    {
-        $this->detailPage = false;
         return $this;
     }
 
@@ -55,10 +47,6 @@ class CrudConfigDto
     public static function fromEntityFqcn(string $entityFqcn): CrudConfigDto
     {
         $config = new CrudConfigDto();
-
-        if (is_a($entityFqcn, SlugAwareInterface::class, true)) {
-            $config->onCreateGenerateSlug = true;
-        }
 
         $reflection = (new ReflectionClass($entityFqcn))
             ->getProperty('id')
