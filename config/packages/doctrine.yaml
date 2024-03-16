@@ -1,10 +1,12 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+
         types:
             # Identities
-            contact_id: App\Infrastructure\Doctrine\Type\ContactIdType
-            company_id: App\Infrastructure\Doctrine\Type\CompanyIdType
+            contact_id: App\Infrastructure\Doctrine\Type\Identity\ContactIdType
+            company_id: App\Infrastructure\Doctrine\Type\Identity\CompanyIdType
+            user_id: App\Infrastructure\Doctrine\Type\Identity\UserIdType
             # ValueObject
             email: App\Infrastructure\Doctrine\Type\EmailType
 
@@ -23,12 +25,6 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Infrastructure\Doctrine\EntityModel'
 #                alias: YourDomain
-#            App:
-#                type: attribute
-#                is_bundle: false
-#                dir: '%kernel.project_dir%/src/Entity'
-#                prefix: 'App\Entity'
-#                alias: App
             App\Infrastructure\Doctrine\Entity:
                 type: attribute
                 is_bundle: false
