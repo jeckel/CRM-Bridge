@@ -38,8 +38,11 @@ abstract class AbstractIdentityType extends Type
         if (is_object($value) && is_a($value, $this->getIdentityFqcn())) {
             return (string) $value;
         }
+        if (is_string($value)) {
+            return $value;
+        }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw ConversionException::conversionFailed($value, static::NAME);
     }
 
     /**
@@ -70,6 +73,6 @@ abstract class AbstractIdentityType extends Type
     #[Override]
     public function getName(): string
     {
-        return self::NAME;
+        return static::NAME;
     }
 }

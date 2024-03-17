@@ -43,7 +43,7 @@ readonly class DeleteCardDavContactHandler
             $cardDavAddressBook->deleteCard($vCardUri);
 
             $this->eventDispatcher->dispatch(
-                event: new CardDavAddressBookUpdated($contact->getAddressBookOrFail()->getIdentity())
+                event: new CardDavAddressBookUpdated($contact->getAddressBookOrFail()->getId())
             );
         }
     }

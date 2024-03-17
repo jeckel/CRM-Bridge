@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Infrastructure\Doctrine\EntityModel\CardDavAccount"
+        table="card_dav_account"
+        repository-class="App\Infrastructure\Doctrine\Repository\CardDavAccountRepository"
+    >
+        <id name="id" type="card_dav_account_id" column="card_dav_account_id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="name" type="string" length="180" nullable="false" />
+        <field name="uri" type="string" length="180" nullable="false" unique="true" />
+        <field name="login" type="string" length="180" nullable="false" />
+        <field name="password" type="string" length="180" nullable="false" />
+        <one-to-many
+            mapped-by="account"
+            target-entity="App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook"
+            field="addressBooks"
+            orphan-removal="true"
+        >
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

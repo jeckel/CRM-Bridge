@@ -30,7 +30,7 @@ readonly class SyncAddressBookScheduler
         $addressBooks = $this->addressBookRepository->findBy(['enabled' => true]);
         foreach ($addressBooks as $addressBookEntity) {
             $this->messageBus->dispatch(
-                new SyncCardDavAddressBook($addressBookEntity->getIdentity())
+                new SyncCardDavAddressBook($addressBookEntity->getId())
             );
         }
     }

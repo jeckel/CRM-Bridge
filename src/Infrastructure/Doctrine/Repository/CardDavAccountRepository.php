@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CardDavAccount[]    findAll()
  * @method CardDavAccount[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CardDavConfigRepository extends AbstractEntityRepository
+class CardDavAccountRepository extends AbstractEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

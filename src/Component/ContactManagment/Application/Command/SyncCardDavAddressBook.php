@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Command;
 
-use App\Component\Shared\Identity\AddressBookId;
+use App\Component\Shared\Identity\CardDavAddressBookId;
 
 readonly class SyncCardDavAddressBook
 {
     public function __construct(
-        public AddressBookId $addressBookId
+        public CardDavAddressBookId $addressBookId
     ) {}
 }

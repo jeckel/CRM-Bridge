@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CardDav;
 
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Config;
 use Psr\Log\LoggerInterface;
@@ -25,10 +25,10 @@ class CardDavClientProvider
 
     public function getClient(CardDavAccount $cardDavAccount): CardDavClient
     {
-        if (! isset($this->clientInstances[$cardDavAccount->getUri()])) {
-            $this->clientInstances[$cardDavAccount->getUri()] = $this->createClient($cardDavAccount);
+        if (! isset($this->clientInstances[$cardDavAccount->uri()])) {
+            $this->clientInstances[$cardDavAccount->uri()] = $this->createClient($cardDavAccount);
         }
-        return $this->clientInstances[$cardDavAccount->getUri()];
+        return $this->clientInstances[$cardDavAccount->uri()];
     }
 
     private function createClient(CardDavAccount $cardDavAccount): CardDavClient
@@ -36,10 +36,10 @@ class CardDavClientProvider
         Config::init($this->logger, $this->logger);
         return new CardDavClient(
             account: new Account(
-                discoveryUri: $cardDavAccount->getUri(),
+                discoveryUri: $cardDavAccount->uri(),
                 httpOptions: [
-                    "username" => $cardDavAccount->getLogin(),
-                    "password" => $cardDavAccount->getPassword()
+                    "username" => $cardDavAccount->login(),
+                    "password" => $cardDavAccount->password()
                 ]
             ),
         );

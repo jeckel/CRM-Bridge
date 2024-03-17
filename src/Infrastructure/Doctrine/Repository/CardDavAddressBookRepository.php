@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -34,6 +34,6 @@ class CardDavAddressBookRepository extends AbstractEntityRepository
      */
     public function findByAccount(CardDavAccount $account): array
     {
-        return $this->findBy(['cardDavAccount' => $account]);
+        return $this->findBy(['account' => $account]);
     }
 }

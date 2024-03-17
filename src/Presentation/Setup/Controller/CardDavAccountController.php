@@ -9,10 +9,11 @@ declare(strict_types=1);
 namespace App\Presentation\Setup\Controller;
 
 use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
+use App\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
-use App\Infrastructure\Doctrine\Repository\CardDavConfigRepository;
+use App\Presentation\Setup\Form\CardDavAccountDto;
 use App\Presentation\Setup\Form\CardDavAccountFormType;
 use App\Presentation\Setup\Form\DefaultAddressBookFormType;
 use Exception;
@@ -30,7 +31,7 @@ class CardDavAccountController extends AbstractController
     public function __construct(
         private readonly CardDavClientProvider $cardDavClientProvider,
         private readonly CardDavAddressBookRepository $addressBookRepository,
-        private readonly CardDavConfigRepository $cardDavConfigRepository
+        private readonly CardDavAccountRepository $cardDavConfigRepository
     ) {}
 
     #[Route('/', name: 'index')]
@@ -53,20 +54,22 @@ class CardDavAccountController extends AbstractController
     {
         $form = $this->createForm(
             CardDavAccountFormType::class,
-            new CardDavAccount(),
+            new CardDavAccountDto(),
             [
                 'hx-post' => $this->generateUrl('setup.card_dav.create_account'),
             ]
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var CardDavAccount $account */
-            $account = $form->getData();
-            $this->cardDavConfigRepository->persist($account);
-            $this->fetchAddressBookFromAccount($account);
+            // @todo: Build Account from form resilt DTO
+//            /** @var CardDavAccountDto $account */
+//            $accountDto = $form->getData();
+//            $account = CardDavAccount::fromFormDto($accountDto);
+//            $this->cardDavConfigRepository->persist($account);
+//            $this->fetchAddressBookFromAccount($account);
             return $this->redirect($this->generateUrl(
                 'setup.card_dav.setup_address_books',
-                ['accountId' => (string) $account->getId()]
+//                ['accountId' => (string) $account->getId()]
             ));
         }
         return $this->render(
@@ -101,11 +104,12 @@ class CardDavAccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var array{syncedAddressBooks: string[], defaultAddressBook: string} $data */
             $data = $form->getData();
-            $this->updateAddressBooks($account, $data['syncedAddressBooks'], $data['defaultAddressBook']);
+            // @todo Review how to handle default address book
+            $this->updateAddressBooks($account, $data['syncedAddressBooks']);
             return $this->render('@modal/success.html.twig', [
                 'message' => new TranslatableMessage(
                     'setup.flash_message.card_dav_account_added',
-                    ['%account%' => $account->getName()],
+                    ['%account%' => $account->name()],
                     'messages'
                 ),
                 'refresh' => [
@@ -131,14 +135,15 @@ class CardDavAccountController extends AbstractController
         foreach($this->cardDavClientProvider->getClient($account)->discoverAddressBooks() as $addressBook) {
             if (null !== $this->addressBookRepository->findOneBy([
                     'uri' => $addressBook->getUri(),
-                    'cardDavAccount' => $account,
+                    'account' => $account,
                 ])) {
                 continue;
             }
-            $entity = (new CardDavAddressBook())
-                ->setName($addressBook->getName())
-                ->setUri($addressBook->getUri())
-                ->setCardDavAccount($account);
+            $entity = CardDavAddressBook::new(
+                $addressBook->getName(),
+                $addressBook->getUri(),
+                $account
+            );
             $this->addressBookRepository->persist($entity);
         }
     }
@@ -165,15 +170,13 @@ class CardDavAccountController extends AbstractController
     /**
      * @param CardDavAccount $account
      * @param string[] $syncedAddressBooks
-     * @param string $defaultAddressBook
      * @return void
      */
-    private function updateAddressBooks(CardDavAccount $account, array $syncedAddressBooks, string $defaultAddressBook): void
+    private function updateAddressBooks(CardDavAccount $account, array $syncedAddressBooks): void
     {
         $addressBookEntities = $this->addressBookRepository->findByAccount($account);
         foreach ($addressBookEntities as $addressBook) {
             $addressBook->setEnabled(in_array($addressBook->getName(), $syncedAddressBooks, true));
-            $addressBook->setIsDefault($addressBook->getName() === $defaultAddressBook);
             $this->addressBookRepository->persist($addressBook);
         }
     }

@@ -37,7 +37,7 @@ readonly class CreateCardDavContactHandler
             'ORG' => [$data->company],
         ]);
         $addressBook = $this->addressBookRepository->getById($command->addressBookId);
-        $abook = $this->clientProvider->getClient($addressBook->getCardDavAccountOrFail())
+        $abook = $this->clientProvider->getClient($addressBook->getCardDavAccount())
             ->getAddressBook($addressBook->getUri());
 
         $abook->createCard($vcard);

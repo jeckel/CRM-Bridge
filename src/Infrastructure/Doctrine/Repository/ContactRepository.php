@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Component\Shared\ValueObject\EmailType;
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\EntityModel\ContactEmail;
 use Doctrine\ORM\QueryBuilder;

@@ -11,8 +11,8 @@ namespace App\Component\ContactManagment\Application\Service;
 
 use App\Component\ContactManagment\Application\Command\DeleteInternalContact;
 use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
-use App\Component\Shared\Identity\AddressBookId;
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use App\Component\Shared\Identity\CardDavAddressBookId;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use Doctrine\ORM\EntityManagerInterface;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;
@@ -31,7 +31,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class CardDavAddressBookSynchronizer implements SyncHandler
 {
-    private AddressBookId $addressBookId;
+    private CardDavAddressBookId $addressBookId;
 
     public function __construct(
         private readonly MessageBusInterface $messageBus,
@@ -44,14 +44,11 @@ class CardDavAddressBookSynchronizer implements SyncHandler
     public function syncAddressBook(CardDavAddressBook $cardDavAddressBook): void
     {
         $config = $cardDavAddressBook->getCardDavAccount();
-        if (null === $config) {
-            return;
-        }
         $account = new Account(
-            discoveryUri: $config->getUri(),
+            discoveryUri: $config->uri(),
             httpOptions: [
-                "username" => $config->getLogin(),
-                "password" => $config->getPassword()
+                "username" => $config->login(),
+                "password" => $config->password()
             ]
         );
         $syncManager = new Sync();
@@ -61,7 +58,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
             account: $account,
             restype: [ElementNames::RESTYPE_ABOOK]
         );
-        $this->addressBookId = AddressBookId::from((string) $cardDavAddressBook->getId());
+        $this->addressBookId = CardDavAddressBookId::from((string) $cardDavAddressBook->getId());
         $lastSyncToken = $syncManager->synchronize(
             $addressBook,
             $this,

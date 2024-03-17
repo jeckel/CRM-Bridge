@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\EasyAdmin\Controller\Dashboard;
 
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\ServiceConnector;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 
@@ -30,7 +30,6 @@ trait DashboardMenuTrait
         yield MenuItem::section('menu.admin');
         yield MenuItem::subMenu('menu.config', 'fa fa-wrench')
             ->setSubItems([
-                MenuItem::linkToCrud('menu.card_dav', 'fas fa-id-card', CardDavAccount::class),
                 MenuItem::linkToCrud('menu.imap', 'fa fa-inbox', ImapAccount::class),
                 MenuItem::linkToCrud('menu.services', 'fas fa-concierge-bell', ServiceConnector::class),
             ])

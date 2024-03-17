@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace App\Presentation\EasyAdmin\EventSubscriber;
 
 use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\Doctrine\Entity\CardDavAccount;
-use App\Infrastructure\Doctrine\Entity\CardDavAddressBook;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
+use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -45,11 +45,11 @@ readonly class EasyAdminEventSubscriber implements EventSubscriberInterface
                     ])) {
                     continue;
                 }
-                $entity = (new CardDavAddressBook())
-                    ->setId(new_uuid())
-                    ->setName($addressBook->getName())
-                    ->setUri($addressBook->getUri())
-                    ->setCardDavAccount($instance);
+                $entity = CardDavAddressBook::new(
+                    $addressBook->getName(),
+                    $addressBook->getUri(),
+                    $instance
+                );
                 $this->addressBookRepository->persist($entity);
             }
         }

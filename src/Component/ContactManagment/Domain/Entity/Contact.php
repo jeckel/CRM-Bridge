@@ -12,7 +12,7 @@ use App\Component\ContactManagment\Domain\Error\VCardUriChangedError;
 use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Event\ContactEmailAdded;
 use App\Component\Shared\Event\DomainEventCollection;
-use App\Component\Shared\Identity\AddressBookId;
+use App\Component\Shared\Identity\CardDavAddressBookId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
@@ -31,7 +31,7 @@ use DateTimeImmutable;
  * @property-read ?string $vCardUri
  * @property-read ?string $vCardEtag
  * @property-read ?DateTimeImmutable $vCardLastSyncAt
- * @property-read ?AddressBookId $addressBookId
+ * @property-read ?CardDavAddressBookId $addressBookId
  */
 class Contact
 {
@@ -56,7 +56,7 @@ class Contact
         protected ?string $vCardUri = null,
         protected ?string $vCardEtag = null,
         protected ?DateTimeImmutable $vCardLastSyncAt = null,
-        protected ?AddressBookId $addressBookId = null
+        protected ?CardDavAddressBookId $addressBookId = null
     ) {
         $this->activities = $activities ?? new ContactActivityCollection();
         $this->emailAddresses = $emailAddresses ?? new EmailAddressCollection();
@@ -164,7 +164,7 @@ class Contact
         string $vCardUri,
         string $vCardEtag,
         DateTimeImmutable $vCardLastSyncAt,
-        AddressBookId $addressBookId
+        CardDavAddressBookId $addressBookId
     ): self {
         if (null !== $this->vCardUri && $this->vCardUri !== $vCardUri) {
             throw new VCardUriChangedError('Can not change vCardUri');

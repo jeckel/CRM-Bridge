@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Command;
 
-use App\Component\Shared\Identity\AddressBookId;
+use App\Component\Shared\Identity\CardDavAddressBookId;
 use App\Component\Shared\ValueObject\Email;
 use Sabre\VObject\Component\VCard;
 
@@ -19,7 +19,7 @@ readonly class UpsertInternalContact
         public string $vCardUri,
         public string $vCardEtag,
         public VCard $card,
-        public AddressBookId $addressBookId
+        public CardDavAddressBookId $addressBookId
     ) {}
 
     public function firstName(): ?string
