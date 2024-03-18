@@ -9,14 +9,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\EasyAdmin\EventSubscriber;
 
+use App\Component\CardDav\Domain\Entity\CardDavAccount;
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use function App\new_uuid;
 
 readonly class EasyAdminEventSubscriber implements EventSubscriberInterface
 {

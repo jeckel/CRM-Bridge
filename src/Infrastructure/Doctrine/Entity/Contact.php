@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\CardDav\Domain\Entity\CardDavAccount;
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Component\Shared\ValueObject\EmailType;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\EntityModel\ContactEmail;
 use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;

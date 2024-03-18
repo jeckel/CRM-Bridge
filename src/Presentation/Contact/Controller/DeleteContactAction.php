@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Controller;
 
-use App\Component\ContactManagment\Application\Command\DeleteCardDavContact;
-use App\Component\Shared\Identity\ContactId;
+use App\Component\CardDav\Application\Command\DeleteCardDavContact;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

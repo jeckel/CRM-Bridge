@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\Command;
+namespace App\Component\CardDav\Application\Command;
 
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\Identity\CardDavAddressBookId;

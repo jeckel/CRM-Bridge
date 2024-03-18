@@ -7,16 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\EntityModel;
+namespace App\Component\CardDav\Domain\Entity;
 
 use App\Component\Shared\Identity\CardDavAddressBookId;
-use App\Infrastructure\Doctrine\Exception\RelationNotFoundException;
-use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\UuidInterface;
 use Stringable;
 
 class CardDavAddressBook implements Stringable
@@ -39,7 +32,7 @@ class CardDavAddressBook implements Stringable
         return $addressBook;
     }
 
-    public function getId(): CardDavAddressBookId
+    public function id(): CardDavAddressBookId
     {
         return $this->id;
     }

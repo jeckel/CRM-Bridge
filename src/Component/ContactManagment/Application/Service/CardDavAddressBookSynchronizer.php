@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Service;
 
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\ContactManagment\Application\Command\DeleteInternalContact;
 use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
 use App\Component\Shared\Identity\CardDavAddressBookId;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use Doctrine\ORM\EntityManagerInterface;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;
@@ -58,7 +58,7 @@ class CardDavAddressBookSynchronizer implements SyncHandler
             account: $account,
             restype: [ElementNames::RESTYPE_ABOOK]
         );
-        $this->addressBookId = CardDavAddressBookId::from((string) $cardDavAddressBook->getId());
+        $this->addressBookId = CardDavAddressBookId::from((string) $cardDavAddressBook->id());
         $lastSyncToken = $syncManager->synchronize(
             $addressBook,
             $this,

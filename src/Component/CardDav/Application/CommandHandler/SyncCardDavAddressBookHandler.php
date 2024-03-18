@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\CommandHandler;
+namespace App\Component\CardDav\Application\CommandHandler;
 
-use App\Component\ContactManagment\Application\Command\SyncCardDavAddressBook;
+use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
 use App\Component\ContactManagment\Application\Service\CardDavAddressBookSynchronizer;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

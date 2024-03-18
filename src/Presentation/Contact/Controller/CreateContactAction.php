@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Controller;
 
-use App\Component\ContactManagment\Application\Command\CreateCardDavContact;
+use App\Component\CardDav\Application\Command\CreateCardDavContact;
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Presentation\Contact\Form\ContactFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -104,7 +104,7 @@ class CreateContactAction extends AbstractController
                 phoneNumber: null,
                 company: $company
             ),
-            addressBookId: $addressBook->getId()
+            addressBookId: $addressBook->id()
         );
     }
 }

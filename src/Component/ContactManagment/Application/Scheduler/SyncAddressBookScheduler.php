@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\ContactManagment\Application\Scheduler;
 
-use App\Component\ContactManagment\Application\Command\SyncCardDavAddressBook;
+use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
@@ -30,7 +30,7 @@ readonly class SyncAddressBookScheduler
         $addressBooks = $this->addressBookRepository->findBy(['enabled' => true]);
         foreach ($addressBooks as $addressBookEntity) {
             $this->messageBus->dispatch(
-                new SyncCardDavAddressBook($addressBookEntity->getId())
+                new SyncCardDavAddressBook($addressBookEntity->id())
             );
         }
     }

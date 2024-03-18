@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Form;
 
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\ORM\QueryBuilder;

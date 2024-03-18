@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\EntityModel;
+namespace App\Component\CardDav\Domain\Entity;
 
 use App\Component\Shared\Identity\CardDavAccountId;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +29,21 @@ class CardDavAccount implements Stringable
         private string $password
     ) {
         $this->addressBooks = new ArrayCollection();
+    }
+
+    public static function new(
+        string $name,
+        string $uri,
+        string $login,
+        string $password
+    ): self {
+        return new self(
+            CardDavAccountId::new(),
+            $name,
+            $uri,
+            $login,
+            $password
+        );
     }
 
     public function getId(): CardDavAccountId

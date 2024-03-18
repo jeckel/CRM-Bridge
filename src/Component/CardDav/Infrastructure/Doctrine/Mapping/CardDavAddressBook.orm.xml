@@ -3,7 +3,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity
-        name="App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook"
+        name="App\Component\CardDav\Domain\Entity\CardDavAddressBook"
         table="card_dav_address_book"
         repository-class="App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository"
     >
@@ -16,7 +16,7 @@
         <field name="lastSyncToken" type="string" length="255" nullable="true" />
         <many-to-one
             field="account"
-            target-entity="App\Infrastructure\Doctrine\EntityModel\CardDavAccount"
+            target-entity="App\Component\CardDav\Domain\Entity\CardDavAccount"
             inversed-by="addressBooks"
         >
             <join-column

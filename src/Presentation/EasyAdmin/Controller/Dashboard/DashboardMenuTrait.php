@@ -14,7 +14,6 @@ use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\ServiceConnector;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
 use App\Infrastructure\Doctrine\EntityModel\Company;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 

@@ -2,21 +2,29 @@
 
 namespace App\Presentation\Setup\Form;
 
+use App\Component\CardDav\Application\Command\UpdateAddressBooksActivation;
+use App\Component\Shared\Identity\CardDavAccountId;
 use Override;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DefaultAddressBookFormType extends AbstractType
+class SyncedAddressBookFormType extends AbstractType
 {
     #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add(
+                child:'accountId',
+                type: HiddenType::class,
+                options: ['data' => $options['accountId']]
+            )
             ->add(
                 child: 'syncedAddressBooks',
                 type: ChoiceType::class,
@@ -25,15 +33,6 @@ class DefaultAddressBookFormType extends AbstractType
                     'label' => 'setup.card_dav.field.sync_address_books',
                     'multiple' => true,
                     'expanded' => true
-                ]
-            )
-            ->add(
-                child: 'defaultAddressBook',
-                type: ChoiceType::class,
-                options: [
-                    'choices' => $options['addressBooks'],
-                    'label' => 'setup.card_dav.field.default_address_book',
-                    'multiple' => false,
                 ]
             )
             ->add(
@@ -48,9 +47,9 @@ class DefaultAddressBookFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'accountId' => null,
             'addressBooks' => [],
-//            'translation_domain' => 'admin',
-            'hx-post' => null
+            'hx-post' => null,
         ]);
     }
 

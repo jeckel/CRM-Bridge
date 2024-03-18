@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
-use App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook;
+use App\Component\CardDav\Domain\Entity\CardDavAccount;
+use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

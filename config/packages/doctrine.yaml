@@ -21,6 +21,12 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
+            App\Component\CardDav\Domain\Entity:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Component/CardDav/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Component\CardDav\Domain\Entity'
+#                alias: CardDav
             App\Infrastructure\Doctrine\EntityModel:
                 is_bundle: false
                 type: xml

@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\CommandHandler;
+namespace App\Component\CardDav\Application\CommandHandler;
 
-use App\Component\ContactManagment\Application\Command\DeleteCardDavContact;
+use App\Component\CardDav\Application\Command\DeleteCardDavContact;
 use App\Component\ContactManagment\Application\Event\CardDavAddressBookUpdated;
 use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
@@ -43,7 +43,7 @@ readonly class DeleteCardDavContactHandler
             $cardDavAddressBook->deleteCard($vCardUri);
 
             $this->eventDispatcher->dispatch(
-                event: new CardDavAddressBookUpdated($contact->getAddressBookOrFail()->getId())
+                event: new CardDavAddressBookUpdated($contact->getAddressBookOrFail()->id())
             );
         }
     }

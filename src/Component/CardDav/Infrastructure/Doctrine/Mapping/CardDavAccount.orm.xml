@@ -3,7 +3,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity
-        name="App\Infrastructure\Doctrine\EntityModel\CardDavAccount"
+        name="App\Component\CardDav\Domain\Entity\CardDavAccount"
         table="card_dav_account"
         repository-class="App\Infrastructure\Doctrine\Repository\CardDavAccountRepository"
     >
@@ -16,7 +16,7 @@
         <field name="password" type="string" length="180" nullable="false" />
         <one-to-many
             mapped-by="account"
-            target-entity="App\Infrastructure\Doctrine\EntityModel\CardDavAddressBook"
+            target-entity="App\Component\CardDav\Domain\Entity\CardDavAddressBook"
             field="addressBooks"
             orphan-removal="true"
         >

@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\CommandHandler;
+namespace App\Component\CardDav\Application\CommandHandler;
 
-use App\Component\ContactManagment\Application\Command\CreateCardDavContact;
+use App\Component\CardDav\Application\Command\CreateCardDavContact;
 use App\Component\ContactManagment\Application\Event\CardDavAddressBookUpdated;
 use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;

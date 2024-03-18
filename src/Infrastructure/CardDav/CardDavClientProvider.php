@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CardDav;
 
-use App\Infrastructure\Doctrine\EntityModel\CardDavAccount;
+use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\Config;
 use Psr\Log\LoggerInterface;
