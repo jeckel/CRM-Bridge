@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\EasyAdmin\Controller\Dashboard;
 
+use App\Component\Contact\Domain\Entity\Company;
 use App\Infrastructure\Doctrine\Entity\Configuration;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\IncomingWebhook;
 use App\Infrastructure\Doctrine\Entity\ServiceConnector;
-use App\Infrastructure\Doctrine\EntityModel\Company;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 
 trait DashboardMenuTrait

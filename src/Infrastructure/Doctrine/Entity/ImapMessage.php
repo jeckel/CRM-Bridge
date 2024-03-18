@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Doctrine\Entity;
 
+use App\Component\Contact\Domain\Entity\Contact;
 use App\Component\Shared\ValueObject\IncomingEmailType;
 use App\Infrastructure\Doctrine\Repository\ImapMessageRepository;
 use DateTimeImmutable;

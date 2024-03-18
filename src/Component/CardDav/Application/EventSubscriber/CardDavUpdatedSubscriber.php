@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\EventSubscriber;
+namespace App\Component\CardDav\Application\EventSubscriber;
 
 use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
 use App\Component\CardDav\Application\Event\CardDavAddressBookUpdated;

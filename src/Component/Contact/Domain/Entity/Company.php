@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\EntityModel;
+namespace App\Component\Contact\Domain\Entity;
 
 use App\Component\Shared\Identity\CompanyId;
 

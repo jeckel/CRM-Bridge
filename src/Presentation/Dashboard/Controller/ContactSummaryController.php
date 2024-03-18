@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Dashboard\Controller;
 
-use App\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Component\Contact\Infrastructure\Doctrine\Repository\ContactRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

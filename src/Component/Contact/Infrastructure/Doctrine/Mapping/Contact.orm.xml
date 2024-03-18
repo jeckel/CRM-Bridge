@@ -1,0 +1,64 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Component\Contact\Domain\Entity\Contact"
+        table="contact"
+        repository-class="App\Component\Contact\Infrastructure\Doctrine\Repository\ContactRepository"
+    >
+        <id name="id" type="contact_id" column="contact_id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="displayName" type="string" nullable="false" />
+        <field name="vCardUri" type="string" nullable="false" unique="true" />
+        <field name="vCardEtag" type="string" nullable="false" />
+        <field name="vCardLastSyncAt" type="datetime_immutable" nullable="false" />
+        <many-to-one
+            field="company"
+            target-entity="App\Component\Contact\Domain\Entity\Company"
+        >
+            <join-column
+                name="company_id"
+                on-delete="SET NULL"
+                nullable="true"
+                referenced-column-name="company_id"
+            />
+        </many-to-one>
+        <many-to-one
+            field="addressBook"
+            target-entity="App\Component\CardDav\Domain\Entity\CardDavAddressBook"
+        >
+            <join-column
+                name="card_dav_address_book_id"
+                on-delete="RESTRICT"
+                nullable="false"
+                referenced-column-name="card_dav_address_book_id"
+            />
+        </many-to-one>
+        <one-to-many
+            mapped-by="contact"
+            target-entity="App\Component\Contact\Domain\Entity\ContactEmail"
+            field="emailAddresses"
+            orphan-removal="false"
+        >
+        </one-to-many>
+        <one-to-many
+            mapped-by="contact"
+            target-entity="App\Infrastructure\Doctrine\Entity\ImapMessage"
+            field="mails"
+            orphan-removal="false"
+        >
+        </one-to-many>
+        <one-to-many
+            mapped-by="contact"
+            target-entity="App\Component\Contact\Domain\Entity\ContactActivity"
+            field="activities"
+            orphan-removal="false"
+        >
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

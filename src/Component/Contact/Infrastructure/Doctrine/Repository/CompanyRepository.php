@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\Repository;
+namespace App\Component\Contact\Infrastructure\Doctrine\Repository;
 
-use App\Infrastructure\Doctrine\EntityModel\Company;
+use App\Component\Contact\Domain\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

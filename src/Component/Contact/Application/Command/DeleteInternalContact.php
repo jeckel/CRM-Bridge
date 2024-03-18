@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\Command;
+namespace App\Component\Contact\Application\Command;
 
 readonly class DeleteInternalContact
 {

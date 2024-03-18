@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace App\Presentation\EasyAdmin\Controller;
 
 use App\Infrastructure\Doctrine\Entity\Contact;
-use App\Infrastructure\Doctrine\EntityModel\Company;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -20,9 +18,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Override;
-
-use function App\new_uuid;
-use function App\slug;
 
 class ContactCrudController extends AbstractCrudController
 {

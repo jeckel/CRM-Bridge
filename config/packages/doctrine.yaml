@@ -6,8 +6,9 @@ doctrine:
             # Identities
             card_dav_account_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAccountIdType
             card_dav_address_book_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAddressBookIdType
-            contact_id: App\Infrastructure\Doctrine\Type\Identity\ContactIdType
-            company_id: App\Infrastructure\Doctrine\Type\Identity\CompanyIdType
+            contact_activity_id: App\Component\Contact\Infrastructure\Doctrine\Type\ContactActivityIdType
+            contact_id: App\Component\Contact\Infrastructure\Doctrine\Type\ContactIdType
+            company_id: App\Component\Contact\Infrastructure\Doctrine\Type\CompanyIdType
             user_id: App\Infrastructure\Doctrine\Type\Identity\UserIdType
             # ValueObject
             email: App\Infrastructure\Doctrine\Type\EmailType
@@ -26,6 +27,12 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/src/Component/CardDav/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Component\CardDav\Domain\Entity'
+            App\Component\Contact\Domain\Entity:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Component/Contact/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Component\Contact\Domain\Entity'
+
 #                alias: CardDav
             App\Infrastructure\Doctrine\EntityModel:
                 is_bundle: false

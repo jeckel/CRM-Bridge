@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace App\Component\CardDav\Application\Service;
 
-use App\Component\ContactManagment\Application\Command\DeleteInternalContact;
+use App\Component\CardDav\Infrastructure\CardDav\VCard\ContactVCard;
+use App\Component\Contact\Application\Command\DeleteInternalContact;
+use App\Component\Contact\Application\Command\UpsertContactVCard;
 use App\Component\ContactManagment\Application\Command\UpsertInternalContact;
 use App\Component\Shared\Identity\CardDavAddressBookId;
 use MStilkerich\CardDavClient\Services\SyncHandler;
@@ -31,11 +33,10 @@ readonly class AddressBookSyncHandler implements SyncHandler
             return;
         }
         $this->messageBus->dispatch(
-            new UpsertInternalContact(
-                vCardUri: $uri,
-                vCardEtag: $etag,
-                card: $card,
-                addressBookId: $this->addressBookId
+            new UpsertContactVCard(
+                vCard: new ContactVCard($uri, $card),
+                addressBookId: $this->addressBookId,
+                vCardEtag: $etag
             )
         );
     }

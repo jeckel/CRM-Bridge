@@ -11,9 +11,9 @@ namespace App\Presentation\Contact\Controller;
 
 use App\Component\CardDav\Application\Command\CreateCardDavContact;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
+use App\Component\Contact\Domain\Entity\Company;
 use App\Component\ContactManagment\Application\Dto\ContactDto;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\EntityModel\Company;
 use App\Presentation\Contact\Form\ContactFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

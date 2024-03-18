@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace App\Component\ContactManagment\Application\Mapper;
 
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
+use App\Component\Contact\Domain\Entity\Company;
+use App\Component\Contact\Infrastructure\Doctrine\Repository\CompanyRepository;
 use App\Component\ContactManagment\Domain\Entity\Contact as DomainContact;
 use App\Component\ContactManagment\Domain\Entity\ContactActivity;
 use App\Component\ContactManagment\Domain\Entity\ContactActivityCollection;
@@ -19,8 +21,6 @@ use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\Contact as DoctrineContact;
-use App\Infrastructure\Doctrine\EntityModel\Company;
-use App\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Ramsey\Uuid\Uuid;

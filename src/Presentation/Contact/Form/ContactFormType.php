@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace App\Presentation\Contact\Form;
 
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
-use App\Infrastructure\Doctrine\EntityModel\Company;
-use App\Infrastructure\Doctrine\Repository\CompanyRepository;
+use App\Component\Contact\Domain\Entity\Company;
+use App\Component\Contact\Infrastructure\Doctrine\Repository\CompanyRepository;
 use Doctrine\ORM\QueryBuilder;
 use Override;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

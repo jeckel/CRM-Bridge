@@ -7,10 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\EntityModel;
+namespace App\Component\Contact\Domain\Entity;
 
 use App\Component\Shared\ValueObject\Email;
-use App\Component\Shared\ValueObject\EmailType;
 use App\Infrastructure\Doctrine\Entity\Contact;
 
 /**
@@ -23,12 +22,12 @@ class ContactEmail
     /** @phpstan-ignore-next-line  */
     private Contact $contact;
 
-    private EmailType $emailType;
+    private string $emailType;
 
     public static function new(
         Email $emailAddress,
         Contact $contact,
-        EmailType $emailType = EmailType::PRIMARY
+        string $emailType = 'Work'
     ): self {
         $email = new self();
         $email->emailAddress = $emailAddress;
@@ -39,7 +38,7 @@ class ContactEmail
 
     public function isPrimary(): bool
     {
-        return $this->emailType === EmailType::PRIMARY;
+        return $this->emailType === 'Work';
     }
 
     public function address(): Email
@@ -47,7 +46,7 @@ class ContactEmail
         return $this->emailAddress;
     }
 
-    public function type(): EmailType
+    public function type(): string
     {
         return $this->emailType;
     }

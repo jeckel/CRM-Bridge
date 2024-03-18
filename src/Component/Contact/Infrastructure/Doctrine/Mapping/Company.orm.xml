@@ -1,0 +1,16 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Component\Contact\Domain\Entity\Company"
+        table="company"
+        repository-class="App\Component\Contact\Infrastructure\Doctrine\Repository\CompanyRepository"
+    >
+        <id name="id" type="company_id" column="company_id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="name" type="string" length="180" nullable="false" />
+        <field name="slug" type="string" length="180" nullable="false" unique="true" />
+    </entity>
+</doctrine-mapping>
