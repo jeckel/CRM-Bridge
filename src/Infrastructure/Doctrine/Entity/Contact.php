@@ -358,7 +358,7 @@ class Contact implements Stringable
 
     public function getCardDavAccountOrFail(): CardDavAccount
     {
-        return $this->getAddressBookOrFail()->getCardDavAccount();
+        return $this->getAddressBookOrFail()->account();
     }
 
     public function setAddressBook(?CardDavAddressBook $addressBook): Contact

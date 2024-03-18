@@ -14,10 +14,17 @@ use Exception;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;
 use MStilkerich\CardDavClient\Services\Discovery;
+use MStilkerich\CardDavClient\Services\Sync;
+use MStilkerich\CardDavClient\Services\SyncHandler;
+use MStilkerich\CardDavClient\WebDavResource;
+use MStilkerich\CardDavClient\XmlElements\ElementNames;
 use RuntimeException;
 use Sabre\VObject\Component\VCard;
 use Sabre\VObject\Reader;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 readonly class CardDavClient
 {
     public function __construct(private Account $account) {}
@@ -59,5 +66,27 @@ readonly class CardDavClient
             throw new RuntimeException('Could not parse vCard');
         }
         return new ContactVCard($vCardUri, $vCard);
+    }
+
+    public function sync(
+        SyncHandler $syncHandler,
+        string $addressBookUri,
+        ?string $lastSyncToken = null
+    ): string {
+        $syncManager = new Sync();
+
+        /** @var AddressbookCollection $addressBook */
+        $addressBook = WebDavResource::createInstance(
+            uri: $addressBookUri,
+            account: $this->account,
+            restype: [ElementNames::RESTYPE_ABOOK]
+        );
+
+        return $syncManager->synchronize(
+            $addressBook,
+            $syncHandler,
+            ["FN"],
+            $lastSyncToken ?? ''
+        );
     }
 }

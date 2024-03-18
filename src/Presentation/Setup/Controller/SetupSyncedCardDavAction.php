@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Setup\Controller;
 
+use App\Component\CardDav\Application\Command\SyncAddressBookList;
 use App\Component\CardDav\Application\Command\UpdateAddressBooksActivation;
 use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use App\Component\Shared\Identity\CardDavAccountId;
@@ -40,7 +41,12 @@ class SetupSyncedCardDavAction extends AbstractController
         MessageBusInterface $messageBus,
         CardDavAccountRepository $accountRepository
     ): Response {
-        $addressBooks = $listCardDavAddressBooks(CardDavAccountId::from($accountId));
+        $accountIdentity = CardDavAccountId::from($accountId);
+        $addressBooks = $listCardDavAddressBooks($accountIdentity);
+        if (count($addressBooks) === 0) {
+            $messageBus->dispatch(new SyncAddressBookList($accountIdentity));
+            $addressBooks = $listCardDavAddressBooks($accountIdentity);
+        }
         $account = $accountRepository->getById($accountId);
         $form = $this->createForm(
             SyncedAddressBookFormType::class,

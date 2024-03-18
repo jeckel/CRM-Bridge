@@ -69,7 +69,7 @@ class CardDavAddressBook implements Stringable
         return $this;
     }
 
-    public function getCardDavAccount(): CardDavAccount
+    public function account(): CardDavAccount
     {
         return $this->account;
     }

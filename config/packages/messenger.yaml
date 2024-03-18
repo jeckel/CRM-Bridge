@@ -15,6 +15,7 @@ framework:
             failed: 'doctrine://default?queue_name=failed'
 
         routing:
+            App\Component\CardDav\Application\Command\SyncCardDavAddressBook: async
             App\Component\DirectCommunicationHub\Application\Command\SyncImapAccount: async
             App\Component\DirectCommunicationHub\Application\Command\SyncImapMailbox: async
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
