@@ -5,7 +5,7 @@
     <entity
         name="App\Component\CardDav\Domain\Entity\CardDavAccount"
         table="card_dav_account"
-        repository-class="App\Infrastructure\Doctrine\Repository\CardDavAccountRepository"
+        repository-class="App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAccountRepository"
     >
         <id name="id" type="card_dav_account_id" column="card_dav_account_id">
             <generator strategy="NONE"/>

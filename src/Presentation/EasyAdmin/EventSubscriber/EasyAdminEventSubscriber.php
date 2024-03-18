@@ -11,8 +11,8 @@ namespace App\Presentation\EasyAdmin\EventSubscriber;
 
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
-use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

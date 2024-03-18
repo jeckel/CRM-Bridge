@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
+use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\Doctrine\Entity\Contact;
 use App\Presentation\Common\Service\Avatar\AvatarDto;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;

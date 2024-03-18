@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav\VCard;
+namespace App\Component\CardDav\Infrastructure\CardDav\VCard;
 
 readonly class ComposedName
 {

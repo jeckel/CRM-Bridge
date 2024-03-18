@@ -7,10 +7,10 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\Scheduler;
+namespace App\Component\CardDav\Application\Scheduler;
 
 use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
-use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
 

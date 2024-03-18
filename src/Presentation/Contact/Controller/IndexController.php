@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Contact\Controller;
 
+use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\CardDav\AddressBookDiscovery;
-use App\Infrastructure\CardDav\CardDavClientProvider;
 use App\Infrastructure\CardDav\VCardHelper;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use Knp\Component\Pager\PaginatorInterface;

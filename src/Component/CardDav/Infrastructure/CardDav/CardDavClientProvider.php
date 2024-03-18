@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav;
+namespace App\Component\CardDav\Infrastructure\CardDav;
 
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use MStilkerich\CardDavClient\Account;

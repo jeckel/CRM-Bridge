@@ -7,6 +7,6 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav;
+namespace App\Component\CardDav\Infrastructure\CardDav;
 
 class InvalidArgumentException extends \InvalidArgumentException {}

@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace App\Component\CardDav\Application\CommandHandler;
 
 use App\Component\CardDav\Application\Command\CreateCardDavContact;
-use App\Component\ContactManagment\Application\Event\CardDavAddressBookUpdated;
-use App\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use App\Component\CardDav\Application\Event\CardDavAddressBookUpdated;
+use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Sabre\VObject\Component\VCard;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

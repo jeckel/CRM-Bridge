@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace App\Presentation\Setup\Controller;
 
 use App\Component\CardDav\Application\Command\UpdateAddressBooksActivation;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use App\Component\Shared\Identity\CardDavAccountId;
 use App\Component\Shared\Identity\CardDavAddressBookId;
-use App\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use App\Presentation\Setup\Form\SyncedAddressBookFormType;
 use App\Presentation\Setup\Query\ListCardDavAddressBooks;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav;
+namespace App\Component\CardDav\Infrastructure\CardDav;
 
-use App\Infrastructure\CardDav\VCard\ContactVCard;
+use App\Component\CardDav\Infrastructure\CardDav\VCard\ContactVCard;
 use Exception;
 use MStilkerich\CardDavClient\Account;
 use MStilkerich\CardDavClient\AddressbookCollection;

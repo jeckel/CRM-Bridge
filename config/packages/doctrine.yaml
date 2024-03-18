@@ -4,8 +4,8 @@ doctrine:
 
         types:
             # Identities
-            card_dav_account_id: App\Infrastructure\Doctrine\Type\Identity\CardDavAccountIdType
-            card_dav_address_book_id: App\Infrastructure\Doctrine\Type\Identity\CardDavAddressBookIdType
+            card_dav_account_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAccountIdType
+            card_dav_address_book_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAddressBookIdType
             contact_id: App\Infrastructure\Doctrine\Type\Identity\ContactIdType
             company_id: App\Infrastructure\Doctrine\Type\Identity\CompanyIdType
             user_id: App\Infrastructure\Doctrine\Type\Identity\UserIdType

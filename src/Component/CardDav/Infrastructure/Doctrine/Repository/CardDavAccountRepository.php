@@ -7,9 +7,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Doctrine\Repository;
+namespace App\Component\CardDav\Infrastructure\Doctrine\Repository;
 
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
+use App\Infrastructure\Doctrine\Repository\AbstractEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

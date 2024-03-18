@@ -7,10 +7,10 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\CardDav\VCard;
+namespace App\Component\CardDav\Infrastructure\CardDav\VCard;
 
+use App\Component\CardDav\Infrastructure\CardDav\InvalidArgumentException;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\CardDav\InvalidArgumentException;
 use Exception;
 use Sabre\VObject\Component\VCard;
 

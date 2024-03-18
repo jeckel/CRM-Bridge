@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Setup\Controller;
 
-use App\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

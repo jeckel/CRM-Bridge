@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\ContactManagment\Application\Event;
+namespace App\Component\CardDav\Application\Event;
 
 use App\Component\Shared\Identity\CardDavAddressBookId;
 

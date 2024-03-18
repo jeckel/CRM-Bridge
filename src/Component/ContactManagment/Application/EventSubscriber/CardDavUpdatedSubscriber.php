@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Component\ContactManagment\Application\EventSubscriber;
 
 use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
-use App\Component\ContactManagment\Application\Event\CardDavAddressBookUpdated;
+use App\Component\CardDav\Application\Event\CardDavAddressBookUpdated;
 use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
