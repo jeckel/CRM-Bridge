@@ -10,16 +10,16 @@ declare(strict_types=1);
 namespace App\Component\CardDav\Application\CommandHandler;
 
 use App\Component\CardDav\Application\Command\CreateCardDavAccount;
+use App\Component\CardDav\Application\Port\RepositoryPort;
 use App\Component\CardDav\Application\Service\AddressBookManager;
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 readonly class CreateCardDavAccountHandler
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private RepositoryPort $repository,
         private AddressBookManager $addressBookManager,
     ) {}
 
@@ -31,9 +31,8 @@ readonly class CreateCardDavAccountHandler
             login: $command->login,
             password: $command->password
         );
-        $this->entityManager->persist($account);
+        $this->repository->persist($account);
         $this->addressBookManager->fetchAddressBookFromAccount($account);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        $this->repository->flush();
     }
 }

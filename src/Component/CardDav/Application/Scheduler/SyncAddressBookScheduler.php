@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Component\CardDav\Application\Scheduler;
 
 use App\Component\CardDav\Application\Command\SyncCardDavAddressBook;
-use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
+use App\Component\CardDav\Application\Port\RepositoryPort;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
@@ -21,13 +21,13 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
 readonly class SyncAddressBookScheduler
 {
     public function __construct(
-        private CardDavAddressBookRepository $addressBookRepository,
+        private RepositoryPort $repository,
         private MessageBusInterface $messageBus
     ) {}
 
     public function onSchedule(): void
     {
-        $addressBooks = $this->addressBookRepository->findBy(['enabled' => true]);
+        $addressBooks = $this->repository->getEnabledAddressBooks();
         foreach ($addressBooks as $addressBookEntity) {
             $this->messageBus->dispatch(
                 new SyncCardDavAddressBook($addressBookEntity->id())

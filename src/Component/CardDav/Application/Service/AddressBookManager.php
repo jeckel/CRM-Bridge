@@ -9,18 +9,16 @@ declare(strict_types=1);
 
 namespace App\Component\CardDav\Application\Service;
 
+use App\Component\CardDav\Application\Port\RepositoryPort;
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
-use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 readonly class AddressBookManager
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
         private CardDavClientProvider $cardDavClientProvider,
-        private CardDavAddressBookRepository $addressBookRepository,
+        private RepositoryPort $repository,
     ) {}
 
     public function fetchAddressBookFromAccount(CardDavAccount $account): void
@@ -30,10 +28,7 @@ readonly class AddressBookManager
                 $account
             )->discoverAddressBooks() as $addressBook
         ) {
-            if (null !== $this->addressBookRepository->findOneBy([
-                    'uri' => $addressBook->getUri(),
-                    'account' => $account,
-                ])) {
+            if (null !== $this->repository->findAddressBookByUri($addressBook->getUri(), $account->getId())) {
                 continue;
             }
             $entity = CardDavAddressBook::new(
@@ -41,7 +36,7 @@ readonly class AddressBookManager
                 $addressBook->getUri(),
                 $account
             );
-            $this->entityManager->persist($entity);
+            $this->repository->persist($entity);
         }
     }
 }

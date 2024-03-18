@@ -11,8 +11,8 @@ namespace App\Component\CardDav\Application\CommandHandler;
 
 use App\Component\CardDav\Application\Command\CreateCardDavContact;
 use App\Component\CardDav\Application\Event\CardDavAddressBookUpdated;
+use App\Component\CardDav\Application\Port\RepositoryPort;
 use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
-use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Sabre\VObject\Component\VCard;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -21,7 +21,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 readonly class CreateCardDavContactHandler
 {
     public function __construct(
-        private CardDavAddressBookRepository $addressBookRepository,
+        private RepositoryPort $repository,
         private CardDavClientProvider $clientProvider,
         private EventDispatcherInterface $eventDispatcher
     ) {}
@@ -36,7 +36,7 @@ readonly class CreateCardDavContactHandler
             'EMAIL' => [$data->emailAddress?->getEmail()],
             'ORG' => [$data->company],
         ]);
-        $addressBook = $this->addressBookRepository->getById($command->addressBookId);
+        $addressBook = $this->repository->getAddressBookById($command->addressBookId);
         $abook = $this->clientProvider->getClient($addressBook->account())
             ->getAddressBook($addressBook->getUri());
 

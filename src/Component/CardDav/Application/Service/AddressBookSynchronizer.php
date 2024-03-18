@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace App\Component\CardDav\Application\Service;
 
+use App\Component\CardDav\Application\Port\RepositoryPort;
 use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
-use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAddressBookRepository;
 use App\Component\Shared\Identity\CardDavAddressBookId;
 
 readonly class AddressBookSynchronizer
@@ -18,12 +18,12 @@ readonly class AddressBookSynchronizer
     public function __construct(
         private AddressBookSyncHandlerProvider $syncHandlerProvider,
         private CardDavClientProvider $clientProvider,
-        private CardDavAddressBookRepository $repository
+        private RepositoryPort $repository
     ) {}
 
     public function sync(CardDavAddressBookId $cardDavAddressBookId): void
     {
-        $addressBook = $this->repository->getById($cardDavAddressBookId);
+        $addressBook = $this->repository->getAddressBookById($cardDavAddressBookId);
 
         $syncToken = $this->clientProvider
             ->getClient($addressBook->account())
