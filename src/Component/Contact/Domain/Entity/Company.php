@@ -13,9 +13,6 @@ use App\Component\Shared\Identity\CompanyId;
 
 use function App\slug;
 
-/**
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
- */
 class Company
 {
     private CompanyId $id;

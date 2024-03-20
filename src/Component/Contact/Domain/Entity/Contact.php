@@ -16,15 +16,18 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 class Contact
 {
-    private ContactId $id;
+    private ContactId $id;  /** @phpstan-ignore-line  */
     private string $displayName;
-    private string $vCardUri;
+    private string $vCardUri;  /** @phpstan-ignore-line  */
     private string $vCardEtag;
-    private DateTimeImmutable $vCardLastSyncAt;
+    private DateTimeImmutable $vCardLastSyncAt;  /** @phpstan-ignore-line  */
     private ?Company $company = null;
-    private CardDavAddressBook $addressBook;
+    private CardDavAddressBook $addressBook;  /** @phpstan-ignore-line  */
 
     /**
      * @var Collection<int, ContactActivity> $activities
@@ -34,12 +37,12 @@ class Contact
     /**
      * @var Collection<string, ContactEmail> $emailAddresses
      */
-    private Collection $emailAddresses;
+    private Collection $emailAddresses; /** @phpstan-ignore-line  */
 
     /**
      * @var Collection<int, ImapMessage> $mails
      */
-    private Collection $mails;
+    private Collection $mails; /** @phpstan-ignore-line  */
 
     private function __construct()
     {
@@ -73,14 +76,32 @@ class Contact
     }
 
     public function update(
+        string $displayName,
+        string $vCardEtag,
         DateTimeImmutable $vCardLastSyncAt,
+        ?Company $company = null,
     ): self {
-        $this->vCardLastSyncAt = $vCardLastSyncAt;
-        $this->addActivity(
-            subject: 'contact updated',
-            description: 'contact updated',
-            activityAt: $vCardLastSyncAt
-        );
+        $updated = [];
+        if ($displayName !== $this->displayName) {
+            $this->displayName = $displayName;
+            $updated[] = 'Display Name';
+        }
+        if ($vCardEtag !== $this->vCardEtag) {
+            $this->vCardEtag = $vCardEtag;
+            $updated[] = 'eTag';
+        }
+        if ($company !== $this->company) {
+            $this->company = $company;
+            $updated[] = 'Company';
+        }
+        if (count($updated) > 0) {
+            $this->vCardLastSyncAt = $vCardLastSyncAt;
+            $this->addActivity(
+                subject: 'contact updated',
+                description: sprintf('Contact updated : %s', implode(', ', $updated)),
+                activityAt: $vCardLastSyncAt
+            );
+        }
         return $this;
     }
 
