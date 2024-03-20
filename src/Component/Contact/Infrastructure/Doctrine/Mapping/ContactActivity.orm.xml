@@ -12,5 +12,16 @@
         <field name="date" type="datetime_immutable" nullable="false" />
         <field name="subject" type="text" nullable="false" />
         <field name="description" type="text" nullable="false" />
+        <many-to-one
+            field="contact"
+            target-entity="App\Component\Contact\Domain\Entity\Contact"
+        >
+            <join-column
+                name="contact_id"
+                on-delete="CASCADE"
+                nullable="false"
+                referenced-column-name="contact_id"
+            />
+        </many-to-one>
     </entity>
 </doctrine-mapping>
