@@ -42,11 +42,6 @@ class ContactEmail
         return $email;
     }
 
-    public function isPrimary(): bool
-    {
-        return $this->isPreferred;
-    }
-
     public function address(): Email
     {
         return $this->address;
@@ -55,5 +50,10 @@ class ContactEmail
     public function type(): ?string
     {
         return $this->type;
+    }
+
+    public function isPreferred(): bool
+    {
+        return $this->isPreferred;
     }
 }

@@ -10,8 +10,11 @@ declare(strict_types=1);
 namespace App\Component\Contact\Infrastructure\Doctrine\Repository;
 
 use App\Component\Contact\Domain\Entity\Contact;
+use App\Component\Shared\Identity\ContactId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
+use Stringable;
 
 /**
  * @extends ServiceEntityRepository<Contact>
@@ -26,5 +29,13 @@ class ContactRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Contact::class);
+    }
+
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function getById(ContactId $id): Contact
+    {
+        return $this->find($id) ?? throw new EntityNotFoundException();
     }
 }

@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace App\Presentation\Contact\Controller;
 
 use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
-use App\Infrastructure\CardDav\AddressBookDiscovery;
-use App\Infrastructure\CardDav\VCardHelper;
-use App\Infrastructure\Doctrine\Repository\ContactRepository;
-use Knp\Component\Pager\PaginatorInterface;
+use App\Component\Contact\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Component\Shared\Identity\ContactId;
+use App\Presentation\Contact\Query\ContactListQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(
@@ -32,20 +33,12 @@ class IndexController extends AbstractController
         methods: ['GET']
     )]
     public function index(
-        PaginatorInterface $paginator,
-        Request $request
+        Request $request,
+        ContactListQuery $contactListQuery
     ): Response {
         $page = $request->query->getInt('page', 1);
         $limit = 25;
-        $contacts = $paginator->paginate(
-            $this->contactRepository->createQueryList(),
-            $page,
-            $limit,
-            [
-                'defaultSortFieldName' => ['c.displayName'],
-                'defaultSortDirection' => 'asc',
-            ]
-        );
+        $contacts = $contactListQuery($page, $limit);
         return $this->render('@contact/index.html.twig', [
             'contacts' => $contacts,
             'page' => $page,
@@ -61,22 +54,27 @@ class IndexController extends AbstractController
     )]
     public function details(string $contactId): Response
     {
-        $contact = $this->contactRepository->getById($contactId);
+        $id = ContactId::from($contactId);
+        $contact = $this->contactRepository->getById($id);
         return $this->render('@contact/details.html.twig', ['contact' => $contact]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     #[Route(path: '/{contactId}/dumpCardDav', name: 'contact.debug', methods: ['GET'])]
-    public function dumpCardDav(string $contactId, CardDavClientProvider $cardDavClientProvider): Response
+    public function dumpCardDav(#[MapQueryParameter] ContactId $contactId, CardDavClientProvider $cardDavClientProvider): Response
     {
         $contact = $this->contactRepository->getById($contactId);
-        $vCardUri = $contact->getVCardUri();
-        if (null === $vCardUri) {
-            dd(null);
-        }
-        $vCard = $cardDavClientProvider
-            ->getClient($contact->getCardDavAccountOrFail())
-            ->getVCard($vCardUri);
-        //        dd($vCard->uid());
-        dd($vCard);
+        dd($contact);
+//        $vCardUri = $contact->getVCardUri();
+//        if (null === $vCardUri) {
+//            dd(null);
+//        }
+//        $vCard = $cardDavClientProvider
+//            ->getClient($contact->getCardDavAccountOrFail())
+//            ->getVCard($vCardUri);
+//        //        dd($vCard->uid());
+//        dd($vCard);
     }
 }

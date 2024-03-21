@@ -10,7 +10,6 @@
             <tr>
                 <th>{{ knp_pagination_sortable(contacts, 'contact.field.display_name'|trans, 'c.displayName', {target: '#contactList'}) }}</th>
                 <th>{{ knp_pagination_sortable(contacts, 'contact.field.company'|trans, 'co.name', {target: '#contactList'}) }}</th>
-                <th>{{ 'contact.field.phone_number'|trans }}</th>
                 <th>{{ 'contact.field.email_address'|trans }}</th>
                 <th>{{ 'contact.field.address_book'|trans }}</th>
             </tr>
@@ -25,7 +24,6 @@
                         </a>
                     </td>
                     <td>{{ contact.companyName }}</td>
-                    <td>{{ contact.phoneNumber }}</td>
                     <td>{{ contact.emailAddress }}</td>
                     <td>{{ contact.addressBook }}</td>
                 </tr>
@@ -41,5 +39,3 @@
     </div>
 </div>
 {% endblock %}
-
-

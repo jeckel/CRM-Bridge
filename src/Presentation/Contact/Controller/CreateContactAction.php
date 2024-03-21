@@ -90,7 +90,7 @@ class CreateContactAction extends AbstractController
         if ($formData['companyNew'] !== null) {
             $company = $formData['companyNew'];
         } elseif ($formData['company'] instanceof Company) {
-            $company = $formData['company']->getName();
+            $company = $formData['company']->name();
         }
         /** @var CardDavAddressBook $addressBook */
         $addressBook = $formData['addressBook'];

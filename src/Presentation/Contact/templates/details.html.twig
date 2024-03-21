@@ -18,9 +18,9 @@
                     <div class="card-title">
                         {{ contact.displayName }}
                     </div>
-                    {% if contact.company %}
+                    {% if contact.companyName %}
                     <div class="card-subtitle">
-                        {{ contact.company.name }}
+                        {{ contact.companyName }}
                     </div>
                     {% endif %}
                 </div>
@@ -69,27 +69,27 @@
                         </div>
                         <div class="row">
                             <div class="col-1">{{ 'contact.field.primary_email'|trans }}</div>
-                            <div class="col">{{ contact.primaryEmailAddress }}</div>
+                            <div class="col">{{ contact.preferredEmail }}</div>
                         </div>
-                        <div class="row">
-                            <div class="col-1">{{ 'contact.field.secondary_emails'|trans }}</div>
-                            <div class="col">@todo</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">{{ 'contact.field.first_name'|trans }}</div>
-                            <div class="col">{{ contact.firstname }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">{{ 'contact.field.last_name'|trans }}</div>
-                            <div class="col">{{ contact.lastname }}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">{{ 'contact.field.phone_number'|trans }}</div>
-                            <div class="col">{{ contact.phoneNumber }}</div>
-                        </div>
+{#                        <div class="row">#}
+{#                            <div class="col-1">{{ 'contact.field.secondary_emails'|trans }}</div>#}
+{#                            <div class="col">@todo</div>#}
+{#                        </div>#}
+{#                        <div class="row">#}
+{#                            <div class="col-1">{{ 'contact.field.first_name'|trans }}</div>#}
+{#                            <div class="col">{{ contact.firstname }}</div>#}
+{#                        </div>#}
+{#                        <div class="row">#}
+{#                            <div class="col-1">{{ 'contact.field.last_name'|trans }}</div>#}
+{#                            <div class="col">{{ contact.lastname }}</div>#}
+{#                        </div>#}
+{#                        <div class="row">#}
+{#                            <div class="col-1">{{ 'contact.field.phone_number'|trans }}</div>#}
+{#                            <div class="col">{{ contact.phoneNumber }}</div>#}
+{#                        </div>#}
                         <div class="row">
                             <div class="col-1">{{ 'contact.field.company'|trans }}</div>
-                            <div class="col">{{ contact.company }}</div>
+                            <div class="col">{{ contact.companyName }}</div>
                         </div>
                         <div class="row">
                             <div class="col-1">{{ 'contact.field.address_book'|trans }}</div>

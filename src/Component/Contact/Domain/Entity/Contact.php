@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Collection;
  */
 class Contact
 {
-    private ContactId $id;  /** @phpstan-ignore-line  */
+    private ContactId $id;
     private string $displayName;
     private string $vCardUri;  /** @phpstan-ignore-line  */
     private string $vCardEtag;
@@ -152,5 +152,30 @@ class Contact
     ): self {
         $this->activities->add(ContactActivity::new($subject, $description, $activityAt, $this));
         return $this;
+    }
+
+    public function id(): ContactId
+    {
+        return $this->id;
+    }
+
+    public function companyName(): ?string
+    {
+        return $this->company?->name();
+    }
+
+    public function displayName(): string
+    {
+        return $this->displayName;
+    }
+
+    public function preferredEmail(): ?Email
+    {
+        /** @var ContactEmail|false $email */
+        $email = $this->emailAddresses->filter(static fn(ContactEmail $email) => $email->isPreferred())->first();
+        if (false === $email) {
+            return null;
+        }
+        return $email->address();
     }
 }
