@@ -24,6 +24,9 @@
                 nullable="true"
                 referenced-column-name="company_id"
             />
+            <cascade>
+                <cascade-all/>
+            </cascade>
         </many-to-one>
         <many-to-one
             field="addressBook"
@@ -42,6 +45,9 @@
             field="emailAddresses"
             orphan-removal="false"
         >
+            <cascade>
+                <cascade-all/>
+            </cascade>
         </one-to-many>
         <one-to-many
             mapped-by="contact"

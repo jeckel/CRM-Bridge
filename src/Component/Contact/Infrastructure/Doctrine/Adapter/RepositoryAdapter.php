@@ -30,7 +30,9 @@ class RepositoryAdapter implements RepositoryPort
     private function contactRepo(): ContactRepository
     {
         if (! isset($this->contactRepo)) {
-            $this->contactRepo = $this->entityManager->getRepository(Contact::class);
+            /** @var ContactRepository $repo */
+            $repo = $this->entityManager->getRepository(Contact::class);
+            $this->contactRepo = $repo;
         }
         return $this->contactRepo;
     }
@@ -38,7 +40,9 @@ class RepositoryAdapter implements RepositoryPort
     private function companyRepo(): CompanyRepository
     {
         if (! isset($this->companyRepo)) {
-            $this->companyRepo = $this->entityManager->getRepository(Company::class);
+            /** @var CompanyRepository $repo */
+            $repo = $this->entityManager->getRepository(Company::class);
+            $this->companyRepo = $repo;
         }
         return $this->companyRepo;
     }
@@ -59,7 +63,6 @@ class RepositoryAdapter implements RepositoryPort
     public function flush(): void
     {
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
     #[\Override]
@@ -71,7 +74,9 @@ class RepositoryAdapter implements RepositoryPort
     #[\Override]
     public function getAddressBookReference(CardDavAddressBookId $addressBookId): CardDavAddressBook
     {
-        return $this->entityManager->getReference(CardDavAddressBook::class, $addressBookId);
+        /** @var CardDavAddressBook $ref */
+        $ref = $this->entityManager->getReference(CardDavAddressBook::class, $addressBookId);
+        return $ref;
     }
 
     #[\Override]

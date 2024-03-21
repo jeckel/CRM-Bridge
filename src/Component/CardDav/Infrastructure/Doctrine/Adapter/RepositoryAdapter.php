@@ -36,7 +36,6 @@ readonly class RepositoryAdapter implements RepositoryPort
     public function flush(): void
     {
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
     /**

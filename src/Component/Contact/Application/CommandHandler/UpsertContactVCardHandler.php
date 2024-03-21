@@ -41,7 +41,8 @@ readonly class UpsertContactVCardHandler
                 displayName: $command->vCard->displayName(),
                 vCardEtag: $command->vCardEtag,
                 vCardLastSyncAt: $this->clock->now(),
-                company: $company
+                company: $company,
+                emails: $command->vCard->emails()
             );
         }
         if (null === $contact) {
@@ -51,7 +52,8 @@ readonly class UpsertContactVCardHandler
                 vCardEtag: $command->vCardEtag,
                 vCardLastSyncAt: $this->clock->now(),
                 addressBook: $this->repository->getAddressBookReference($command->addressBookId),
-                company: $company
+                company: $company,
+                emails: $command->vCard->emails()
             );
         }
         $this->repository->persist($contact);

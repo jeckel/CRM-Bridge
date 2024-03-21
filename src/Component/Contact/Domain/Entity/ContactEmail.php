@@ -10,44 +10,50 @@ declare(strict_types=1);
 namespace App\Component\Contact\Domain\Entity;
 
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Contact;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class ContactEmail
 {
-    private Email $emailAddress;
+    private Email $address;
 
     /** @phpstan-ignore-next-line  */
     private Contact $contact;
 
-    private string $emailType;
+    private ?string $type;
 
+    private bool $isPreferred;
+
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public static function new(
-        Email $emailAddress,
         Contact $contact,
-        string $emailType = 'Work'
+        Email $address,
+        ?string $type = null,
+        bool $isPreferred = false
     ): self {
         $email = new self();
-        $email->emailAddress = $emailAddress;
+        $email->address = $address;
         $email->contact = $contact;
-        $email->emailType = $emailType;
+        $email->type = $type;
+        $email->isPreferred = $isPreferred;
         return $email;
     }
 
     public function isPrimary(): bool
     {
-        return $this->emailType === 'Work';
+        return $this->isPreferred;
     }
 
     public function address(): Email
     {
-        return $this->emailAddress;
+        return $this->address;
     }
 
-    public function type(): string
+    public function type(): ?string
     {
-        return $this->emailType;
+        return $this->type;
     }
 }

@@ -11,6 +11,7 @@ namespace App\Component\Contact\Domain\Entity;
 
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,7 +28,7 @@ class Contact
     private string $vCardEtag;
     private DateTimeImmutable $vCardLastSyncAt;  /** @phpstan-ignore-line  */
     private ?Company $company = null;
-    private CardDavAddressBook $addressBook;  /** @phpstan-ignore-line  */
+    public CardDavAddressBook $addressBook;
 
     /**
      * @var Collection<int, ContactActivity> $activities
@@ -37,7 +38,7 @@ class Contact
     /**
      * @var Collection<string, ContactEmail> $emailAddresses
      */
-    private Collection $emailAddresses; /** @phpstan-ignore-line  */
+    private Collection $emailAddresses;
 
     /**
      * @var Collection<int, ImapMessage> $mails
@@ -51,13 +52,17 @@ class Contact
         $this->mails = new ArrayCollection();
     }
 
+    /**
+     * @param array{email: Email, type: ?string, pref: bool}[] $emails
+     */
     public static function new(
         string $displayName,
         string $vCardUri,
         string $vCardEtag,
         DateTimeImmutable $vCardLastSyncAt,
         CardDavAddressBook $addressBook,
-        ?Company $company = null
+        ?Company $company,
+        array $emails
     ): self {
         $contact = new self();
         $contact->id = ContactId::new();
@@ -67,6 +72,9 @@ class Contact
         $contact->vCardLastSyncAt = $vCardLastSyncAt;
         $contact->addressBook = $addressBook;
         $contact->company = $company;
+        foreach ($emails as $email) {
+            $contact->addEmail($email);
+        }
         $contact->addActivity(
             subject: 'contact created',
             description: 'contact created',
@@ -75,11 +83,15 @@ class Contact
         return $contact;
     }
 
+    /**
+     * @param array{email: Email, type: ?string, pref: bool}[] $emails
+     */
     public function update(
         string $displayName,
         string $vCardEtag,
         DateTimeImmutable $vCardLastSyncAt,
-        ?Company $company = null,
+        ?Company $company,
+        array $emails
     ): self {
         $updated = [];
         if ($displayName !== $this->displayName) {
@@ -94,6 +106,11 @@ class Contact
             $this->company = $company;
             $updated[] = 'Company';
         }
+        foreach ($emails as $email) {
+            if ($this->addEmail($email)) {
+                $updated[] = 'Email';
+            }
+        }
         if (count($updated) > 0) {
             $this->vCardLastSyncAt = $vCardLastSyncAt;
             $this->addActivity(
@@ -103,6 +120,29 @@ class Contact
             );
         }
         return $this;
+    }
+
+    /**
+     * @param array{email: Email, type: ?string, pref: bool} $emailData
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function addEmail(array $emailData): bool
+    {
+        if ($this->emailAddresses->exists(
+            static fn($key, ContactEmail $email) => $email->address()->equals($emailData['email'])
+        )) {
+            return false;
+        }
+        $this->emailAddresses->add(
+            ContactEmail::new(
+                contact: $this,
+                address: $emailData['email'],
+                type: $emailData['type'],
+                isPreferred: $emailData['pref']
+            )
+        );
+        return true;
     }
 
     public function addActivity(

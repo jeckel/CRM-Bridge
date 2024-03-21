@@ -6,12 +6,22 @@
         name="App\Component\Contact\Domain\Entity\ContactEmail"
         table="contact_email"
     >
-        <id name="emailAddress" type="email" column="email_address">
+        <id name="address" type="email" column="email_address">
             <generator strategy="NONE"/>
         </id>
-<!--        <many-to-one field="contact" target-entity="App\Infrastructure\Doctrine\Entity\Contact" inversed-by="emailAddresses">-->
-<!--            <join-column name="contact_id" on-delete="CASCADE" nullable="false" referenced-column-name="contact_id"/>-->
-<!--        </many-to-one>-->
-        <field name="emailType" length="64" nullable="false"/>
+        <many-to-one
+            field="contact"
+            target-entity="App\Component\Contact\Domain\Entity\Contact"
+            inversed-by="emailAddresses"
+        >
+            <join-column
+                name="contact_id"
+                on-delete="CASCADE"
+                nullable="false"
+                referenced-column-name="contact_id"
+            />
+        </many-to-one>
+        <field name="type" length="64" column="email_type" nullable="true"/>
+        <field name="isPreferred" type="boolean" nullable="false"/>
     </entity>
 </doctrine-mapping>

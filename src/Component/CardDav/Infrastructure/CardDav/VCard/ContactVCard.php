@@ -13,6 +13,7 @@ use App\Component\CardDav\Infrastructure\CardDav\InvalidArgumentException;
 use App\Component\Shared\ValueObject\Email;
 use Exception;
 use Sabre\VObject\Component\VCard;
+use Sabre\VObject\Property\FlatText;
 
 /**
  * @see https://en.wikipedia.org/wiki/VCard#Properties
@@ -68,15 +69,25 @@ readonly class ContactVCard
     }
 
     /**
-     * @return Email[]
+     * @return array{email: Email, type: ?string, pref: bool}[]
      */
     public function emails(): array
     {
         $emails = [];
+        /** @var FlatText $email */
         /** @phpstan-ignore-next-line  */
         foreach($this->vCard->EMAIL as $email) {
+            /** @phpstan-ignore-next-line  */
+            $isPref = ((string) $email->offsetGet('TYPE')) === 'pref';
+
+            /** @phpstan-ignore-next-line  */
+            $type = $email->offsetExists('TYPE') ? (string) $email->offsetGet('TYPE') : null;
             try {
-                $emails[] = new Email((string) $email);
+                $emails[] = [
+                    'email' => new Email($email->getValue()),
+                    'type' => $type,
+                    'pref' => $isPref,
+                ];
             } catch (InvalidArgumentException) {
                 continue;
             }

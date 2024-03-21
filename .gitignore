@@ -35,6 +35,5 @@ phpstan.neon
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
-/src/Presentation/Controller/SandboxController.php
 /src/DataFixtures/ImapFixtures.php
-/src/Presentation/Controller/Sandbox/IndexController.php
+/src/Presentation/Common/Controller/SandboxController.php

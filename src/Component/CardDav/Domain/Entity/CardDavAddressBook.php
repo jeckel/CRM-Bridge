@@ -20,7 +20,7 @@ class CardDavAddressBook implements Stringable
     private string $uri;
     private bool $enabled = false;
     private ?string $lastSyncToken = null;
-    private CardDavAccount $account;
+    public CardDavAccount $account;
 
     public static function new(string $name, string $uri, CardDavAccount $account): self
     {
