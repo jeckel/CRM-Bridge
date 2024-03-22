@@ -71,22 +71,31 @@
                             <div class="col-1">{{ 'contact.field.primary_email'|trans }}</div>
                             <div class="col">{{ contact.preferredEmail }}</div>
                         </div>
-{#                        <div class="row">#}
-{#                            <div class="col-1">{{ 'contact.field.secondary_emails'|trans }}</div>#}
-{#                            <div class="col">@todo</div>#}
-{#                        </div>#}
-{#                        <div class="row">#}
-{#                            <div class="col-1">{{ 'contact.field.first_name'|trans }}</div>#}
-{#                            <div class="col">{{ contact.firstname }}</div>#}
-{#                        </div>#}
-{#                        <div class="row">#}
-{#                            <div class="col-1">{{ 'contact.field.last_name'|trans }}</div>#}
-{#                            <div class="col">{{ contact.lastname }}</div>#}
-{#                        </div>#}
-{#                        <div class="row">#}
-{#                            <div class="col-1">{{ 'contact.field.phone_number'|trans }}</div>#}
-{#                            <div class="col">{{ contact.phoneNumber }}</div>#}
-{#                        </div>#}
+                        {% set addresses = contact.secondaryEmails %}
+                        {% if addresses|length > 0 %}
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.secondary_emails'|trans }}</div>
+                            <div class="col">
+                                <ul>
+                                    {% for address in addresses %}
+                                    <li>{{ address.address }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.first_name'|trans }}</div>
+                            <div class="col">{{ vCard.name.firstName }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.last_name'|trans }}</div>
+                            <div class="col">{{ vCard.name.familyName }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">{{ 'contact.field.phone_number'|trans }}</div>
+                            <div class="col">{{ vCard.phoneNumber }}</div>
+                        </div>
                         <div class="row">
                             <div class="col-1">{{ 'contact.field.company'|trans }}</div>
                             <div class="col">{{ contact.companyName }}</div>

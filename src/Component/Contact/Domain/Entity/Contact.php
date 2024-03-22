@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Component\Contact\Domain\Entity;
 
+use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
@@ -24,7 +25,7 @@ class Contact
 {
     private ContactId $id;
     private string $displayName;
-    private string $vCardUri;  /** @phpstan-ignore-line  */
+    private string $vCardUri;
     private string $vCardEtag;
     private DateTimeImmutable $vCardLastSyncAt;  /** @phpstan-ignore-line  */
     private ?Company $company = null;
@@ -177,5 +178,25 @@ class Contact
             return null;
         }
         return $email->address();
+    }
+
+    /**
+     * @return array<ContactEmail>
+     */
+    public function secondaryEmails(): array
+    {
+        return
+            $this->emailAddresses->filter(static fn(ContactEmail $email) => !$email->isPreferred())
+            ->toArray();
+    }
+
+    public function cardDavAccount(): CardDavAccount
+    {
+        return $this->addressBook->account();
+    }
+
+    public function vCardUri(): string
+    {
+        return $this->vCardUri;
     }
 }

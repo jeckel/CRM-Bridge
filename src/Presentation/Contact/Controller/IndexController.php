@@ -47,17 +47,17 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route(
-        path: "/{contactId}/details",
-        name: "contact.details",
-        methods: ['GET']
-    )]
-    public function details(string $contactId): Response
-    {
-        $id = ContactId::from($contactId);
-        $contact = $this->contactRepository->getById($id);
-        return $this->render('@contact/details.html.twig', ['contact' => $contact]);
-    }
+//    #[Route(
+//        path: "/{contactId}/details",
+//        name: "contact.details",
+//        methods: ['GET']
+//    )]
+//    public function details(string $contactId): Response
+//    {
+//        $id = ContactId::from($contactId);
+//        $contact = $this->contactRepository->getById($id);
+//        return $this->render('@contact/details.html.twig', ['contact' => $contact]);
+//    }
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
