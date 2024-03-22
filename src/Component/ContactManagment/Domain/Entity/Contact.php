@@ -10,13 +10,10 @@ namespace App\Component\ContactManagment\Domain\Entity;
 
 use App\Component\ContactManagment\Domain\Error\VCardUriChangedError;
 use App\Component\Shared\DomainTrait\ReadPropertyTrait;
-use App\Component\Shared\Event\ContactEmailAdded;
-use App\Component\Shared\Event\DomainEventCollection;
 use App\Component\Shared\Identity\CardDavAddressBookId;
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\Identity\MailId;
 use App\Component\Shared\ValueObject\Email;
-use App\Component\Shared\ValueObject\EmailType;
 use DateTimeImmutable;
 
 /**
@@ -83,18 +80,12 @@ class Contact
             phoneNumber: $phoneNumber,
             company: $company
         );
-        if ($emailAddress !== null) {
-            DomainEventCollection::getInstance()
-                ->addDomainEvent(new ContactEmailAdded($contact->id, $emailAddress));
-        }
         return $contact;
     }
 
     public function addEmailAddress(Email $email): self
     {
         $this->emailAddresses->add($email);
-        DomainEventCollection::getInstance()
-            ->addDomainEvent(new ContactEmailAdded($this->id, $email));
         return $this;
     }
 

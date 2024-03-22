@@ -14,6 +14,7 @@ use App\Component\Contact\Application\Port\RepositoryPort;
 use App\Component\Contact\Domain\Entity\Company;
 use App\Component\Contact\Domain\Entity\Contact;
 use JeckelLab\Contract\Infrastructure\System\Clock;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 use function App\slug;
@@ -23,7 +24,8 @@ readonly class UpsertContactVCardHandler
 {
     public function __construct(
         private RepositoryPort $repository,
-        private Clock $clock
+        private Clock $clock,
+        private EventDispatcherInterface $eventDispatcher
     ) {}
 
     public function __invoke(UpsertContactVCard $command): void
@@ -58,5 +60,9 @@ readonly class UpsertContactVCardHandler
         }
         $this->repository->persist($contact);
         $this->repository->flush();
+
+        foreach ($contact->popEvents() as $event) {
+            $this->eventDispatcher->dispatch($event);
+        }
     }
 }

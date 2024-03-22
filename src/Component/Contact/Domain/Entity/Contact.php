@@ -11,18 +11,24 @@ namespace App\Component\Contact\Domain\Entity;
 
 use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
+use App\Component\Contact\Domain\Event\ContactCreated;
 use App\Component\Shared\Identity\ContactId;
-use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use JeckelLab\Contract\Domain\Entity\DomainEventAwareInterface;
+use JeckelLab\Contract\Domain\Entity\DomainEventAwareTrait;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @phpstan-import-type vCardEmailDto from ContactEmail
  */
-class Contact
+class Contact implements DomainEventAwareInterface
 {
+    use DomainEventAwareTrait;
+    use ContactEmailCollectionTrait;
+
     private ContactId $id;
     private string $displayName;
     private string $vCardUri;
@@ -37,11 +43,6 @@ class Contact
     private Collection $activities;
 
     /**
-     * @var Collection<string, ContactEmail> $emailAddresses
-     */
-    private Collection $emailAddresses;
-
-    /**
      * @var Collection<int, ImapMessage> $mails
      */
     private Collection $mails; /** @phpstan-ignore-line  */
@@ -54,7 +55,7 @@ class Contact
     }
 
     /**
-     * @param array{email: Email, type: ?string, pref: bool}[] $emails
+     * @param vCardEmailDto[] $emails
      */
     public static function new(
         string $displayName,
@@ -81,11 +82,15 @@ class Contact
             description: 'contact created',
             activityAt: $vCardLastSyncAt
         );
+        $contact->addDomainEvent(new ContactCreated(
+            contactId: $contact->id,
+            occurredAt: $vCardLastSyncAt
+        ));
         return $contact;
     }
 
     /**
-     * @param array{email: Email, type: ?string, pref: bool}[] $emails
+     * @param vCardEmailDto[] $emails
      */
     public function update(
         string $displayName,
@@ -123,29 +128,6 @@ class Contact
         return $this;
     }
 
-    /**
-     * @param array{email: Email, type: ?string, pref: bool} $emailData
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function addEmail(array $emailData): bool
-    {
-        if ($this->emailAddresses->exists(
-            static fn($key, ContactEmail $email) => $email->address()->equals($emailData['email'])
-        )) {
-            return false;
-        }
-        $this->emailAddresses->add(
-            ContactEmail::new(
-                contact: $this,
-                address: $emailData['email'],
-                type: $emailData['type'],
-                isPreferred: $emailData['pref']
-            )
-        );
-        return true;
-    }
-
     public function addActivity(
         string $subject,
         string $description,
@@ -168,26 +150,6 @@ class Contact
     public function displayName(): string
     {
         return $this->displayName;
-    }
-
-    public function preferredEmail(): ?Email
-    {
-        /** @var ContactEmail|false $email */
-        $email = $this->emailAddresses->filter(static fn(ContactEmail $email) => $email->isPreferred())->first();
-        if (false === $email) {
-            return null;
-        }
-        return $email->address();
-    }
-
-    /**
-     * @return array<ContactEmail>
-     */
-    public function secondaryEmails(): array
-    {
-        return
-            $this->emailAddresses->filter(static fn(ContactEmail $email) => !$email->isPreferred())
-            ->toArray();
     }
 
     public function cardDavAccount(): CardDavAccount

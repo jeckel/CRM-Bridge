@@ -13,6 +13,7 @@ use App\Component\Shared\ValueObject\Email;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @phpstan-type vCardEmailDto array{email: Email, type: ?string, pref: bool}
  */
 class ContactEmail
 {
@@ -42,6 +43,21 @@ class ContactEmail
         return $email;
     }
 
+    /**
+     * @param Contact $contact
+     * @param vCardEmailDto $emailData
+     * @return ContactEmail
+     */
+    public static function fromVCardDto(Contact $contact, array $emailData): self
+    {
+        return self::new(
+            contact: $contact,
+            address: $emailData['email'],
+            type: $emailData['type'],
+            isPreferred: $emailData['pref']
+        );
+    }
+
     public function address(): Email
     {
         return $this->address;
@@ -55,5 +71,11 @@ class ContactEmail
     public function isPreferred(): bool
     {
         return $this->isPreferred;
+    }
+
+    public function setPreferred(bool $isPreferred): self
+    {
+        $this->isPreferred = $isPreferred;
+        return $this;
     }
 }

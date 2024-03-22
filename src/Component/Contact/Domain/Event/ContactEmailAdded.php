@@ -7,12 +7,13 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Shared\Event;
+namespace App\Component\Contact\Domain\Event;
 
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
+use JeckelLab\Contract\Domain\Event\Event;
 
-class ContactEmailAdded implements Event
+readonly class ContactEmailAdded implements Event
 {
     public function __construct(
         public ContactId $contactId,

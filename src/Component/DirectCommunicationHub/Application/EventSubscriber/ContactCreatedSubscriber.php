@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace App\Component\DirectCommunicationHub\Application\EventSubscriber;
 
+use App\Component\Contact\Domain\Event\ContactEmailAdded;
 use App\Component\DirectCommunicationHub\Domain\Service\MailAuthorLinkManager;
-use App\Component\Shared\Event\ContactCreated;
-use App\Component\Shared\Event\ContactEmailAdded;
 use Override;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -7,20 +7,17 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Shared\Event;
+namespace App\Component\Contact\Domain\Event;
 
 use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
+use JeckelLab\Contract\Domain\Event\Event;
 
 readonly class ContactCreated implements Event
 {
-    /**
-     * @param Email[] $emailAddresses
-     */
     public function __construct(
         public ContactId $contactId,
-        public array $emailAddresses,
         public DateTimeImmutable $occurredAt,
     ) {}
 }
