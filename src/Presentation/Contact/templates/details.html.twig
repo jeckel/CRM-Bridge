@@ -56,7 +56,15 @@
                         >{{ 'contact.tab.mails'|trans }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#tabs-activity" class="nav-link" data-bs-toggle="tab">{{ 'contact.tab.activity'|trans }}</a>
+                        <a
+                            href="#tabs-activity"
+                            class="nav-link"
+                            data-bs-toggle="tab"
+                            hx-get="{{ url('contact.activities', {contactId: contact.id}) }}"
+                            hx-trigger="revealed, click"
+                            hx-swap="outerHTML"
+                            hx-target="#contactActivities"
+                        >{{ 'contact.tab.activity'|trans }}</a>
                     </li>
                 </ul>
             </div>
@@ -111,7 +119,7 @@
                         ></div>
                     </div>
                     <div class="tab-pane" id="tabs-activity">
-                        Activity
+                        <div id="contactActivities"></div>
                     </div>
                 </div>
             </div>

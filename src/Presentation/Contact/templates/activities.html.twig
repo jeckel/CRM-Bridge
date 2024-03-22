@@ -1,0 +1,39 @@
+{% extends '@layout/dynamic-layout.html.twig' %}
+
+{% block page_content %}
+<div class="row" id="contactActivities">
+    <div class="table-responsive">
+        <table class="table table-vcenter card-table table-striped table-hover table-sm">
+            <thead>
+            <tr>
+                <th>{{ knp_pagination_sortable(activities, 'contact.field.activity_date'|trans, 'ca.date', {target: '#contactActivities'}) }}</th>
+                <th>{{ knp_pagination_sortable(activities, 'contact.field.activity_subject'|trans, 'ca.subject', {target: '#contactActivities'}) }}</th>
+                <th>{{ 'contact.field.activity_description'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for activity in activities %}
+                <tr>
+                    <td>
+                        {{ activity.date|date('d/m/Y H:i') }}
+                    </td>
+                    <td>{{ activity.subject }}</td>
+                    <td>{{ activity.description }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer d-flex align-items-center">
+        <p class="m-0 text-secondary">Showing <span>{{ (page - 1) * limit + 1 }}</span> to <span>{{ page * limit > total ? total : page * limit }}</span> of <span>{{ total }}</span> entries</p>
+        <ul class="pagination m-0 ms-auto">
+            {{ knp_pagination_render(activities, null, [], {target: '#contactActivities', first: true, last: true}) }}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_title %}
+Title
+{% endblock %}
+

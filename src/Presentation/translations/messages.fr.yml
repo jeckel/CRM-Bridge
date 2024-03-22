@@ -14,6 +14,9 @@ action:
 contact:
   field:
     address_book: Carnet d'adresses
+    activity_date: Date
+    activity_description: Description
+    activity_subject: Objet
     company: Organisation
     display_name: Nom
     email_address: E-Mail
