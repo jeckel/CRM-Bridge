@@ -34,8 +34,11 @@ class ContactRepository extends ServiceEntityRepository
     /**
      * @throws EntityNotFoundException
      */
-    public function getById(ContactId $id): Contact
+    public function getById(string|ContactId $id): Contact
     {
+        if (is_string($id)) {
+            $id = ContactId::from($id);
+        }
         return $this->find($id) ?? throw new EntityNotFoundException();
     }
 }

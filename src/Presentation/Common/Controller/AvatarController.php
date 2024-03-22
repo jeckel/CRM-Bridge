@@ -8,8 +8,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Common\Controller;
 
+use App\Component\Contact\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Component\Shared\Identity\ContactId;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Repository\ContactRepository;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use App\Presentation\Common\Service\Avatar\Provider\ChainAvatarProvider;
 use App\Presentation\Common\Service\Avatar\RemoteAvatarDto;
@@ -38,12 +39,10 @@ class AvatarController extends AbstractController
     }
 
     #[Route('/avatar/contact/{contactId}', name: 'avatar.contact')]
-    public function contactAvatar(string $contactId, ChainAvatarProvider $avatarProvider, ContactRepository $contactRepository): Response
+    public function contactAvatar(string $contactId, ChainAvatarProvider $avatarProvider): Response
     {
         return $this->returnContent(
-            $avatarProvider->getAvatarFromContact(
-                $contactRepository->getById($contactId)
-            )
+            $avatarProvider->getAvatarFromContactId(ContactId::from($contactId))
         );
     }
 

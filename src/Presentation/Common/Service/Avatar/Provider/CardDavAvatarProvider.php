@@ -10,8 +10,9 @@ declare(strict_types=1);
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
 use App\Component\CardDav\Infrastructure\CardDav\CardDavClientProvider;
+use App\Component\CardDav\Infrastructure\Doctrine\Repository\CardDavAccountRepository;
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Presentation\Common\Service\Avatar\AvatarContactDto;
 use App\Presentation\Common\Service\Avatar\AvatarDto;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use Override;
@@ -19,7 +20,10 @@ use Throwable;
 
 readonly class CardDavAvatarProvider implements AvatarProviderInterface
 {
-    public function __construct(private CardDavClientProvider $cardDavClientProvider) {}
+    public function __construct(
+        private CardDavClientProvider $cardDavClientProvider,
+        private CardDavAccountRepository $accountRepository
+    ) {}
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -34,17 +38,12 @@ readonly class CardDavAvatarProvider implements AvatarProviderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[Override]
-    public function getAvatarFromContact(Contact $contact, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromContact(AvatarContactDto $contact, int $size = 40): ?AvatarDtoInterface
     {
-        $vCardUri = $contact->getVCardUri();
-        if (null === $vCardUri) {
-            return null;
-        }
-
         try {
             $vCard = $this->cardDavClientProvider
-                ->getClient($contact->getCardDavAccountOrFail())
-                ->getVCard($vCardUri);
+                ->getClient($this->accountRepository->getById($contact->accountId))
+                ->getVCard($contact->vCardUri);
             if (! $vCard->hasPhoto()) {
                 return null;
             }

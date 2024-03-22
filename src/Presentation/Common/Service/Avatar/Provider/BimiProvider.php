@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace App\Presentation\Common\Service\Avatar\Provider;
 
 use App\Component\Shared\ValueObject\Email;
-use App\Infrastructure\Doctrine\Entity\Contact;
+use App\Presentation\Common\Service\Avatar\AvatarContactDto;
 use App\Presentation\Common\Service\Avatar\AvatarDtoInterface;
 use App\Presentation\Common\Service\Avatar\RemoteAvatarDto;
 use Override;
@@ -33,13 +33,12 @@ readonly class BimiProvider implements AvatarProviderInterface
     }
 
     #[Override]
-    public function getAvatarFromContact(Contact $contact, int $size = 40): ?AvatarDtoInterface
+    public function getAvatarFromContact(AvatarContactDto $contact, int $size = 40): ?AvatarDtoInterface
     {
-        $email = $contact->getPrimaryEmailAddress();
-        if (null === $email) {
+        if (null === $contact->email) {
             return null;
         }
-        return $this->getAvatarFromEmail($email, $size);
+        return $this->getAvatarFromEmail($contact->email, $size);
     }
 
     public function getFromEmail(string|Stringable|Email $email): ?RemoteAvatarDto
