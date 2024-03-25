@@ -71,7 +71,7 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.34",
-        "infection/infection": "^0.27.4",
+        "infection/infection": "^0.28.1",
         "jeckel-lab/castor-helper": "dev-main",
         "phpmd/phpmd": "^2.14",
         "phpro/grumphp": "^2.1",
