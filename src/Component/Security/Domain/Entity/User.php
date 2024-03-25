@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Doctrine\EntityModel;
+namespace App\Component\Security\Domain\Entity;
 
 use App\Component\Shared\Identity\UserId;
 use App\Component\Shared\ValueObject\Email;

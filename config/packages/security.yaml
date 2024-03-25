@@ -10,7 +10,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Infrastructure\Doctrine\EntityModel\User
+                class: App\Component\Security\Domain\Entity\User
                 property: username
         account_service_provider:
             entity:

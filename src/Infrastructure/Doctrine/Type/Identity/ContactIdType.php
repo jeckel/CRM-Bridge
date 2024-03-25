@@ -7,10 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Contact\Infrastructure\Doctrine\Type;
+namespace App\Infrastructure\Doctrine\Type\Identity;
 
 use App\Component\Shared\Identity\ContactId;
-use App\Infrastructure\Doctrine\Type\Identity\AbstractIdentityType;
 use Override;
 
 /**

@@ -49,13 +49,13 @@
                 <cascade-all/>
             </cascade>
         </one-to-many>
-        <one-to-many
-            mapped-by="contact"
-            target-entity="App\Infrastructure\Doctrine\Entity\ImapMessage"
-            field="mails"
-            orphan-removal="false"
-        >
-        </one-to-many>
+<!--        <one-to-many-->
+<!--            mapped-by="contact"-->
+<!--            target-entity="App\Infrastructure\Doctrine\Entity\ImapMessage"-->
+<!--            field="mails"-->
+<!--            orphan-removal="false"-->
+<!--        >-->
+<!--        </one-to-many>-->
         <one-to-many
             mapped-by="contact"
             target-entity="App\Component\Contact\Domain\Entity\ContactActivity"

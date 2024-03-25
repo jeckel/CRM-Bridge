@@ -11,12 +11,12 @@ namespace App\Component\DirectCommunicationHub\Domain\Model;
 use App\Component\DirectCommunicationHub\Domain\Dto\IncomingMailDto;
 use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Identity\ContactId;
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
 /**
- * @property-read MailId $mailId
+ * @property-read ImapMailId $mailId
  * @property-read string $messageId
  * @property-read string $folder
  * @property-read DateTimeImmutable $date
@@ -36,7 +36,7 @@ class IncomingMail
      * @suppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        protected MailId $mailId,
+        protected ImapMailId $mailId,
         protected string $messageId,
         protected string $folder,
         protected DateTimeImmutable $date,

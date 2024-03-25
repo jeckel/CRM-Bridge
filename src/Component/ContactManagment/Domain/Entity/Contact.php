@@ -12,7 +12,7 @@ use App\Component\ContactManagment\Domain\Error\VCardUriChangedError;
 use App\Component\Shared\DomainTrait\ReadPropertyTrait;
 use App\Component\Shared\Identity\CardDavAddressBookId;
 use App\Component\Shared\Identity\ContactId;
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
@@ -106,7 +106,7 @@ class Contact
         return $this;
     }
 
-    public function addMail(MailId $mailId, DateTimeImmutable $sendAt): self
+    public function addMail(ImapMailId $mailId, DateTimeImmutable $sendAt): self
     {
         $this->activities->add(
             ContactActivity::new(

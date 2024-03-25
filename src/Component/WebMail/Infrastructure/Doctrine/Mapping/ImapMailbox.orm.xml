@@ -1,0 +1,42 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Component\WebMail\Domain\Entity\ImapMailbox"
+        table="imap_mailbox"
+    >
+        <id name="id" type="imap_mailbox_id" column="imap_mailbox_id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="name" type="string" length="180" nullable="false"/>
+        <field name="imapPath" type="string" length="255" nullable="false"/>
+        <field name="slug" type="string" length="180" nullable="false"/>
+        <field name="lastSyncUid" type="integer" nullable="true"/>
+        <field name="flags" type="integer" nullable="false"/>
+        <field name="messages" type="integer" nullable="false"/>
+        <field name="unseen" type="integer" nullable="false"/>
+        <field name="uidNext" type="integer" nullable="false"/>
+        <field name="uidValidity" type="integer" nullable="true"/>
+        <field name="lastSyncDate" type="datetime_immutable" nullable="true"/>
+        <field name="enabled" type="boolean" nullable="false"/>
+        <many-to-one field="account" target-entity="App\Component\WebMail\Domain\Entity\ImapAccount">
+            <join-column
+                name="imap_account_id"
+                on-delete="CASCADE"
+                nullable="false"
+                referenced-column-name="imap_account_id"
+            />
+        </many-to-one>
+<!--        <one-to-many-->
+<!--            target-entity="App\Component\WebMail\Domain\Entity\ImapMail"-->
+<!--            field="mails"-->
+<!--            orphan-removal="false"-->
+<!--            mapped-by="mailbox"-->
+<!--        >-->
+<!--            <cascade>-->
+<!--                <cascade-all/>-->
+<!--            </cascade>-->
+<!--        </one-to-many>-->
+    </entity>
+</doctrine-mapping>

@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace App\Component\Shared\Event;
 
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
 final readonly class NewIncomingEmail implements Event
 {
     public function __construct(
-        public MailId $mailId,
+        public ImapMailId $mailId,
         public Email $email,
         public DateTimeImmutable $sendAt,
     ) {}

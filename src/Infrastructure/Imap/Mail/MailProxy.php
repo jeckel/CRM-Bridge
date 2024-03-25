@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Imap\Mail;
 
 use App\Component\Shared\Event\NewIncomingEmail;
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapAccount;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
@@ -108,7 +108,7 @@ class MailProxy implements MailInterface
                 dd($this->entity, $e);
             }
             $this->eventDispatcher->dispatch(new NewIncomingEmail(
-                mailId: MailId::from((string) $this->entity->getId()),
+                mailId: ImapMailId::from((string) $this->entity->getId()),
                 email: new Email($this->entity->getFromAddress()),
                 sendAt: $this->entity->getDate()
             ));

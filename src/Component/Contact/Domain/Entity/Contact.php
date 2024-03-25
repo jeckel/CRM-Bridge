@@ -13,7 +13,7 @@ use App\Component\CardDav\Domain\Entity\CardDavAccount;
 use App\Component\CardDav\Domain\Entity\CardDavAddressBook;
 use App\Component\Contact\Domain\Event\ContactCreated;
 use App\Component\Shared\Identity\ContactId;
-use App\Infrastructure\Doctrine\Entity\ImapMessage;
+use App\Component\WebMail\Domain\Entity\ImapMail;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -43,7 +43,7 @@ class Contact implements DomainEventAwareInterface
     private Collection $activities;
 
     /**
-     * @var Collection<int, ImapMessage> $mails
+     * @var Collection<int, ImapMail> $mails
      */
     private Collection $mails; /** @phpstan-ignore-line  */
 

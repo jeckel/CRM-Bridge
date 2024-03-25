@@ -4,12 +4,15 @@ doctrine:
 
         types:
             # Identities
-            card_dav_account_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAccountIdType
-            card_dav_address_book_id: App\Component\CardDav\Infrastructure\Doctrine\Type\CardDavAddressBookIdType
-            contact_activity_id: App\Component\Contact\Infrastructure\Doctrine\Type\ContactActivityIdType
-            contact_id: App\Component\Contact\Infrastructure\Doctrine\Type\ContactIdType
-            company_id: App\Component\Contact\Infrastructure\Doctrine\Type\CompanyIdType
+            card_dav_account_id: App\Infrastructure\Doctrine\Type\Identity\CardDavAccountIdType
+            card_dav_address_book_id: App\Infrastructure\Doctrine\Type\Identity\CardDavAddressBookIdType
+            contact_activity_id: App\Infrastructure\Doctrine\Type\Identity\ContactActivityIdType
+            contact_id: App\Infrastructure\Doctrine\Type\Identity\ContactIdType
+            company_id: App\Infrastructure\Doctrine\Type\Identity\CompanyIdType
             user_id: App\Infrastructure\Doctrine\Type\Identity\UserIdType
+            imap_account_id: \App\Infrastructure\Doctrine\Type\Identity\ImapAccountIdType
+            imap_mail_id: \App\Infrastructure\Doctrine\Type\Identity\ImapMailIdType
+            imap_mailbox_id: \App\Infrastructure\Doctrine\Type\Identity\ImapMailboxIdType
             # ValueObject
             email: App\Infrastructure\Doctrine\Type\EmailType
 
@@ -32,21 +35,42 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/src/Component/Contact/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Component\Contact\Domain\Entity'
-
-#                alias: CardDav
-            App\Infrastructure\Doctrine\EntityModel:
+            App\Component\Security\Domain\Entity:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
-                prefix: 'App\Infrastructure\Doctrine\EntityModel'
-#                alias: YourDomain
-            App\Infrastructure\Doctrine\Entity:
-                type: attribute
+                dir: '%kernel.project_dir%/src/Component/Security/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Component\Security\Domain\Entity'
+            App\Component\WebMail\Domain\Entity:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Entity'
-                prefix: 'App\Infrastructure\Doctrine\Entity'
-#                alias: App
+                type: xml
+                dir: '%kernel.project_dir%/src/Component/WebMail/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Component\WebMail\Domain\Entity'
+#            App\Component\WebMail\Domain\Entity\ImapMailAuthor:
+#                is_bundle: false
+#                type: xml
+#                dir: '%kernel.project_dir%/src/Component/WebMail/Infrastructure/Doctrine/Mapping/ImapAuthor.orm.xml'
+#                prefix: 'App\Component\WebMail\Domain\Entity\ImapMailAuthor'
+#                exclude: true
 
+##                alias: CardDav
+#            App\Infrastructure\Doctrine\EntityModel:
+#                is_bundle: false
+#                type: xml
+#                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
+#                prefix: 'App\Infrastructure\Doctrine\EntityModel'
+##                alias: YourDomain
+#            App\Infrastructure\Doctrine\Entity:
+#                type: attribute
+#                is_bundle: false
+#                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Entity'
+#                prefix: 'App\Infrastructure\Doctrine\Entity'
+##                alias: App
+#        resolve_target_entities:
+#            \App\Component\WebMail\Domain\Entity\ImapMailAuthor: \App\Component\Contact\Domain\Entity\Contact
+
+#        entity_managers:
+        schema_ignore_classes:
+            - App\Component\WebMail\Domain\Entity\ImapMailAuthor
 when@test:
     doctrine:
         dbal:

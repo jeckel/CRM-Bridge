@@ -1,0 +1,66 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity
+        name="App\Component\WebMail\Domain\Entity\ImapMail"
+        table="imap_mail"
+    >
+        <id name="id" type="imap_mail_id" column="imap_mail_id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="imapUid" type="integer" nullable="false"/>
+        <field name="imapPath" type="string" length="255" nullable="false"/>
+        <field name="messageId" type="string" length="255" nullable="false"/>
+        <field name="messageUniqueId" type="string" length="255" nullable="false"/>
+        <field name="date" type="datetime_immutable" nullable="false"/>
+        <field name="subject" type="string" length="255" nullable="false"/>
+        <field name="fromName" type="string" length="255" nullable="false"/>
+        <field name="fromAddress" type="string" length="255" nullable="false"/>
+        <field name="toString" type="string" length="255" nullable="true"/>
+        <field name="headerRaw" type="text" nullable="false"/>
+        <field name="hasAttachment" type="boolean" nullable="false"/>
+        <field name="emailType" type="string" enum-type="App\Component\Shared\ValueObject\IncomingEmailType"
+               nullable="false"/>
+        <field name="isSpam" type="boolean" nullable="false"/>
+        <field name="spamScore" type="integer" nullable="false"/>
+        <field name="spamHeaders" type="json" nullable="false"/>
+        <field name="textPlain" type="text" nullable="true"/>
+        <field name="textHtml" type="text" nullable="true"/>
+        <field name="isTreated" type="boolean" nullable="false"/>
+        <field name="treatedAt" type="datetime_immutable" nullable="true"/>
+        <many-to-one
+            field="account"
+            target-entity="App\Component\WebMail\Domain\Entity\ImapAccount"
+        >
+            <join-column
+                name="imap_account_id"
+                on-delete="CASCADE"
+                nullable="false"
+                referenced-column-name="imap_account_id"
+            />
+        </many-to-one>
+        <many-to-one
+            field="mailbox"
+            target-entity="App\Component\WebMail\Domain\Entity\ImapMailbox"
+        >
+            <join-column
+                name="imap_mailbox_id"
+                on-delete="CASCADE"
+                nullable="false"
+                referenced-column-name="imap_mailbox_id"
+            />
+        </many-to-one>
+        <many-to-one
+            target-entity="App\Component\WebMail\Domain\Entity\ImapMailAuthor"
+            field="author"
+        >
+            <join-column
+                name="contact_id"
+                on-delete="SET NULL"
+                nullable="true"
+                referenced-column-name="contact_id"
+            />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

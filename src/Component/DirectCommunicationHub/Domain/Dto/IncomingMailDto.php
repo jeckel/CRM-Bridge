@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace App\Component\DirectCommunicationHub\Domain\Dto;
 
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use DateTimeImmutable;
 
@@ -18,7 +18,7 @@ final readonly class IncomingMailDto
      * @suppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        public MailId $id,
+        public ImapMailId $id,
         public string $messageId,
         public DateTimeImmutable $date,
         public string $subject,

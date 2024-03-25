@@ -7,10 +7,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\CardDav\Infrastructure\Doctrine\Type;
+namespace App\Infrastructure\Doctrine\Type\Identity;
 
 use App\Component\Shared\Identity\CardDavAddressBookId;
-use App\Infrastructure\Doctrine\Type\Identity\AbstractIdentityType;
 use Override;
 
 /**

@@ -3,9 +3,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity
-        name="App\Infrastructure\Doctrine\EntityModel\User"
+        name="App\Component\Security\Domain\Entity\User"
         table="users"
-        repository-class="App\Infrastructure\Doctrine\Repository\UserRepository"
+        repository-class="App\Component\Security\Infrastructure\Doctrine\Repository\UserRepository"
     >
         <id name="id" type="user_id" column="user_id">
             <generator strategy="NONE"/>

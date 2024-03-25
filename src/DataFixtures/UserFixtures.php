@@ -2,17 +2,13 @@
 
 namespace App\DataFixtures;
 
+use App\Component\Security\Domain\Entity\User;
 use App\Component\Shared\Identity\UserId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\Account;
-use App\Infrastructure\Doctrine\EntityModel\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
-use function App\new_uuid;
 
 class UserFixtures extends Fixture
 {

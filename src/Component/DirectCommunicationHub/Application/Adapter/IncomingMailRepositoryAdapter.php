@@ -12,7 +12,7 @@ use App\Component\DirectCommunicationHub\Application\Helper\MailContextManager;
 use App\Component\DirectCommunicationHub\Domain\Model\IncomingMail;
 use App\Component\DirectCommunicationHub\Domain\Port\IncomingMailRepository;
 use App\Component\Shared\Helper\ContextManager;
-use App\Component\Shared\Identity\MailId;
+use App\Component\Shared\Identity\ImapMailId;
 use App\Component\Shared\ValueObject\Email;
 use App\Infrastructure\Doctrine\Entity\ImapMessage;
 use App\Infrastructure\Doctrine\Repository\ContactRepository;
@@ -59,7 +59,7 @@ readonly class IncomingMailRepositoryAdapter implements IncomingMailRepository
         ]);
         foreach ($mails as $mail) {
             yield new IncomingMail(
-                MailId::from((string) $mail->getId()),
+                ImapMailId::from((string) $mail->getId()),
                 $mail->getMessageId(),
                 $mail->getImapPath(),
                 $mail->getDate(),

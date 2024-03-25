@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\LinkedIn;
 
+use App\Component\Security\Infrastructure\Doctrine\Repository\UserRepository;
 use App\Infrastructure\Doctrine\Entity\User;
-use App\Infrastructure\Doctrine\Repository\UserRepository;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 
