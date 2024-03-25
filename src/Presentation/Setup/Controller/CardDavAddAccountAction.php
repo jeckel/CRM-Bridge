@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/setup/card_dav", name: "setup.card_dav.")]
 #[IsGranted("ROLE_ADMIN")]
-class AddCardDavAccountAction extends AbstractController
+class CardDavAddAccountAction extends AbstractController
 {
     /**
      * @throws NonUniqueResultException

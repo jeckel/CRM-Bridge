@@ -9,9 +9,14 @@ declare(strict_types=1);
 
 namespace App\Component\CardDav\Application\Command;
 
-use App\Component\Shared\Identity\ContactId;
+use App\Component\Shared\Identity\CardDavAccountId;
+use App\Component\Shared\Identity\CardDavAddressBookId;
 
 readonly class DeleteCardDavContact
 {
-    public function __construct(public ContactId $contactId) {}
+    public function __construct(
+        public CardDavAccountId $cardDavAccountId,
+        public CardDavAddressBookId $addressBookId,
+        public string $vCardUri
+    ) {}
 }

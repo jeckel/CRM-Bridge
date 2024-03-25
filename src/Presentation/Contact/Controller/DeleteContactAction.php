@@ -10,7 +10,11 @@ declare(strict_types=1);
 namespace App\Presentation\Contact\Controller;
 
 use App\Component\CardDav\Application\Command\DeleteCardDavContact;
-use App\Infrastructure\Doctrine\Repository\ContactRepository;
+use App\Component\Shared\Identity\CardDavAccountId;
+use App\Component\Shared\Identity\CardDavAddressBookId;
+use App\Component\Shared\Identity\ContactId;
+use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -31,13 +35,31 @@ class DeleteContactAction extends AbstractController
     public function delete(
         string $contactId,
         MessageBusInterface $messageBus,
-        ContactRepository $repository
+        EntityManagerInterface $entityManager
     ): Response {
-        $contact = $repository->getById($contactId);
-        $messageBus->dispatch(new DeleteCardDavContact($contact->getIdentity()));
+        /** @var array{vCardUri: string, displayName: string, addressBookId: CardDavAddressBookId, accountId: CardDavAccountId}|null $result */
+        $result = $entityManager->createQuery(
+            'SELECT c.vCardUri, c.displayName, ab.id AS addressBookId, cd.id as accountId
+            FROM \App\Component\Contact\Domain\Entity\Contact c
+            INNER JOIN c.addressBook ab
+            INNER JOIN ab.account cd
+            WHERE c.id = :contactId'
+        )->setParameter('contactId', ContactId::from($contactId))
+            ->getOneOrNullResult();
+
+        if ($result === null) {
+            throw new LogicException('Not found');
+        }
+
+        $messageBus->dispatch(new DeleteCardDavContact(
+            cardDavAccountId: $result['accountId'],
+            addressBookId: $result['addressBookId'],
+            vCardUri: $result['vCardUri'],
+        ));
+
         $this->addFlash('success', new TranslatableMessage(
             'contact.flash_message.contact_deleted',
-            ['%contact%' => $contact->getDisplayName()]
+            ['%contact%' => $result['displayName']]
         ));
         return $this->redirectToRoute('contact.index');
     }
