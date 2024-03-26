@@ -54,6 +54,7 @@
         <many-to-one
             target-entity="App\Component\WebMail\Domain\Entity\ImapMailAuthor"
             field="author"
+            inversed-by="mails"
         >
             <join-column
                 name="contact_id"

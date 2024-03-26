@@ -20,7 +20,11 @@
         <field name="uidValidity" type="integer" nullable="true"/>
         <field name="lastSyncDate" type="datetime_immutable" nullable="true"/>
         <field name="enabled" type="boolean" nullable="false"/>
-        <many-to-one field="account" target-entity="App\Component\WebMail\Domain\Entity\ImapAccount">
+        <many-to-one
+            field="account"
+            target-entity="App\Component\WebMail\Domain\Entity\ImapAccount"
+            inversed-by="mailboxes"
+        >
             <join-column
                 name="imap_account_id"
                 on-delete="CASCADE"
