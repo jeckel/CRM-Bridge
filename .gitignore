@@ -2,14 +2,12 @@
 /tools
 /vendor
 
-/.php-cs-fixer.cache
 /.phpunit.result.cache
 /.phpunit.xml
 
 /phpstan.neon
 /phpunit.xml
 
-/.idea
 .castor.stub.php
 
 ###> symfony/framework-bundle ###
@@ -35,5 +33,6 @@ phpstan.neon
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
 /src/DataFixtures/ImapFixtures.php
 /src/Presentation/Common/Controller/SandboxController.php
