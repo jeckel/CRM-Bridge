@@ -25,7 +25,7 @@ readonly class SyncImapAccountHandler
 
     public function __invoke(SyncImapAccount $command): void
     {
-        $account = $this->repository->getById($command->accountId);
+        $account = $this->repository->getAccountById($command->accountId);
 
         foreach($this->imap->listMailboxes($account) as $mailboxImapPath) {
             $account->addMailbox($mailboxImapPath);

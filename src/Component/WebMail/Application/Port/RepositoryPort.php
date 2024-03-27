@@ -7,11 +7,18 @@
 namespace App\Component\WebMail\Application\Port;
 
 use App\Component\Shared\Identity\ImapAccountId;
+use App\Component\Shared\Identity\ImapMailboxId;
 use App\Component\WebMail\Domain\Entity\ImapAccount;
+use App\Component\WebMail\Domain\Entity\ImapMail;
+use App\Component\WebMail\Domain\Entity\ImapMailbox;
 
 interface RepositoryPort
 {
     public function persistAccount(ImapAccount $account): void;
 
-    public function getById(ImapAccountId $accountId): ImapAccount;
+    public function getAccountById(ImapAccountId $accountId): ImapAccount;
+
+    public function getMailboxById(ImapMailboxId $mailboxId): ImapMailbox;
+
+    public function persistMail(ImapMail $entity): void;
 }

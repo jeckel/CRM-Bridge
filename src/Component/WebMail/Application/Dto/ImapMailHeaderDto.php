@@ -7,9 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Imap\Mail;
-
-use DateTimeImmutable;
+namespace App\Component\WebMail\Application\Dto;
 
 readonly class ImapMailHeaderDto
 {

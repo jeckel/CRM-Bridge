@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Imap\Mail;
+namespace App\Component\WebMail\Application\Dto;
 
 use LogicException;
 

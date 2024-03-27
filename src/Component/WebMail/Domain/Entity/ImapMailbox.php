@@ -22,20 +22,20 @@ class ImapMailbox implements DomainEventAwareInterface
 
     private string $name;
     private string $slug;   /** @phpstan-ignore-line  */
-    private ?int $lastSyncUid = null; /** @phpstan-ignore-line  */
+    private ?int $lastSyncUid = null;
     private int $flags = 0; /** @phpstan-ignore-line  */
     private int $messages = 0; /** @phpstan-ignore-line  */
     private int $recent = 0; /** @phpstan-ignore-line  */
     private int $unseen = 0; /** @phpstan-ignore-line  */
     private int $uidNext = 0; /** @phpstan-ignore-line  */
-    private ?int $uidValidity = null; /** @phpstan-ignore-line  */
+    private ?int $uidValidity = null;
     private ?DateTimeImmutable $lastSyncDate = null; /** @phpstan-ignore-line  */
     private bool $enabled = true; /** @phpstan-ignore-line  */
 
     public function __construct(
         public readonly ImapMailboxId $id,
         public readonly string $imapPath,
-        private readonly ImapAccount $account /** @phpstan-ignore-line  */
+        private readonly ImapAccount $account
     ) {
         $this->name = self::shortPath($imapPath);
         $this->slug = slug($this->name);
@@ -55,5 +55,29 @@ class ImapMailbox implements DomainEventAwareInterface
             throw new InvalidArgumentException('Invalid imap path');
         }
         return substr($imapPath, $pos + 1);
+    }
+
+    public function account(): ImapAccount
+    {
+        return $this->account;
+    }
+
+    public function updateUidValidity(int $uidValidity, int $minUid): self
+    {
+        if ($this->uidValidity !== $uidValidity) {
+            $this->lastSyncUid = $minUid - 1;
+            $this->uidValidity = $uidValidity;
+        }
+        return $this;
+    }
+
+    public function requireSync(int $uidNext): bool
+    {
+        return $this->lastSyncUid === null || $uidNext > ($this->lastSyncUid + 1);
+    }
+
+    public function lastSyncUid(): int
+    {
+        return $this->lastSyncUid ?? 1;
     }
 }

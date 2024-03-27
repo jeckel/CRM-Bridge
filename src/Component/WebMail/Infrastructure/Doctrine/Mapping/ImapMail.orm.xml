@@ -5,6 +5,7 @@
     <entity
         name="App\Component\WebMail\Domain\Entity\ImapMail"
         table="imap_mail"
+        repository-class="App\Component\WebMail\Infrastructure\Doctrine\Repository\ImapMailRepository"
     >
         <id name="id" type="imap_mail_id" column="imap_mail_id">
             <generator strategy="NONE"/>
