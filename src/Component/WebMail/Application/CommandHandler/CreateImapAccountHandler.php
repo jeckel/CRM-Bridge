@@ -30,7 +30,7 @@ readonly class CreateImapAccountHandler
             $command->login,
             $command->password
         );
-        $this->repository->persistAccount($account);
+        $this->repository->persist($account);
 
         foreach ($account->popEvents() as $event) {
             $this->eventDispatcher->dispatch($event);

@@ -14,11 +14,11 @@ use App\Component\WebMail\Domain\Entity\ImapMailbox;
 
 interface RepositoryPort
 {
-    public function persistAccount(ImapAccount $account): void;
-
     public function getAccountById(ImapAccountId $accountId): ImapAccount;
 
     public function getMailboxById(ImapMailboxId $mailboxId): ImapMailbox;
 
-    public function persistMail(ImapMail $entity): void;
+    public function findMailByUniqueMessageId(string $messageUniqueId): ?ImapMail;
+
+    public function persist(ImapMailbox|ImapAccount|ImapMail $entity): void;
 }

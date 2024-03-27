@@ -16,6 +16,7 @@ use App\Component\WebMail\Domain\Entity\ImapMail;
 use App\Component\WebMail\Domain\Entity\ImapMailbox;
 use App\Component\WebMail\Infrastructure\Doctrine\Repository\ImapAccountRepository;
 use App\Component\WebMail\Infrastructure\Doctrine\Repository\ImapMailboxRepository;
+use App\Component\WebMail\Infrastructure\Doctrine\Repository\ImapMailRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -24,15 +25,9 @@ readonly class RepositoryAdapter implements RepositoryPort
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ImapAccountRepository $accountRepository,
-        private ImapMailboxRepository $mailboxRepository
+        private ImapMailboxRepository $mailboxRepository,
+        private ImapMailRepository $mailRepository
     ) {}
-
-    #[\Override]
-    public function persistAccount(ImapAccount $account): void
-    {
-        $this->entityManager->persist($account);
-        $this->entityManager->flush();
-    }
 
     /**
      * @throws EntityNotFoundException
@@ -53,7 +48,13 @@ readonly class RepositoryAdapter implements RepositoryPort
     }
 
     #[\Override]
-    public function persistMail(ImapMail $entity): void
+    public function findMailByUniqueMessageId(string $messageUniqueId): ?ImapMail
+    {
+        return $this->mailRepository->findOneBy(['messageUniqueId' => $messageUniqueId]);
+    }
+
+    #[\Override]
+    public function persist(ImapAccount|ImapMail|ImapMailbox $entity): void
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();

@@ -30,7 +30,7 @@ readonly class SyncImapAccountHandler
         foreach($this->imap->listMailboxes($account) as $mailboxImapPath) {
             $account->addMailbox($mailboxImapPath);
         };
-        $this->repository->persistAccount($account);
+        $this->repository->persist($account);
 
         foreach ($account->popEvents() as $event) {
             $this->eventDispatcher->dispatch($event);

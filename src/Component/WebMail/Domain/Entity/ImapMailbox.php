@@ -3,6 +3,7 @@
 namespace App\Component\WebMail\Domain\Entity;
 
 use App\Component\Shared\Identity\ImapMailboxId;
+use App\Component\WebMail\Application\Dto\MailboxStatusDto;
 use App\Component\WebMail\Application\Event\ImapMailboxCreated;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -65,7 +66,7 @@ class ImapMailbox implements DomainEventAwareInterface
     public function updateUidValidity(int $uidValidity, int $minUid): self
     {
         if ($this->uidValidity !== $uidValidity) {
-            $this->lastSyncUid = $minUid - 1;
+            $this->lastSyncUid = max(1, $minUid - 1);
             $this->uidValidity = $uidValidity;
         }
         return $this;
@@ -79,5 +80,23 @@ class ImapMailbox implements DomainEventAwareInterface
     public function lastSyncUid(): int
     {
         return $this->lastSyncUid ?? 1;
+    }
+
+    public function updateSyncStatus(
+        MailboxStatusDto $status,
+        ?int $lastUid,
+        DateTimeImmutable $now
+    ): self {
+        if (null !== $lastUid) {
+            $this->lastSyncUid = $lastUid;
+        }
+        $this->lastSyncDate = $now;
+        $this->flags = $status->flags;
+        $this->messages = $status->messages;
+        $this->recent = $status->recent;
+        $this->unseen = $status->unseen;
+        $this->uidNext = $status->uidnext;
+        $this->uidValidity = $status->uidvalidity;
+        return $this;
     }
 }
