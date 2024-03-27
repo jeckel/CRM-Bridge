@@ -6,9 +6,12 @@
 
 namespace App\Component\WebMail\Application\Port;
 
+use App\Component\Shared\Identity\ImapAccountId;
 use App\Component\WebMail\Domain\Entity\ImapAccount;
 
 interface RepositoryPort
 {
     public function persistAccount(ImapAccount $account): void;
+
+    public function getById(ImapAccountId $accountId): ImapAccount;
 }

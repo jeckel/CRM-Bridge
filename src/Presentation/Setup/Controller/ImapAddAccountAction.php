@@ -42,7 +42,7 @@ class ImapAddAccountAction extends AbstractController
             return $this->render('@modal/success.html.twig', [
                 'message' => new TranslatableMessage(
                     'setup.flash_message.imap_account_added',
-                    ['%command%' => $command->name],
+                    ['%account%' => $command->name],
                     'messages'
                 ),
                 'refresh' => [
