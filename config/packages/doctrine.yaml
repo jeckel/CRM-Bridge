@@ -45,30 +45,6 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/src/Component/WebMail/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Component\WebMail\Domain\Entity'
-#            App\Component\WebMail\Domain\Entity\ImapMailAuthor:
-#                is_bundle: false
-#                type: xml
-#                dir: '%kernel.project_dir%/src/Component/WebMail/Infrastructure/Doctrine/Mapping/ImapAuthor.orm.xml'
-#                prefix: 'App\Component\WebMail\Domain\Entity\ImapMailAuthor'
-#                exclude: true
-
-##                alias: CardDav
-#            App\Infrastructure\Doctrine\EntityModel:
-#                is_bundle: false
-#                type: xml
-#                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
-#                prefix: 'App\Infrastructure\Doctrine\EntityModel'
-##                alias: YourDomain
-#            App\Infrastructure\Doctrine\Entity:
-#                type: attribute
-#                is_bundle: false
-#                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Entity'
-#                prefix: 'App\Infrastructure\Doctrine\Entity'
-##                alias: App
-#        resolve_target_entities:
-#            \App\Component\WebMail\Domain\Entity\ImapMailAuthor: \App\Component\Contact\Domain\Entity\Contact
-
-#        entity_managers:
         schema_ignore_classes:
             - App\Component\WebMail\Domain\Entity\ImapMailAuthor
 when@test:

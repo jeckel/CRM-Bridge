@@ -8,53 +8,41 @@ declare(strict_types=1);
 
 namespace App\Presentation\Setup\Controller;
 
-use App\Infrastructure\Doctrine\Entity\ImapAccount;
-use App\Infrastructure\Doctrine\Repository\ImapAccountRepository;
+use App\Component\WebMail\Application\Command\CreateImapAccount;
 use App\Presentation\Setup\Form\ImapAccountFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Translation\TranslatableMessage;
 
-#[Route("/setup/imap", name: "setup.imap.")]
 #[IsGranted("ROLE_ADMIN")]
-class ImapAccountController extends AbstractController
+class ImapAddAccountAction extends AbstractController
 {
-    #[Route('/', name: 'index')]
-    public function index(
-        ImapAccountRepository $repository
-    ): Response {
-        return $this->render(
-            '@setup/imap/index_embed.html.twig',
-            [
-                'imap_accounts' => $repository->findAll()
-            ]
-        );
-    }
-
     #[Route(
-        path: "/create_account",
-        name: "create_account",
+        path: "/setup/imap/create_account",
+        name: "setup.imap.create_account",
         methods: ['GET', 'POST']
     )]
-    public function addAccount(Request $request, ImapAccountRepository $repository): Response
+    public function __invoke(Request $request, MessageBusInterface $messageBus): Response
     {
         $form = $this->createForm(
             ImapAccountFormType::class,
-            new ImapAccount(),
+            null,
             [ 'hx-post' => $this->generateUrl('setup.imap.create_account')]
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var ImapAccount $account */
-            $account = $form->getData();
-            $repository->persist($account);
+            /** @var CreateImapAccount $command */
+            $command = $form->getData();
+            $messageBus->dispatch($command);
+
             return $this->render('@modal/success.html.twig', [
                 'message' => new TranslatableMessage(
                     'setup.flash_message.imap_account_added',
-                    ['%account%' => $account->getName()],
+                    ['%command%' => $command->name],
                     'messages'
                 ),
                 'refresh' => [
@@ -63,6 +51,7 @@ class ImapAccountController extends AbstractController
                 ]
             ]);
         }
+
         return $this->render(
             '@modal/form.html.twig',
             [

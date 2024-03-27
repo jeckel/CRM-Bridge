@@ -49,11 +49,13 @@ class CardDavAddAccountAction extends AbstractController
             /** @var CreateCardDavAccount $command */
             $command = $form->getData();
             $messageBus->dispatch($command);
+
             return $this->redirect($this->generateUrl(
                 'setup.card_dav.setup_address_books',
                 ['accountId' => (string) $accountIdFromUri($command->uri)]
             ));
         }
+
         return $this->render(
             '@modal/form.html.twig',
             [

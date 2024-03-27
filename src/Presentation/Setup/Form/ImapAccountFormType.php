@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Setup\Form;
 
+use App\Component\WebMail\Application\Command\CreateImapAccount;
 use Override;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -71,6 +72,15 @@ class ImapAccountFormType extends AbstractType
     {
         $resolver->setDefaults([
             'hx-post' => null,
+            'data_class' => CreateImapAccount::class,
+            'empty_data' => function (FormInterface $form) {
+                return new CreateImapAccount(
+                    name: $form->get('name')->getData(), /** @phpstan-ignore-line */
+                    uri: $form->get('uri')->getData(), /** @phpstan-ignore-line */
+                    login: $form->get('login')->getData(), /** @phpstan-ignore-line */
+                    password: $form->get('password')->getData() /** @phpstan-ignore-line */
+                );
+            },
         ]);
     }
 
